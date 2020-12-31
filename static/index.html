@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link href="css/toast.css" rel="stylesheet" />
+	<meta charset="utf-8"/>
+	<style>
+		h2 {
+			margin : 0 ;
+		}
+	
+		td {
+			 padding-top: 5px ;
+			 padding-right: 5px ;
+			 padding-bottom: 5px ;
+			 padding-left: 5px ;
+		}
+	</style>
+	
+</head> 
+
+<body>
+<div id="webShop" align=center>
+<h1>Aplikacija za rezervaciju karata</h1>
+<a href="#/" v-bind:hidden="korisnik.uloga == 'ADMIN'">Pocetna</a>
+<a href="#/register" v-bind:hidden="korisnik.uloga != 'GOST'">Register</a>
+<a href="#/login" v-bind:hidden="korisnik.uloga != 'GOST'">Login</a>
+
+<a href="#/adminManif" v-bind:hidden="korisnik.uloga != 'ADMIN'">PREGLED MANIFESTACIJA</a>
+<a href="#/adminTickets" v-bind:hidden="korisnik.uloga != 'ADMIN'">PREGLED KARATA</a>
+<a href="#/adminUsers" v-bind:hidden="korisnik.uloga != 'ADMIN'">PREGLED KORISNIKA</a>
+<a href="#/adminComment" v-bind:hidden="korisnik.uloga != 'ADMIN'">PREGLED KOMENTARA</a>
+
+<a href="#/" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Dodaj manifestaciju</a>
+<a href="#/" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Pregled manifestacija</a>
+<a href="#/" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Pregled rezervisanih karata</a>
+
+<a href="#/" v-bind:hidden="korisnik.uloga != 'KUPAC'">Moje karte</a>
+
+<a href="#/" v-on:click="logout()"  v-bind:hidden="korisnik.uloga == 'GOST'">Logout</a>
+
+	  <router-view></router-view>
+</div>
+
+<script src="js/vue.js"></script>
+<script src="js/vue-router.js"></script>
+<script src="js/axios.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/toast.js"></script>
+
+<script src="app/login.js"></script>
+<script src="app/registracija.js"></script>
+<script src="app/prikaz_manifestacija.js"></script>
+<script src="app/pregled_manifestacija_admin.js"></script>
+<script src="app/prikaz_karata_admin.js"></script>
+<script src="app/prikaz_komentara_admin.js"></script>
+<script src="app/prikaz_korisnika_admin.js"></script>
+
+<script src="app/app.js"></script>
+</body>
+</html>
