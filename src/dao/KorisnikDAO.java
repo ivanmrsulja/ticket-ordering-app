@@ -27,6 +27,7 @@ public class KorisnikDAO {
 	private List<Prodavac> prodavci;
 	private HashMap<String, Korisnik> korisniciMap;
 	private HashMap<String, Kupac> kupciMap;
+	private HashMap<String, Prodavac> prodavciMap;
 	private TipKupcaDAO tipovi;
 	
 	public KorisnikDAO() {
@@ -35,6 +36,7 @@ public class KorisnikDAO {
 		prodavci = new ArrayList<Prodavac>();
 		korisniciMap = new HashMap<String, Korisnik>();
 		kupciMap = new HashMap<String, Kupac>();
+		prodavciMap = new HashMap<String, Prodavac>();
 	}
 	
 	public KorisnikDAO(TipKupcaDAO t) {
@@ -73,7 +75,7 @@ public class KorisnikDAO {
 						korisnici.add(k);
 						prodavci.add(pr);
 						korisniciMap.put(k.getUsername(),k);
-						
+						prodavciMap.put(k.getUsername(), pr);
 						break;
 					}
 					case "KUPAC":{
@@ -250,6 +252,18 @@ public class KorisnikDAO {
 		this.tipovi = tipovi;
 	}
 
+	public HashMap<String, Prodavac> getProdavciMap() {
+		return prodavciMap;
+	}
+
+	public void setProdavciMap(HashMap<String, Prodavac> prodavciMap) {
+		this.prodavciMap = prodavciMap;
+	}
+
+	public void setKupciMap(HashMap<String, Kupac> kupciMap) {
+		this.kupciMap = kupciMap;
+	}
+
 	public Korisnik find(String username, String password) {
 		try {
 			Korisnik k = (Korisnik) korisniciMap.get(username);
@@ -262,6 +276,5 @@ public class KorisnikDAO {
 			return null;
 		}
 	}
-	
 	
 }

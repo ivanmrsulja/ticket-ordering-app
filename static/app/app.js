@@ -1,6 +1,7 @@
 const PrikazManifestacijaPocetna = { template: '<pocetna-strana></pocetna-strana>' }
 const Registracija = { template: '<register-user></register-user>' }
 const Login = { template: '<login-user></login-user>' }
+const Profil = { template: '<update-user></update-user>' }
 const ManifestacijeAdmin = { template: '<manifestacije-admin></manifestacije-admin>' }
 const KorisniciAdmin = { template: '<korisnici-admin></korisnici-admin>' }
 const KarteAdmin = { template: '<karte-admin></karte-admin>' }
@@ -16,7 +17,8 @@ const router = new VueRouter({
 	    { path: '/adminManif', component: ManifestacijeAdmin },
 	    { path: '/adminUsers', component: KorisniciAdmin },
 	    { path: '/adminTickets', component: KarteAdmin },
-	    { path: '/adminComment', component: KomentariAdmin }
+	    { path: '/adminComment', component: KomentariAdmin },
+	    { path: '/profile', component: Profil }
 	  ]
 });
 

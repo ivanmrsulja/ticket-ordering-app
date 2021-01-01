@@ -7,7 +7,7 @@ public class Manifestacija {
 	private int id;
 	private String naziv;
 	private String tipManifestacije;
-	private Date datumOdrzavanja;
+	private long datumOdrzavanja;
 	private int brojMesta;
 	private double cenaRegular;
 	private String status;
@@ -17,7 +17,7 @@ public class Manifestacija {
 	
 	public Manifestacija() {}
 
-	public Manifestacija(int id, String naziv, String tipManifestacije, Date datOdr, int brojMesta, double cenaRegular, String status,
+	public Manifestacija(int id, String naziv, String tipManifestacije, long datOdr, int brojMesta, double cenaRegular, String status,
 			Lokacija lokacija, String slika) {
 		this.id = id;
 		this.naziv = naziv;
@@ -89,7 +89,7 @@ public class Manifestacija {
 		return id;
 	}
 
-	public Date getDatumOdrzavanja() {
+	public long getDatumOdrzavanja() {
 		return datumOdrzavanja;
 	}
 
@@ -97,7 +97,7 @@ public class Manifestacija {
 		this.id = id;
 	}
 
-	public void setDatumOdrzavanja(Date datumOdrzavanja) {
+	public void setDatumOdrzavanja(long datumOdrzavanja) {
 		this.datumOdrzavanja = datumOdrzavanja;
 	}
 

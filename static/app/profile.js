@@ -1,14 +1,14 @@
-Vue.component("register-user", {
+Vue.component("update-user", {
 	data: function () {
 		    return {
 		    }
 	},
 	template: ` 
 <div>
-		<h1>Registracija korisnika: </h1>
+		<h1>Korisnicki profil: </h1>
 		<table>
 			<tr>
-				<td> <h2>Username:</h2> </td> <td> <input type="text" name="username"/> </td>
+				<td> <h2>Username:</h2> </td> <td> <input type="text" name="username" disabled /> </td>
 			</tr>
 			<tr>
 				<td> <h2>Password:</h2> </td> <td> <input type="text" name="pass"/> </td>
@@ -34,7 +34,7 @@ Vue.component("register-user", {
 			</tr>
 			<tr>
 				<td align=center colspan=2>
-					<input type="button" value="Posalji" v-on:click="registerUser()"/>
+					<input type="button" value="Posalji" v-on:click="updateUser()"/>
 				</td>
 			</tr>
 		</table>
@@ -45,7 +45,7 @@ Vue.component("register-user", {
 	methods : {
 		init : function() {
 		}, 
-		registerUser : function () {
+		updateUser : function () {
 			let usr = $("input[name=username]").val();
 			let pas = $("input[name=pass]").val();
 			let ime = $("input[name=ime]").val();
@@ -53,26 +53,39 @@ Vue.component("register-user", {
 			let pol = $('#pol option:selected').val();
 			let dat = $("input[name=birthday]").val();
 			let date = (new Date(dat)).getTime();
-
-			//TODO: Validacija upisa
 			
-			newUser = {username: usr, password: pas, ime: ime, prezime : prz, pol: pol, datumRodjenja: date};
-			let addr = '/rest/users/registerUser';
+			updatedUser = {username: usr, password: pas, ime: ime, prezime : prz, pol: pol, datumRodjenja: date};
+			let addr = '/rest/users/updateUser';
 			
-			axios
-    		.post(addr, newUser)
-    		.then(function(response){
-				if(response.data == "Done"){
-					alert("Uspesno ste kreirali nalog, mozete se ulogovati.");
-					window.location.href = "#/login";
-				}else{
-					alert("Vec postoji korisnik sa tim kredencijalima, pokusajte ponovo.");
-				}	
-    		});
+			$.ajax({
+				  url: addr,
+				  type: 'PUT',
+				  data: JSON.stringify(updatedUser),
+				  success: function(data) {
+				    alert('Uspesno azurirano.');
+				  }
+				});
 
 		} 
 	},
 	mounted () {
-        
+			
+			$.get("rest/users/currentUser", function(data){
+				 $("input[name=username]").val(data.username);
+				$("input[name=pass]").val(data.password);
+				$("input[name=ime]").val(data.ime);
+				$("input[name=prezime]").val(data.prezime);
+				$('#pol').val(data.pol);
+				
+				var now = new Date(data.datumRodjenja);
+
+				var day = ("0" + now.getDate()).slice(-2);
+				var month = ("0" + (now.getMonth() + 1)).slice(-2);
+				
+				var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+				
+				$("input[name=birthday]").val(today);
+				
+			});
     }
 });

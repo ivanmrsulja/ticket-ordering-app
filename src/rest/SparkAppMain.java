@@ -3,16 +3,20 @@ package rest;
 import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
+import static spark.Spark.put;
 import static spark.Spark.staticFiles;
 import static spark.Spark.webSocket;
 
 import java.io.File;
 import java.security.Key;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gson.Gson;
 
 import beans.Korisnik;
 import beans.Kupac;
+import beans.Prodavac;
 import beans.TipKupca;
 import dao.KarteDAO;
 import dao.KomentarDAO;
@@ -120,6 +124,40 @@ public class SparkAppMain {
 			return g.toJson(user);
 		});
 		
+		put("rest/users/updateUser", (req,res) -> {
+			Korisnik user = (Korisnik) req.session().attribute("currentUser");
+			System.out.println(user);
+			Korisnik updatedUser = (Korisnik) g.fromJson(req.body(), Korisnik.class);
+			user.setPassword(updatedUser.getPassword());
+			user.setIme(updatedUser.getIme());
+			user.setPrezime(updatedUser.getPrezime());
+			user.setPol(updatedUser.getPol());
+			user.setDatumRodjenja(updatedUser.getDatumRodjenja());
+			switch(user.getUloga()) {
+				case "KUPAC":
+						Kupac kup = k.getKupciMap().get(user.getUsername());
+						kup.setPassword(updatedUser.getPassword());
+						kup.setIme(updatedUser.getIme());
+						kup.setPrezime(updatedUser.getPrezime());
+						kup.setPol(updatedUser.getPol());
+						kup.setDatumRodjenja(updatedUser.getDatumRodjenja());
+						System.out.println(kup);
+					break;
+				case "PRODAVAC":
+					Prodavac prod = k.getProdavciMap().get(user.getUsername());
+					prod.setPassword(updatedUser.getPassword());
+					prod.setIme(updatedUser.getIme());
+					prod.setPrezime(updatedUser.getPrezime());
+					prod.setPol(updatedUser.getPol());
+					prod.setDatumRodjenja(updatedUser.getDatumRodjenja());
+					System.out.println(prod);
+					break;
+			}
+			k.save();
+			
+			return "Done";
+		});
+		
 		get("/rest/users/allUsers", (req, res) -> {
 			res.type("application/json");
 			return g.toJson(k.getKorisnici());
@@ -139,7 +177,14 @@ public class SparkAppMain {
 			res.type("application/json");
 			return  g.toJson(komentari);
 		});
-//		
+		
+		post("/rest/tickets/checkout", (req, res) -> {
+			HashMap<String, Integer> cart = (HashMap<String, Integer>) g.fromJson(req.body(), Map.class);
+			System.out.println(cart);
+			res.type("application/json");
+			//TODO: da se nastavi :D
+			return  "Done";
+		});
 //		get("/rest/demo/book/:isbn", (req, res) -> {
 //			String isbn = req.params("isbn");
 //			return "/rest/demo/book received PathParam 'isbn': " + isbn;
@@ -173,77 +218,5 @@ public class SparkAppMain {
 //			Student s = new Student(ime, prezime, null);
 //			return g.toJson(s);
 //		});
-//
-//		post("/rest/demo/testjson", (req, res) -> {
-//			res.type("application/json");
-//			String payload = req.body();
-//			Student s = g.fromJson(payload, Student.class);
-//			s.setIme(s.getIme() + "2");
-//			s.setPrezime(s.getPrezime() + "2");
-//			return g.toJson(s);
-//		});
-//
-//		post("/rest/demo/login", (req, res) -> {
-//			res.type("application/json");
-//			String payload = req.body();
-//			User u = g.fromJson(payload, User.class);
-//			Session ss = req.session(true);
-//			User user = ss.attribute("user");
-//			if (user == null) {
-//				user = u;
-//				ss.attribute("user", user);
-//			}
-//			return g.toJson(user);
-//		});
-//
-//		get("/rest/demo/testlogin", (req, res) -> {
-//			Session ss = req.session(true);
-//			User user = ss.attribute("user");
-//			
-//			if (user == null) {
-//				return "No user logged in.";  
-//			} else {
-//				return "User " + user + " logged in.";
-//			}
-//		});
-//
-//		get("/rest/demo/logout", (req, res) -> {
-//			res.type("application/json");
-//			Session ss = req.session(true);
-//			User user = ss.attribute("user");
-//			
-//			if (user != null) {
-//				ss.invalidate();
-//			}
-//			return true;
-//		});
-//		
-//		post("/rest/demo/loginJWT", (req, res) -> {
-//			res.type("application/json");
-//			String payload = req.body();
-//			User u = g.fromJson(payload, User.class);
-//			// Token je validan 10 sekundi!
-//			String jws = Jwts.builder().setSubject(u.getUsername()).setExpiration(new Date(new Date().getTime() + 1000*10L)).setIssuedAt(new Date()).signWith(key).compact();
-//			u.setJWTToken(jws);
-//			System.out.println("Returned JWT: " + jws);
-//			return g.toJson(u);
-//		});
-
-//		get("/rest/demo/testloginJWT", (req, res) -> {
-//			String auth = req.headers("Authorization");
-//			System.out.println("Authorization: " + auth);
-//			if ((auth != null) && (auth.contains("Bearer "))) {
-//				String jwt = auth.substring(auth.indexOf("Bearer ") + 7);
-//				try {
-//				    Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
-//				    // ako nije bacio izuzetak, onda je OK
-//					return "User " + claims.getBody().getSubject() + " logged in.";
-//				} catch (Exception e) {
-//					System.out.println(e.getMessage());
-//				}
-//			}
-//			return "No user logged in.";
-//		});
-
 	}
 }

@@ -49,7 +49,7 @@ public class ManifestacijaDAO {
 				String[] tokens = currentLine.split(";");
 				Lokacija l = (Lokacija) lokacije.getLokacijeMap().get(tokens[7]);
 				
-				Manifestacija m =  new Manifestacija(Integer.parseInt(tokens[0]), tokens[1],tokens[2],new Date(Integer.parseInt(tokens[3])),Integer.parseInt(tokens[4]),Double.parseDouble(tokens[5]),tokens[6],(Lokacija) lokacije.getLokacijeMap().get(tokens[7]),tokens[8]);
+				Manifestacija m =  new Manifestacija(Integer.parseInt(tokens[0]), tokens[1],tokens[2],Long.parseLong(tokens[3]),Integer.parseInt(tokens[4]),Double.parseDouble(tokens[5]),tokens[6],(Lokacija) lokacije.getLokacijeMap().get(tokens[7]),tokens[8]);
 				manifestacijaList.add(m);
 				manifestacijaMap.put(m.getId(), m);
 				

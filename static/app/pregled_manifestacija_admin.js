@@ -1,8 +1,7 @@
 Vue.component("manifestacije-admin", {
 	data: function () {
 		    return {
-				sc: null,
-		      	total: 0
+		    
 		    }
 	},
 	template: ` 
@@ -15,8 +14,6 @@ Vue.component("manifestacije-admin", {
 	, 
 	methods : {
 		init : function() {
-			this.sc = {};
-			this.total = 0.0;
 		}, 
 		clearSc : function () {
 			if (confirm('Da li ste sigurni?') == true) {

@@ -22,9 +22,10 @@
 <body>
 <div id="webShop" align=center>
 <h1>Aplikacija za rezervaciju karata</h1>
-<a href="#/" v-bind:hidden="korisnik.uloga == 'ADMIN'">Pocetna</a>
+<a href="#/" v-bind:hidden="korisnik.uloga == 'ADMIN' || korisnik.uloga=='PRODAVAC'">Pocetna</a>
 <a href="#/register" v-bind:hidden="korisnik.uloga != 'GOST'">Register</a>
 <a href="#/login" v-bind:hidden="korisnik.uloga != 'GOST'">Login</a>
+<a href="#/profile" v-bind:hidden="korisnik.uloga == 'GOST'">Moj Profil</a>
 
 <a href="#/adminManif" v-bind:hidden="korisnik.uloga != 'ADMIN'">PREGLED MANIFESTACIJA</a>
 <a href="#/adminTickets" v-bind:hidden="korisnik.uloga != 'ADMIN'">PREGLED KARATA</a>
@@ -49,6 +50,7 @@
 <script src="js/toast.js"></script>
 
 <script src="app/login.js"></script>
+<script src="app/profile.js"></script>
 <script src="app/registracija.js"></script>
 <script src="app/prikaz_manifestacija.js"></script>
 <script src="app/pregled_manifestacija_admin.js"></script>

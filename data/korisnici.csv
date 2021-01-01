@@ -1,7 +1,7 @@
-admin;admin;marko;markovic;MUSKI;12345678;ADMIN
+admin;admin;Marko;Markovic;MUSKI;12614400000;ADMIN
 nikolas;nidzo;nikola;stevanovic;MUSKI;12345678;PRODAVAC
-andrija;andro;andrija;vojnvoic;MUSKI;12345678;PRODAVAC
-Jovana;jovanica1999;jovana;jevtic;ZENSKI;12345678;KUPAC;false;24;NOVI
-bojan;caki;bojan;Cakar;MUSKI;12345678;KUPAC;false;0;NOVI
-aaa;aaa;aaa;aaa;MUSKI;1606780800000;KUPAC;false;0;NOVI
-pera;pera;pera;pera;ZENSKI;1606780800000;KUPAC;false;0;NOVI
+andrija;andro;Andrija;Vojnvoic;MUSKI;819504000000;PRODAVAC
+Jovana;jovanica1999;jovana;jevtic;ZENSKI;12345678;KUPAC;true;24;NOVI
+bojan;caki;bojan;Cakar;MUSKI;12345678;KUPAC;true;0;NOVI
+aaa;aaa;aaa;aaa;MUSKI;1234569301200;KUPAC;true;0;NOVI
+pera;pera;Pera;Peric;MUSKI;1192665600000;KUPAC;true;0;NOVI
