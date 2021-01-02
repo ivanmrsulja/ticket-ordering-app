@@ -100,10 +100,24 @@ public class SparkAppMain {
 			//Popraviti
 			Korisnik user = g.fromJson(req.body(), Korisnik.class);
 			Korisnik kor = k.find(user.getUsername(), user.getPassword());
-			System.out.println(user);
 			if(kor != null) {
 				System.out.println("Prosao");
 				res.type("application/json");
+				switch(kor.getUloga()) {
+				case "KUPAC":
+						System.out.println(k.getKupciMap().get(kor.getUsername()));
+						if(k.getKupciMap().get(kor.getUsername()).isObrisan() || k.getKupciMap().get(kor.getUsername()).isBanovan()) {
+							return "Failed";
+						}
+					break;
+				case "PRODAVAC":
+						System.out.println(k.getKupciMap().get(kor.getUsername()));
+						if(k.getProdavciMap().get(kor.getUsername()).isObrisan()) {
+							return "Failed";
+						}
+					break;
+				}
+				
 				req.session().attribute("currentUser", kor);
 				return "Done";
 			}else {

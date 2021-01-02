@@ -14,6 +14,7 @@ public class Manifestacija {
 	private Lokacija lokacija;
 	private String slika; //putanja do slike
 	private double ocena;
+	private boolean obrisana;
 	
 	public Manifestacija() {}
 
@@ -29,8 +30,17 @@ public class Manifestacija {
 		this.lokacija = lokacija;
 		this.slika = slika;
 		this.ocena = 0;
+		obrisana = false;
 	}
 	
+	public boolean isObrisana() {
+		return obrisana;
+	}
+
+	public void setObrisana(boolean obrisana) {
+		this.obrisana = obrisana;
+	}
+
 	public double getOcena() {
 		return ocena;
 	}

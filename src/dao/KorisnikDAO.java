@@ -72,6 +72,9 @@ public class KorisnikDAO {
 						Prodavac pr;
 						pr = new Prodavac(tokens[0],tokens[1],tokens[2],tokens[3],tokens[4],Long.parseLong(tokens[5]),tokens[6]);
 						k = new Korisnik(tokens[0],tokens[1],tokens[2],tokens[3],tokens[4],Long.parseLong(tokens[5]),tokens[6]);
+						if (tokens[7].contentEquals("true")) {
+							pr.setObrisan(true);
+						}
 						korisnici.add(k);
 						prodavci.add(pr);
 						korisniciMap.put(k.getUsername(),k);
@@ -86,8 +89,12 @@ public class KorisnikDAO {
 						Korisnik ko;
 						k = new Kupac(tokens[0],tokens[1],tokens[2],tokens[3],tokens[4],Long.parseLong(tokens[5]), tokens[6],(TipKupca) tipovi.getKupciMap().get(tokens[9]),Integer.parseInt(tokens[8]));
 						ko = new Korisnik(tokens[0],tokens[1],tokens[2],tokens[3],tokens[4],Long.parseLong(tokens[5]),tokens[6]);
-						if(!tokens[7].equals("false"))
+						if(!tokens[7].equals("false")) {
 							k.setBanovan(true);
+						}
+						if(tokens[10].contentEquals("true")) {
+							k.setObrisan(true);
+						}
 						
 						korisnici.add(ko);
 						kupci.add((Kupac) k);
@@ -168,6 +175,8 @@ public class KorisnikDAO {
 						
 					case "PRODAVAC":
 					{
+						out.print(";");
+						out.print(prodavciMap.get(k.getUsername()).isObrisan());
 						out.println();
 						break;
 					}
@@ -183,6 +192,8 @@ public class KorisnikDAO {
 						}
 						out.print(";");
 						out.print(kupciMap.get(k.getUsername()).getTip().getImeTipa());
+						out.print(";");
+						out.print(kupciMap.get(k.getUsername()).isObrisan());
 						out.println();
 						break;
 						
@@ -263,6 +274,8 @@ public class KorisnikDAO {
 	public void setKupciMap(HashMap<String, Kupac> kupciMap) {
 		this.kupciMap = kupciMap;
 	}
+	
+	
 
 	public Korisnik find(String username, String password) {
 		try {

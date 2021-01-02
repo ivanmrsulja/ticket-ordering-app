@@ -5,12 +5,14 @@ import java.util.Date;
 
 public class Prodavac extends Korisnik{
 	
-	ArrayList<Manifestacija> manifestacije;
+	private ArrayList<Manifestacija> manifestacije;
+	private boolean obrisan;
 	
 	public Prodavac() {}
 	public Prodavac(String u, String p, String im, String pr, String po, long dr, String ul) {
 		super(u, p, im, pr, po, dr, ul);
 		manifestacije = new ArrayList<Manifestacija>();
+		obrisan = false;
 	}
 	
 	public ArrayList<Manifestacija> getManifestacije() {
@@ -19,6 +21,13 @@ public class Prodavac extends Korisnik{
 	
 	public void setManifestacije(ArrayList<Manifestacija> manifestacije) {
 		this.manifestacije = manifestacije;
+	}
+	
+	public boolean isObrisan() {
+		return obrisan;
+	}
+	public void setObrisan(boolean obrisan) {
+		this.obrisan = obrisan;
 	}
 	
 	@Override

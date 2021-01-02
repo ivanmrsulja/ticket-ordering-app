@@ -10,6 +10,7 @@ public class Kupac extends Korisnik {
 	private int brojBodova;
 	private TipKupca tip;
 	private boolean banovan;
+	private boolean obrisan;
 	
 	public Kupac() {}
 	public Kupac(String u, String p, String im, String pr, String po, long dr, String ul, TipKupca t, int bodovi) {
@@ -18,8 +19,15 @@ public class Kupac extends Korisnik {
 		brojBodova = bodovi;
 		tip = t;
 		banovan = false;
+		obrisan = false;
 	}
 	
+	public boolean isObrisan() {
+		return obrisan;
+	}
+	public void setObrisan(boolean obrisan) {
+		this.obrisan = obrisan;
+	}
 	public boolean isBanovan() {
 		return banovan;
 	}
@@ -52,7 +60,10 @@ public class Kupac extends Korisnik {
 	
 	@Override
 	public String toString() {
-		return "Kupac [sveKarte=" + sveKarte + ", brojBodova=" + brojBodova + ", tip=" + tip + "]";
+		return "Kupac [sveKarte=" + sveKarte + ", brojBodova=" + brojBodova + ", tip=" + tip + ", banovan=" + banovan
+				+ ", obrisan=" + obrisan + "]";
 	}
+	
+	
 	
 }

@@ -62,10 +62,10 @@ public class KarteDAO {
 				out.print(k.getTip());
 				out.print(";");
 				out.print(k.getIdManifestacije());
+				out.print(";");
+				out.print(k.isObrisana());
 				out.println();
-				
-				
-				
+
 			}
 			out.close();
 		} catch (IOException e) {
@@ -89,6 +89,9 @@ public class KarteDAO {
 				String[] tokens = currentLine.split(";");
 				Kupac kupac = korisnici.getKupciMap().get(tokens[2]);
 				Karta k  = new Karta(tokens[0],Integer.parseInt(tokens[1]), kupac.getUsername(), tokens[3], Double.parseDouble(tokens[4]), tokens[5], tokens[6]);
+				if(tokens[7].contentEquals("true")) {
+					k.setObrisana(true);
+				}
 				kupac.addKarta(k);
 				karteList.add(k);
 				karteMap.put(k.getId(),k);

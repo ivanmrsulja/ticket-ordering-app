@@ -50,6 +50,9 @@ public class ManifestacijaDAO {
 				Lokacija l = (Lokacija) lokacije.getLokacijeMap().get(tokens[7]);
 				
 				Manifestacija m =  new Manifestacija(Integer.parseInt(tokens[0]), tokens[1],tokens[2],Long.parseLong(tokens[3]),Integer.parseInt(tokens[4]),Double.parseDouble(tokens[5]),tokens[6],(Lokacija) lokacije.getLokacijeMap().get(tokens[7]),tokens[8]);
+				if(tokens[9].contentEquals("true")) {
+					m.setObrisana(true);
+				}
 				manifestacijaList.add(m);
 				manifestacijaMap.put(m.getId(), m);
 				
@@ -97,7 +100,7 @@ public class ManifestacijaDAO {
 				out.print(";");
 				out.print(m.getTipManifestacije());
 				out.print(";");
-				out.print(formater.format(m.getDatumOdrzavanja()));
+				out.print(m.getDatumOdrzavanja());
 				out.print(";");
 				out.print(m.getBrojMesta());
 				out.print(";");
@@ -112,6 +115,8 @@ public class ManifestacijaDAO {
 					out.print(" ");
 				out.print(";");
 				out.print(m.getSlika());
+				out.print(";");
+				out.print(m.isObrisana());
 				out.println();
 			}
 			

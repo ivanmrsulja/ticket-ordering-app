@@ -53,6 +53,8 @@ public class KomentarDAO {
 				Komentar k = new Komentar((Korisnik)korisnici.getKorisniciMap().get(tokens[0]),(Manifestacija) manifestacije.getManifestacijaMap().get(tokens[1]), tokens[2], Double.parseDouble(tokens[3]));
 				if(tokens[4].contentEquals("true"))
 					k.setOdobren(true);
+				if(tokens[5].contentEquals("true"))
+					k.setObrisan(true);
 				komentariList.add(k);
 				
 				
@@ -89,7 +91,9 @@ public class KomentarDAO {
 				out.print(";");
 				out.print(k.getOcena());
 				out.print(";");
-				out.println(k.isOdobren());
+				out.print(k.isOdobren());
+				out.print(";");
+				out.println(k.isObrisan());
 				
 			}
 		} catch (IOException e) {

@@ -29,8 +29,8 @@ public class Main {
 		System.out.println(lokacije);
 		
 		ManifestacijaDAO manifestacije = new ManifestacijaDAO(lokacije);
-		manifestacije.save();
 		manifestacije.load();
+		
 		System.out.println(manifestacije);
 		
 		
@@ -39,12 +39,18 @@ public class Main {
 		System.out.println(karte);
 		
 		KomentarDAO komentari = new KomentarDAO(k,manifestacije);
-		komentari.save();
 		komentari.load();
+		komentari.save();
 		System.out.println(komentari);
-		
-		
 		System.out.println(k.getKorisnici());
+		
+		tipovi.save();
+		k.save();
+		lokacije.save();
+		manifestacije.save();
+		karte.save();
+		komentari.save();
+		
 	}
 
 }
