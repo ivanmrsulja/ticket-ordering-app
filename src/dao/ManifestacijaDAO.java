@@ -35,6 +35,10 @@ public class ManifestacijaDAO {
 	}
 	
 	
+	
+	
+	
+	
 	public void load() {
 		
 		String path = "data//manifestacije.csv";

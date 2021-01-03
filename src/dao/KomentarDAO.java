@@ -37,6 +37,33 @@ public class KomentarDAO {
 	}
 	
 	
+	public ArrayList<Komentar> vratiNeobrisaneKomentare(){
+		
+		ArrayList<Komentar> neobrisaniKomentari = new ArrayList<Komentar>();
+		for(Komentar k: komentariList) {
+			if(!k.isObrisan())
+				neobrisaniKomentari.add(k);
+				
+		}
+		return neobrisaniKomentari;
+	}
+	
+	public  ArrayList<Komentar> vratiKomentareManifestacija(String idMan){
+		ArrayList<Komentar> komentari = new  ArrayList<Komentar>();
+		for(Komentar k: komentariList) {
+			if(k.getManifestacija().getNaziv().equals(idMan) && k.isOdobren())
+				komentari.add(k);
+			
+		}
+		return komentari;
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	public void load() {
 		String path = "data//komentari.csv";
