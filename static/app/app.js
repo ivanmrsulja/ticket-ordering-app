@@ -8,6 +8,7 @@ const KarteAdmin = { template: '<karte-admin></karte-admin>' }
 const KomentariAdmin = { template: '<komentari-admin></komentari-admin>' }
 const RegistracijaProdavaca = {template: '<register-seller></register-seller>'}
 const DodavanjeManifestacije = {template: '<add-manifestation></add-manifestation>'}
+const PrikazPojedinacne = {template: '<prikaz-pojedinacne></prikaz-pojedinacne>'}
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -22,6 +23,7 @@ const router = new VueRouter({
 	    { path: '/profile', component: Profil },
 	    { path: '/registerSeller', component: RegistracijaProdavaca },
 	    { path: '/addManif', component: DodavanjeManifestacije },
+	    { path: '/prikaz', component: PrikazPojedinacne}
 	  ]
 });
 

@@ -4,6 +4,7 @@ import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.put;
+import static spark.Spark.delete;
 import static spark.Spark.staticFiles;
 import static spark.Spark.webSocket;
 
@@ -216,7 +217,7 @@ public class SparkAppMain {
 			return "Done";
 		});
 		
-		get("/rest/manifestations/obrisi/:id", (req, res) -> {
+		delete("/rest/manifestations/obrisi/:id", (req, res) -> {
 			String id = req.params("id");
 			Manifestacija m = (Manifestacija) manifestacije.getManifestacijaMap().get(Integer.parseInt(id));
 			m.setObrisana(true);
@@ -237,6 +238,19 @@ public class SparkAppMain {
 				return "Failed";
 			}
 			return "Failed";
+		});
+		
+		post("/rest/manifestations/setCurrent", (req, res) -> {
+			Manifestacija man = g.fromJson(req.body(), Manifestacija.class);
+			req.session().attribute("currentManif", man);
+			return "Done";
+		});
+		
+		get("/rest/manifestations/getCurrent", (req, res) -> {
+			res.type("application/json");
+			Manifestacija m = (Manifestacija) req.session().attribute("currentManif");
+			System.out.println("AAA" + m);
+			return g.toJson(m);
 		});
 		
 		get("/rest/users/all", (req, res) -> {

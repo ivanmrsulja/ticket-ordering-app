@@ -63,9 +63,12 @@ Vue.component("manifestacije-admin", {
 		},
 		obrisi: function(m){
 			let self = this;
-			$.get("/rest/manifestations/obrisi/" + m.id + "", function(data){
-				
-				$.get("/rest/manifestations/all", function(data){
+			
+			$.ajax({
+				url: "/rest/manifestations/obrisi/" + m.id + "",
+				type: 'DELETE',
+				success: function(data){
+					$.get("/rest/manifestations/all", function(data){
 		        	for(d of data){
 		        		var now = new Date(d.datumOdrzavanja);
 		
@@ -79,7 +82,7 @@ Vue.component("manifestacije-admin", {
 		        	self.manifestacije = data;
 		        	
 		        });
-				
+				}
 			});
 		}
 	},

@@ -44,7 +44,7 @@ Vue.component("login-user", {
 						if(resp.data.uloga == "ADMIN"){
 							window.location.href = "#/adminManif";
 						}else if(resp.data.uloga == "PRODAVAC"){
-							window.location.href = "#/";
+							window.location.href = "#/addManif";
 						}else{
 							window.location.href = "#/";
 						}

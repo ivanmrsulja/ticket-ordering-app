@@ -5,7 +5,7 @@ Vue.component("add-manifestation", {
 	},
 	template: ` 
 <div>
-		<h1>Registracija korisnika: </h1>
+		<h1>Dodaj manifestaciju: </h1>
 		<table>
 			<tr>
 				<td> <h2>Naziv:</h2> </td> <td> <input type="text" name="naziv"/> </td>

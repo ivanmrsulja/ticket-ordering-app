@@ -8,20 +8,27 @@ Vue.component("pocetna-strana", {
 <div>
 		<h1>Prikaz manifestacija:</h1>
 		
-		<div class="card" style="background-color:#d1d6cd; width:50%;" v-for="m in this.manifestacije">
-	      <h2>{{m.naziv}}</h2>
+		<div class="card" style="background-color:#d1d6cd; width:50%; margin-bottom:17px" v-for="m in this.manifestacije">
+	      <h2 style="margin-bottom:6px">{{m.naziv}}</h2>
 	      <h5>{{m.tipManifestacije}}, {{m.datumOdrzavanja}}</h5>
 	      <img :src="m.slika" style="height:200px;"></img>
 	      <p>{{m.lokacija.adresa}}</p>
 	      <p>Cena karte vec od: {{m.cenaRegular}}</p>
+	      <input type="button" value="Vise informacija" v-on:click="setCurrent(m)" />
 	    </div>
 		
 </div>		  
 `
 	, 
 	methods : {
-		init : function() {
-			
+		setCurrent : function(m) {
+			let current = JSON.parse(JSON.stringify(m)); //deepcopy :O
+			current.datumOdrzavanja = current.datumOdrzavanja.split(" ")[0];
+			let date = (new Date(current.datumOdrzavanja)).getTime();
+			current.datumOdrzavanja = date;
+			$.post("/rest/manifestations/setCurrent", JSON.stringify(current), function(data){
+				window.location.href = "#/prikaz" ;
+			});
 		},
 	},
 	mounted () {
