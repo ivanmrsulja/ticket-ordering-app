@@ -70,7 +70,7 @@ public class SparkAppMain {
 	}
 
 	public static void main(String[] args) throws Exception {
-		port(8080);
+		port(9090);
 
 		webSocket("/ws", WsHandler.class);
 

@@ -34,6 +34,30 @@ public class KarteDAO {
 		this.korisnici = korisnici;
 	}
 	
+	public  ArrayList<Karta> vratiKarteZaManifestaciju(String idMan){
+		ArrayList<Karta> karteMenifestacija = new ArrayList<Karta>();
+		for(Karta k: karteList) {
+			if(k.getIdManifestacije().equals(idMan)) {
+				karteMenifestacija.add(k);
+		}		
+			}
+		
+		return karteMenifestacija;
+	}
+	
+	public  ArrayList<Karta> NeobrisaneKarteManifestacija(String idMan){
+		ArrayList<Karta> karteMenifestacija = new ArrayList<Karta>();
+		for(Karta k: karteList) {
+			if(k.getIdManifestacije().equals(idMan) && (!k.isObrisana()) && k.getStatus().equals("REZERVISANA")) {
+				karteMenifestacija.add(k);
+		}		
+			}
+		
+		return karteMenifestacija;
+	}
+	
+	
+	
 	
 	public void save() {
 //		Karta k1 = new Karta("000",80,(Kupac) korisnici.getKorisniciMap().get("bojan"),"U PRODAJI",1000, "TIP KARTE 1",(Manifestacija) manifestacije.getManifestacijaMap().get(2));
@@ -92,6 +116,7 @@ public class KarteDAO {
 				if(tokens[7].contentEquals("true")) {
 					k.setObrisana(true);
 				}
+				k.setImePrezime(kupac.getIme()+" "+kupac.getPrezime());
 				kupac.addKarta(k);
 				karteList.add(k);
 				karteMap.put(k.getId(),k);
@@ -129,7 +154,7 @@ public class KarteDAO {
 		this.karteMap = karteMap;
 	}
 
-
+	
 	public ManifestacijaDAO getManifestacije() {
 		return manifestacije;
 	}
@@ -149,7 +174,25 @@ public class KarteDAO {
 		this.korisnici = korisnici;
 	}
 
+	
+	public ArrayList<Karta> vratiKarte(){
+		ArrayList<Karta> karte = new ArrayList<Karta>();
+		for(Karta k: karteList) {
+			
+			if(k.isObrisana())
+				continue;
+			else
+				karte.add(k);
+		}
+		
+	
+		return karte;
+	}
 
+	
+	
+	
+	
 	@Override
 	public String toString() {
 		return "KarteDAO [karteList=" + karteList + ", karteMap=" + karteMap + ", manifestacije=" + manifestacije

@@ -9,6 +9,7 @@ public class Karta {
 	private String status;
 	private String tip;
 	private boolean obrisana;
+	private String imePrezime;
 	
 	public Karta() {}
 
@@ -22,6 +23,16 @@ public class Karta {
 		this.status = status;
 		this.idManifestacije = m;
 		obrisana = false;
+	}
+
+	
+	
+	public String getImePrezime() {
+		return imePrezime;
+	}
+
+	public void setImePrezime(String imePrezime) {
+		this.imePrezime = imePrezime;
 	}
 
 	public String getId() {

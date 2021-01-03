@@ -16,8 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import beans.Karta;
 import beans.Korisnik;
 import beans.Kupac;
+import beans.Manifestacija;
 import beans.Prodavac;
 import beans.TipKupca;
 
@@ -44,6 +46,69 @@ public class KorisnikDAO {
 		tipovi = t;
 	}
 	
+	
+	public ArrayList<Kupac> vratiNeobrisaneKupce(){
+		ArrayList<Kupac> neobrisaniKupci = new ArrayList<Kupac>();
+		for(Kupac k: kupci) {
+			if(!k.isObrisan())
+				neobrisaniKupci.add(k);
+		}
+		
+		return neobrisaniKupci;
+	}
+	
+	
+	public ArrayList<Prodavac> vratiNeobrisaneProdavce(){
+		ArrayList<Prodavac> neobrisaniProdavci = new ArrayList<Prodavac>();
+		for(Prodavac p: prodavci) {
+			if(!p.isObrisan())
+				neobrisaniProdavci.add(p);
+		}
+		
+		return neobrisaniProdavci;
+	}
+	
+	
+	
+	public ArrayList<Karta> vratiKarteProdavcu(String username, KarteDAO karteManager){
+		ArrayList<Karta> karte = new ArrayList<Karta>();
+		Prodavac p = prodavciMap.get(username);
+		if(p == null)
+			return karte;
+		for(Manifestacija m: p.getManifestacije()) {
+			karte.addAll(karteManager.NeobrisaneKarteManifestacija(m.getNaziv()));
+		}
+		return karte;
+		
+	}
+	
+	public ArrayList<Karta> vratiKarteKupcu(String username, KarteDAO karteManager){
+		ArrayList<Karta> karte = new ArrayList<Karta>();
+		
+		
+		
+		return karte;
+		
+	}
+	
+	public ArrayList<Korisnik> vratiNeobrisaneKorisnike(){
+		ArrayList<Korisnik> neobrisaniKorisnici = new ArrayList<Korisnik>();
+		for(Korisnik k : korisnici) {
+			if(k instanceof Kupac) {
+				if(!((Kupac) k).isObrisan())
+					neobrisaniKorisnici.add(k);	
+			}else if(k instanceof Prodavac) {
+				if(!((Prodavac) k).isObrisan())
+					neobrisaniKorisnici.add(k);				
+				
+			}else {
+				neobrisaniKorisnici.add(k);
+			}
+		}
+		
+		
+		return neobrisaniKorisnici;
+	}
 	
 	public void load() {
 		//putanja je navedena rucno, kasnije vidjeti sa mrsuljom gdje i kako
