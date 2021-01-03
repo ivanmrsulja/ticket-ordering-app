@@ -191,6 +191,8 @@ public class KarteDAO {
 
 	
 	
+	
+	
 	@Override
 	public String toString() {
 		return "KarteDAO [karteList=" + karteList + ", karteMap=" + karteMap + ", manifestacije=" + manifestacije
