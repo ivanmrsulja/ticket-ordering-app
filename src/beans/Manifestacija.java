@@ -125,9 +125,10 @@ public class Manifestacija {
 
 	@Override
 	public String toString() {
-		return "Manifestacija [ naziv=" + naziv + ", tipManifestacije=" + tipManifestacije
-				+ ", brojMesta=" + brojMesta + ", cena=" + cenaRegular + ", status=" + status + ", lokacija=" + lokacija
-				+ ", slika=" + slika + "]";
+		return "Manifestacija [id=" + id + ", naziv=" + naziv + ", tipManifestacije=" + tipManifestacije
+				+ ", datumOdrzavanja=" + datumOdrzavanja + ", brojMesta=" + brojMesta + ", cenaRegular=" + cenaRegular
+				+ ", status=" + status + ", lokacija=" + lokacija + ", slika=" + slika + ", ocena=" + ocena
+				+ ", obrisana=" + obrisana + "]";
 	}
 	
 }

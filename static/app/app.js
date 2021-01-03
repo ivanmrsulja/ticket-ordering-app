@@ -6,7 +6,8 @@ const ManifestacijeAdmin = { template: '<manifestacije-admin></manifestacije-adm
 const KorisniciAdmin = { template: '<korisnici-admin></korisnici-admin>' }
 const KarteAdmin = { template: '<karte-admin></karte-admin>' }
 const KomentariAdmin = { template: '<komentari-admin></komentari-admin>' }
-
+const RegistracijaProdavaca = {template: '<register-seller></register-seller>'}
+const DodavanjeManifestacije = {template: '<add-manifestation></add-manifestation>'}
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -18,7 +19,9 @@ const router = new VueRouter({
 	    { path: '/adminUsers', component: KorisniciAdmin },
 	    { path: '/adminTickets', component: KarteAdmin },
 	    { path: '/adminComment', component: KomentariAdmin },
-	    { path: '/profile', component: Profil }
+	    { path: '/profile', component: Profil },
+	    { path: '/registerSeller', component: RegistracijaProdavaca },
+	    { path: '/addManif', component: DodavanjeManifestacije },
 	  ]
 });
 
@@ -27,7 +30,7 @@ var app = new Vue({
 	router,
 	el: '#webShop',
 	data: {
-        korisnik: undefined,
+        korisnik: {uloga : "GOST"},
     },
 	mounted () {
 		this.korisnik = {uloga : "GOST"};

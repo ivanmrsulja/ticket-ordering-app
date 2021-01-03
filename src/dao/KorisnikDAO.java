@@ -46,7 +46,6 @@ public class KorisnikDAO {
 		tipovi = t;
 	}
 	
-	
 	public ArrayList<Kupac> vratiNeobrisaneKupce(){
 		ArrayList<Kupac> neobrisaniKupci = new ArrayList<Kupac>();
 		for(Kupac k: kupci) {
@@ -281,6 +280,14 @@ public class KorisnikDAO {
 		kupci.add(ku);
 		korisniciMap.put(ko.getUsername(), ko);
 		kupciMap.put(ku.getUsername(), ku);
+		save();
+	}
+	
+	public void addNewSeller(Korisnik ko, Prodavac p) {
+		korisnici.add(ko);
+		prodavci.add(p);
+		korisniciMap.put(ko.getUsername(), ko);
+		prodavciMap.put(p.getUsername(), p);
 		save();
 	}
 

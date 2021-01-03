@@ -7,10 +7,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,10 +32,6 @@ public class ManifestacijaDAO {
 		this();
 		lokacije = l;
 	}
-	
-	
-	
-	
 	
 	
 	public void load() {
@@ -133,7 +128,51 @@ public class ManifestacijaDAO {
 		
 	}
 	
+	public int makeID() {
+		int max = 0;
+		for(Manifestacija m : manifestacijaList) {
+			if(m.getId() >= max) {
+				max = m.getId();
+			}
+		}
+		return max+1;
+	}
 	
+	public boolean checkLocation(Lokacija lo, long date) {
+		for(Manifestacija m : manifestacijaList) {
+			if(m.getDatumOdrzavanja() == date && m.getLokacija().getGeografskaSirina() == lo.getGeografskaSirina() && m.getLokacija().getGeografskaDuzina() == lo.getGeografskaDuzina()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean dodajNovu(Manifestacija nova) {
+		for(Manifestacija m : manifestacijaList) {
+			if(m.getNaziv().equals(nova.getNaziv())) {
+				System.out.println(m.getNaziv());
+				return false;
+			}
+		}
+		manifestacijaList.add(nova);
+		manifestacijaMap.put(nova.getId(), nova);
+		lokacije.getLokacijeList().add(nova.getLokacija());
+		lokacije.getLokacijeMap().put(nova.getLokacija().getAdresa(), nova.getLokacija());
+		lokacije.save();
+		save();
+		return true;
+	}
+	
+	public List<Manifestacija> vratiAktuelne(){
+		ArrayList<Manifestacija> ret = new ArrayList<Manifestacija>();
+		for(Manifestacija m : manifestacijaList) {
+			if(!m.isObrisana()) {
+				ret.add(m);
+			}
+		}
+		Collections.reverse(ret);
+		return ret;
+	}
 
 	public List<Manifestacija> getManifestacijaList() {
 		return manifestacijaList;

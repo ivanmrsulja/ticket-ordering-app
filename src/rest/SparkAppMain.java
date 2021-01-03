@@ -9,6 +9,7 @@ import static spark.Spark.webSocket;
 
 import java.io.File;
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import com.google.gson.Gson;
 
 import beans.Korisnik;
 import beans.Kupac;
+import beans.Manifestacija;
 import beans.Prodavac;
 import beans.TipKupca;
 import dao.KarteDAO;
@@ -96,6 +98,24 @@ public class SparkAppMain {
 			}
 		});
 		
+		post("/rest/users/registerSeller", (req, res) -> {
+			//Popraviti
+			Korisnik user = g.fromJson(req.body(), Korisnik.class);
+			Korisnik kor = k.find(user.getUsername(), user.getPassword());
+			if(kor != null) {
+				return "Failed";
+			}else {
+				System.out.println("Prosao");
+				Korisnik newUser = new Korisnik(user.getUsername(), user.getPassword(), user.getIme(), user.getPrezime(), user.getPol(), user.getDatumRodjenja(), "PRODAVAC");
+				
+				Prodavac newSeller = new Prodavac(user.getUsername(), user.getPassword(), user.getIme(), user.getPrezime(), user.getPol(), user.getDatumRodjenja(), "PRODAVAC");
+				System.out.println(newUser);
+				System.out.println(newSeller);
+				k.addNewSeller(newUser, newSeller);
+				return "Done";
+			}
+		});
+		
 		post("/rest/users/logUser", (req, res) -> {
 			//Popraviti
 			Korisnik user = g.fromJson(req.body(), Korisnik.class);
@@ -172,7 +192,54 @@ public class SparkAppMain {
 			return "Done";
 		});
 		
-		get("/rest/users/allUsers", (req, res) -> {
+		get("/rest/manifestations/all", (req, res) -> {
+			res.type("application/json");
+			ArrayList<Manifestacija> ret = new ArrayList<Manifestacija>();
+			for(Manifestacija m : manifestacije.getManifestacijaList()) {
+				if(!m.isObrisana()) {
+					ret.add(m);
+				}
+			}
+			return g.toJson(ret);
+		});
+		
+		get("/rest/manifestations/welcome", (req, res) -> {
+			res.type("application/json");
+			return g.toJson(manifestacije.vratiAktuelne());
+		});
+		
+		get("/rest/manifestations/odobri/:id", (req, res) -> {
+			String id = req.params("id");
+			Manifestacija m = (Manifestacija) manifestacije.getManifestacijaMap().get(Integer.parseInt(id));
+			m.setStatus("AKTIVNO");
+			manifestacije.save();
+			return "Done";
+		});
+		
+		get("/rest/manifestations/obrisi/:id", (req, res) -> {
+			String id = req.params("id");
+			Manifestacija m = (Manifestacija) manifestacije.getManifestacijaMap().get(Integer.parseInt(id));
+			m.setObrisana(true);
+			manifestacije.save();
+			return "Done";
+		});
+		
+		post("/rest/manifestations/add", (req, res) -> {
+			//Popraviti
+			Manifestacija man = g.fromJson(req.body(), Manifestacija.class);
+			boolean ok = manifestacije.checkLocation(man.getLokacija(), man.getDatumOdrzavanja());
+			if (ok) {
+				Manifestacija nova = new Manifestacija(manifestacije.makeID(), man.getNaziv(), man.getTipManifestacije(), man.getDatumOdrzavanja(), man.getBrojMesta(), man.getCenaRegular(), "NEAKTIVNO", man.getLokacija(), "def.jpg");
+				ok = manifestacije.dodajNovu(nova);
+				if(ok) {
+					return "Done";
+				}
+				return "Failed";
+			}
+			return "Failed";
+		});
+		
+		get("/rest/users/all", (req, res) -> {
 			res.type("application/json");
 			return g.toJson(k.getKorisnici());
 		});
@@ -199,6 +266,7 @@ public class SparkAppMain {
 			//TODO: da se nastavi :D
 			return  "Done";
 		});
+		
 //		get("/rest/demo/book/:isbn", (req, res) -> {
 //			String isbn = req.params("isbn");
 //			return "/rest/demo/book received PathParam 'isbn': " + isbn;

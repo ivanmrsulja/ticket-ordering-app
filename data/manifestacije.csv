@@ -1,1 +1,3 @@
-12;EXIT;KONCERT;12345678910;19997;2000.0;AKTIVNO;Bulevar oslobodjenja 96, Novi Sad 21000;static/git.jpg;false
+12;EXIT;KONCERT;1611100800000;19997;2000.0;AKTIVNO;Bulevar oslobodjenja 96, Novi Sad, 21000;def.jpg;false
+13;Zdravko Colic;KONCERT;1611081900000;2000;1000.0;NEAKTIVNO;Trg Slobode, Novi Sad, 21000;def.jpg;false
+14;Predstava;POZORISTE;1611085500000;10;400.0;AKTIVNO;Trg Slobode, Novi Sad, 21000;def.jpg;false
