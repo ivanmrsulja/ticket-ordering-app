@@ -8,13 +8,17 @@ Vue.component("pocetna-strana", {
 <div>
 		<h1>Prikaz manifestacija:</h1>
 		
-		<div class="card" style="background-color:#d1d6cd; width:50%; margin-bottom:17px" v-for="m in this.manifestacije">
+		<div class="card" v-for="m in this.manifestacije">
+		  <div class="post-container">
+	      <div class="post-thumb"><img :src="m.slika" style="height:200px;"></img></div>
+		  <div class="post-content">
 	      <h2 style="margin-bottom:6px">{{m.naziv}}</h2>
 	      <h5>{{m.tipManifestacije}}, {{m.datumOdrzavanja}}</h5>
-	      <img :src="m.slika" style="height:200px;"></img>
+	      
 	      <p>{{m.lokacija.adresa}}</p>
 	      <p>Cena karte vec od: {{m.cenaRegular}}</p>
-	      <input type="button" value="Vise informacija" v-on:click="setCurrent(m)" />
+	      <input type="button" class="button1" value="Vise informacija" v-on:click="setCurrent(m)" />
+	      </div></div>
 	    </div>
 		
 </div>		  

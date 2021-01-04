@@ -1,0 +1,91 @@
+@charset "UTF-8";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+/* Create three equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 15px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width:600px) {
+  .column {
+    width: 100%;
+  }
+}
+
+/* Linkovi */
+
+a {
+  background-color: red;
+  color: white;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition-duration: 0.4s;
+}
+
+a:hover {
+  background-color: #555;
+  cursor: pointer;
+}
+
+a:active {
+  background-color: black;
+}
+
+/* Pocetna strana */
+
+.card {
+	width:43%; 
+	margin-bottom:17px;
+}
+
+.post-container {
+    margin: 20px 20px 0 0;  
+    border: 5px solid #333;
+    overflow: auto;
+    background-image: url("background.jpg");
+	background-size: cover;
+}
+.post-thumb {
+    float: left
+}
+.post-thumb img {
+    display: block
+}
+.post-content {
+    margin-left: 210px
+}
+.post-title {
+    font-weight: bold;
+    font-size: 200%
+}
+
+.button1 {
+  background-color: red;
+  color: white;
+  border: 2px solid red; /* Green */
+  transition-duration: 0.4s;
+}
+
+.button1:hover {
+  background-color: #555; /* Green */
+  border: 2px solid #555;
+  color: white;
+}

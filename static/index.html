@@ -19,7 +19,7 @@
 	
 </head> 
 
-<body style="background-color:#dae0de">
+<body>
 <div id="webShop" align=center>
 <h1>Aplikacija za rezervaciju karata</h1>
 <a href="#/" v-bind:hidden="korisnik.uloga == 'ADMIN' || korisnik.uloga=='PRODAVAC'">Pocetna</a>
@@ -41,10 +41,10 @@
 <a href="#/mojaKorpa" v-bind:hidden="korisnik.uloga != 'KUPAC'">Moja korpa</a>
 
 <a href="#/" v-on:click="logout()"  v-bind:hidden="korisnik.uloga == 'GOST'">Logout</a>
-
 	  <router-view></router-view>
 </div>
 
+<link href="css/styles.css" rel="stylesheet" />
 <script src="js/vue.js"></script>
 <script src="js/vue-router.js"></script>
 <script src="js/axios.js"></script>
