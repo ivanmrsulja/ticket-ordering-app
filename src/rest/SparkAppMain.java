@@ -341,6 +341,8 @@ public class SparkAppMain {
 		put("/rest/tickets/odustanak/:id", (req, res) -> {
 			Karta ka = (Karta) karte.getKarteMap().get(req.params("id"));
 			ka.setStatus("ODUSTANAK");
+			Kupac ku = k.getKupciMap().get(ka.getIdKupca());
+			ku.setBrojBodova((int)(ku.getBrojBodova() - (ka.getCena()/1000)*133*4));
 			for(Manifestacija m : manifestacije.getManifestacijaList()) {
 				if(m.getNaziv().equals(ka.getIdManifestacije())) {
 					m.setBrojMesta(m.getBrojMesta() + 1);
@@ -348,6 +350,7 @@ public class SparkAppMain {
 			}
 			karte.save();
 			manifestacije.save();
+			k.save();
 			return "Done";
 		});
 		
