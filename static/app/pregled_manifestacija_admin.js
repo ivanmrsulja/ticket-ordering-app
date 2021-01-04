@@ -8,7 +8,7 @@ Vue.component("manifestacije-admin", {
 <div>
 		<h1>Prikaz manifestacija admin</h1>
 		
-		<table class="students" border=1>
+		<table border=1>
 			<tr bgcolor="lightgrey">
 				<th>Naziv</th>
 				<th>Tip manifestacije</th>

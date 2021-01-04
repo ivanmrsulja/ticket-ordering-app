@@ -15,6 +15,7 @@ import java.util.Map;
 import beans.Karta;
 import beans.Kupac;
 import beans.Manifestacija;
+import beans.ShoppingCartItem;
 public class KarteDAO {
 
 	
@@ -120,9 +121,11 @@ public class KarteDAO {
 				kupac.addKarta(k);
 				karteList.add(k);
 				karteMap.put(k.getId(),k);
-				
-				
-				
+				for(Manifestacija m : manifestacije.getManifestacijaList()) {
+					if(m.getNaziv().equals(k.getIdManifestacije())) {
+						k.setDatum(m.getDatumOdrzavanja());
+					}
+				}
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -174,6 +177,41 @@ public class KarteDAO {
 		this.korisnici = korisnici;
 	}
 
+	public String getNewID() {
+		boolean go = true;
+		String guess = null;
+		while(go) {
+			guess = getAlphaNumericID(10);
+			go = false;
+			for(Karta k : karteList) {
+				if (k.getId().equals(guess)) {
+					go = true;
+				}
+			}
+		}
+		return guess;
+	}
+	
+	public void makeTickets(ArrayList<ShoppingCartItem> sc, Kupac kupac) {
+		for(ShoppingCartItem item : sc) {
+			Manifestacija m = (Manifestacija) manifestacije.getManifestacijaMap().get(item.getIdManifestacije());
+			for(int i = 0; i < item.getKolicina(); i++) {
+				if(m.getBrojMesta() == 0) {
+					break;
+				}
+				Karta nova = new Karta(getNewID(), m.getBrojMesta(), kupac.getUsername(), "REZERVISANA", item.getCijena(), item.getTipKarte(), m.getNaziv());
+				kupac.setBrojBodova((int)(kupac.getBrojBodova() + ((item.getCijena()/1000)*133)));
+				m.setBrojMesta(m.getBrojMesta() - 1);
+				karteMap.put(nova.getId(), nova);
+				karteList.add(nova);
+				kupac.addKarta(nova);
+			}
+		}
+		korisnici.updateType(kupac);
+		save();
+		manifestacije.save();
+		korisnici.save();
+	}
 	
 	public ArrayList<Karta> vratiKarte(){
 		ArrayList<Karta> karte = new ArrayList<Karta>();
@@ -189,8 +227,32 @@ public class KarteDAO {
 		return karte;
 	}
 
-	
-	
+	public String getAlphaNumericID(int n) 
+    { 
+  
+        // chose a Character random from this String 
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                    + "0123456789"
+                                    + "abcdefghijklmnopqrstuvxyz"; 
+  
+        // create StringBuffer size of AlphaNumericString 
+        StringBuilder sb = new StringBuilder(n); 
+  
+        for (int i = 0; i < n; i++) { 
+  
+            // generate a random number between 
+            // 0 to AlphaNumericString variable length 
+            int index 
+                = (int)(AlphaNumericString.length() 
+                        * Math.random()); 
+  
+            // add Character one by one in end of sb 
+            sb.append(AlphaNumericString 
+                          .charAt(index)); 
+        } 
+  
+        return sb.toString(); 
+    } 
 	
 	
 	@Override

@@ -20,12 +20,12 @@ import beans.Manifestacija;
 public class ManifestacijaDAO {
 
 	private List<Manifestacija> manifestacijaList;
-	private Map manifestacijaMap;
+	private HashMap<Integer, Manifestacija> manifestacijaMap;
 	private LokacijaDAO lokacije;
 	
 	public ManifestacijaDAO() {
 		manifestacijaList = new ArrayList<Manifestacija>();
-		manifestacijaMap = new HashMap<String, Manifestacija>();
+		manifestacijaMap = new HashMap<Integer, Manifestacija>();
 	}
 	
 	public ManifestacijaDAO(LokacijaDAO l) {
@@ -190,7 +190,7 @@ public class ManifestacijaDAO {
 		this.manifestacijaList = manifestacijaList;
 	}
 
-	public void setManifestacijaMap(Map manifestacijaMap) {
+	public void setManifestacijaMap(HashMap<Integer, Manifestacija> manifestacijaMap) {
 		this.manifestacijaMap = manifestacijaMap;
 	}
 

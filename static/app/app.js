@@ -9,6 +9,8 @@ const KomentariAdmin = { template: '<komentari-admin></komentari-admin>' }
 const RegistracijaProdavaca = {template: '<register-seller></register-seller>'}
 const DodavanjeManifestacije = {template: '<add-manifestation></add-manifestation>'}
 const PrikazPojedinacne = {template: '<prikaz-pojedinacne></prikaz-pojedinacne>'}
+const Korpa = {template: '<shopping-cart></shopping-cart>'}
+const KarteKupac = {template: '<karte-kupac></karte-kupac>'}
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -23,7 +25,9 @@ const router = new VueRouter({
 	    { path: '/profile', component: Profil },
 	    { path: '/registerSeller', component: RegistracijaProdavaca },
 	    { path: '/addManif', component: DodavanjeManifestacije },
-	    { path: '/prikaz', component: PrikazPojedinacne}
+	    { path: '/prikaz', component: PrikazPojedinacne},
+	    { path: '/mojaKorpa', component: Korpa},
+	  	{ path: '/mojeKarte', component: KarteKupac}
 	  ]
 });
 
@@ -35,7 +39,13 @@ var app = new Vue({
         korisnik: {uloga : "GOST"},
     },
 	mounted () {
-		this.korisnik = {uloga : "GOST"};
+		let self = this;
+		$.get("/rest/users/currentUser", function(data){
+			if(data){
+				self.korisnik = data;
+			}
+		});
+		
 		this.$root.$on('sendingUser', (data) => {
 			this.korisnik = data;
 		});

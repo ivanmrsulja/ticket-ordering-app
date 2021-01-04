@@ -10,6 +10,7 @@ public class Karta {
 	private String tip;
 	private boolean obrisana;
 	private String imePrezime;
+	private long datum;
 	
 	public Karta() {}
 
@@ -24,9 +25,15 @@ public class Karta {
 		this.idManifestacije = m;
 		obrisana = false;
 	}
+	
+	public long getDatum() {
+		return datum;
+	}
 
-	
-	
+	public void setDatum(long datum) {
+		this.datum = datum;
+	}
+
 	public String getImePrezime() {
 		return imePrezime;
 	}

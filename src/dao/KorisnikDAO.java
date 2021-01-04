@@ -67,7 +67,15 @@ public class KorisnikDAO {
 		return neobrisaniProdavci;
 	}
 	
-	
+	public void updateType(Kupac ku) {
+		TipKupca t = null;
+		for(TipKupca tip : tipovi.getTipoviKupca()) {
+			if(tip.getBodovi() <= ku.getBrojBodova()) {
+				t = tip;
+			}
+		}
+		ku.setTip(t);
+	}
 	
 	public ArrayList<Karta> vratiKarteProdavcu(String username, KarteDAO karteManager){
 		ArrayList<Karta> karte = new ArrayList<Karta>();

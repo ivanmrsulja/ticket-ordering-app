@@ -1,10 +1,10 @@
 package rest;
 
+import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.put;
-import static spark.Spark.delete;
 import static spark.Spark.staticFiles;
 import static spark.Spark.webSocket;
 
@@ -12,14 +12,17 @@ import java.io.File;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
 
+import beans.Karta;
 import beans.Korisnik;
 import beans.Kupac;
 import beans.Manifestacija;
 import beans.Prodavac;
+import beans.ShoppingCartItem;
 import beans.TipKupca;
 import dao.KarteDAO;
 import dao.KomentarDAO;
@@ -138,8 +141,9 @@ public class SparkAppMain {
 						}
 					break;
 				}
-				
+				ArrayList<ShoppingCartItem> sc = new ArrayList<ShoppingCartItem>();
 				req.session().attribute("currentUser", kor);
+				req.session().attribute("cart", sc);
 				return "Done";
 			}else {
 				System.out.println("Pao");
@@ -253,6 +257,100 @@ public class SparkAppMain {
 			return g.toJson(m);
 		});
 		
+		post("/rest/tickets/addToCart", (req, res) -> {
+			ShoppingCartItem sci = g.fromJson(req.body(), ShoppingCartItem.class);
+			Manifestacija man = req.session().attribute("currentManif");
+			Korisnik current = req.session().attribute("currentUser");
+			Kupac kupac = k.getKupciMap().get(current.getUsername());
+			ArrayList<ShoppingCartItem> sc = req.session().attribute("cart");
+			
+			if(sci.getIdManifestacije() != man.getId() || man.getStatus().equals("NEAKTIVNO") || sci.getKolicina() < 0 || sci.getKolicina() > man.getBrojMesta() || sci.getKolicina() == 0) {
+				return "Failed";
+			}
+			double cijena = 0.0;
+			int newId = 0;
+			for(ShoppingCartItem it : sc) {
+				if(it.getId() >= newId) {
+					newId = it.getId() + 1;
+				}
+			}
+			sci.setId(newId);
+			switch(sci.getTipKarte()) {
+			case "REGULAR":
+					cijena = sci.getKolicina() * man.getCenaRegular() * kupac.getTip().getPopust();
+				break;
+			case "VIP":
+					cijena = sci.getKolicina() * man.getCenaRegular() * 2 * kupac.getTip().getPopust();
+				break;
+			case "FAN_PIT":
+					cijena = sci.getKolicina() * man.getCenaRegular() * 4 * kupac.getTip().getPopust();
+				break;
+			}
+			sci.setCijena(cijena);
+			sc.add(sci);
+			req.session().attribute("cart", sc);
+			return "Done";
+		});
+		
+		get("/rest/tickets/getCart", (req, res) -> {
+			res.type("application/json");
+			ArrayList<ShoppingCartItem> sc = req.session().attribute("cart");
+			return g.toJson(sc);
+		});
+		
+		get("/rest/tickets/forUser", (req, res) -> {
+			Korisnik current = req.session().attribute("currentUser");
+			Kupac kupac = k.getKupciMap().get(current.getUsername());
+			List<Karta> karte = kupac.getSveKarte();
+			ArrayList<Karta> ret = new ArrayList<Karta>();
+			for(Karta ka : karte) {
+				if(ka.getStatus().equals("REZERVISANA")) {
+					ret.add(ka);
+				}
+			}
+			res.type("application/json");
+			return g.toJson(ret);
+		});
+		
+		get("/rest/tickets/removeFromCart/:id", (req, res) -> {
+			res.type("application/json");
+			int id = Integer.parseInt(req.params("id"));
+			ArrayList<ShoppingCartItem> sc = req.session().attribute("cart");
+			int index = -1;
+			for(ShoppingCartItem it : sc) {
+				index++;
+				if(it.getId() == id) {
+					break;
+				}
+			}
+			sc.remove(index);
+			req.session().attribute("cart", sc);
+			System.out.println("aaaa");
+			return g.toJson(sc);
+		});
+		
+		get("/rest/tickets/checkout", (req, res) -> {
+			ArrayList<ShoppingCartItem> sc = req.session().attribute("cart");
+			Korisnik ko = req.session().attribute("currentUser");
+			karte.makeTickets(sc, k.getKupciMap().get(ko.getUsername()));
+			sc.clear();
+			req.session().attribute("cart", sc);
+			return "Done";
+		});
+		
+		put("/rest/tickets/odustanak/:id", (req, res) -> {
+			Karta ka = (Karta) karte.getKarteMap().get(req.params("id"));
+			ka.setStatus("ODUSTANAK");
+			for(Manifestacija m : manifestacije.getManifestacijaList()) {
+				if(m.getNaziv().equals(ka.getIdManifestacije())) {
+					m.setBrojMesta(m.getBrojMesta() + 1);
+				}
+			}
+			karte.save();
+			manifestacije.save();
+			return "Done";
+		});
+		
 		get("/rest/users/all", (req, res) -> {
 			res.type("application/json");
 			return g.toJson(k.getKorisnici());
@@ -271,14 +369,6 @@ public class SparkAppMain {
 		get("/rest/comments/allComments", (req, res) -> {
 			res.type("application/json");
 			return  g.toJson(komentari);
-		});
-		
-		post("/rest/tickets/checkout", (req, res) -> {
-			HashMap<String, Integer> cart = (HashMap<String, Integer>) g.fromJson(req.body(), Map.class);
-			System.out.println(cart);
-			res.type("application/json");
-			//TODO: da se nastavi :D
-			return  "Done";
 		});
 		
 //		get("/rest/demo/book/:isbn", (req, res) -> {

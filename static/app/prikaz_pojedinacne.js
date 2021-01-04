@@ -22,8 +22,8 @@ Vue.component("prikaz-pojedinacne", {
 					</select> 
 				</td> 
 				<td> Kolicina: </td>
-				<td> <input type="number" name="kolicina" min="1" :max="this.manifestacija.brojMesta"/> </td>
-				<td> <input type="button" value="Rezervisi!" v-bind:disabled="this.user == null" /> </td>
+				<td> <input type="number" name="kolicina" min="0" :max="this.manifestacija.brojMesta"/> </td>
+				<td> <input type="button" value="Rezervisi!" v-on:click="addToCart()" v-bind:disabled="this.user == null || this.manifestacija.status == 'NEAKTIVNO'" /> </td>
 			</tr>
 		</table>
 		
@@ -31,7 +31,16 @@ Vue.component("prikaz-pojedinacne", {
 `
 	, 
 	methods : {
-		setCurrent : function() {
+		addToCart : function() {
+			let man = this.manifestacija.id;
+			let tip = $('#tip_karte option:selected').val();
+			let amount = $('input[name=kolicina]').val();
+			
+			let sci = {idManifestacije: man, naziv: this.manifestacija.naziv, kolicina: amount, tipKarte: tip};
+			
+			$.post("rest/tickets/addToCart", JSON.stringify(sci), function(data){
+				alert(data);
+			})
 			
 		},
 	},
