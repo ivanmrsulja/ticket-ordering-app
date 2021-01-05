@@ -50,7 +50,7 @@ Vue.component("login-user", {
 						}
 					});
 				}else{
-					alert("Pogresan username/password");
+					toast("Pogresan username/password");
 				}
     		});
 		}  

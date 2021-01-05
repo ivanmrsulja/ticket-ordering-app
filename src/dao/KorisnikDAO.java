@@ -82,37 +82,26 @@ public class KorisnikDAO {
 		Prodavac p = prodavciMap.get(username);
 		if(p == null)
 			return karte;
+		System.out.println(p.getManifestacije());
 		for(Manifestacija m: p.getManifestacije()) {
-			karte.addAll(karteManager.NeobrisaneKarteManifestacija(m.getNaziv()));
+			karte.addAll(karteManager.neobrisaneKarteManifestacija(m.getNaziv()));
 		}
-		return karte;
-		
-	}
-	
-	public ArrayList<Karta> vratiKarteKupcu(String username, KarteDAO karteManager){
-		ArrayList<Karta> karte = new ArrayList<Karta>();
-		
-		
-		
 		return karte;
 		
 	}
 	
 	public ArrayList<Korisnik> vratiNeobrisaneKorisnike(){
 		ArrayList<Korisnik> neobrisaniKorisnici = new ArrayList<Korisnik>();
-		for(Korisnik k : korisnici) {
-			if(k instanceof Kupac) {
-				if(!((Kupac) k).isObrisan())
-					neobrisaniKorisnici.add(k);	
-			}else if(k instanceof Prodavac) {
-				if(!((Prodavac) k).isObrisan())
-					neobrisaniKorisnici.add(k);				
-				
-			}else {
-				neobrisaniKorisnici.add(k);
+		for(Kupac k : kupci) {
+			if(!k.isObrisan()) {
+				neobrisaniKorisnici.add(korisniciMap.get(k.getUsername()));
 			}
 		}
-		
+		for(Prodavac p : prodavci) {
+			if(!p.isObrisan()) {
+				neobrisaniKorisnici.add(korisniciMap.get(p.getUsername()));
+			}
+		}
 		
 		return neobrisaniKorisnici;
 	}

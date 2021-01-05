@@ -16,21 +16,24 @@ import java.util.Map;
 
 import beans.Lokacija;
 import beans.Manifestacija;
+import beans.Prodavac;
 
 public class ManifestacijaDAO {
 
 	private List<Manifestacija> manifestacijaList;
 	private HashMap<Integer, Manifestacija> manifestacijaMap;
 	private LokacijaDAO lokacije;
+	private KorisnikDAO korisnici;
 	
 	public ManifestacijaDAO() {
 		manifestacijaList = new ArrayList<Manifestacija>();
 		manifestacijaMap = new HashMap<Integer, Manifestacija>();
 	}
 	
-	public ManifestacijaDAO(LokacijaDAO l) {
+	public ManifestacijaDAO(LokacijaDAO l, KorisnikDAO k) {
 		this();
 		lokacije = l;
+		korisnici = k;
 	}
 	
 	
@@ -49,6 +52,10 @@ public class ManifestacijaDAO {
 				Lokacija l = (Lokacija) lokacije.getLokacijeMap().get(tokens[7]);
 				
 				Manifestacija m =  new Manifestacija(Integer.parseInt(tokens[0]), tokens[1],tokens[2],Long.parseLong(tokens[3]),Integer.parseInt(tokens[4]),Double.parseDouble(tokens[5]),tokens[6],(Lokacija) lokacije.getLokacijeMap().get(tokens[7]),tokens[8]);
+				m.setIdProdavca(tokens[10]);
+				
+				korisnici.getProdavciMap().get(m.getIdProdavca()).addManifestacija(m);
+				
 				if(tokens[9].contentEquals("true")) {
 					m.setObrisana(true);
 				}
@@ -116,6 +123,8 @@ public class ManifestacijaDAO {
 				out.print(m.getSlika());
 				out.print(";");
 				out.print(m.isObrisana());
+				out.print(";");
+				out.print(m.getIdProdavca());
 				out.println();
 			}
 			

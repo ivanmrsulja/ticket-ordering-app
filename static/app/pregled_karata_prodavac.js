@@ -1,4 +1,4 @@
-Vue.component("karte-admin", {
+Vue.component("karte-prodavac", {
 	data: function () {
 		    return {
 		    	karte: {}
@@ -39,7 +39,7 @@ Vue.component("karte-admin", {
 	},
 	mounted () {
 		let self = this;
-        $.get("/rest/tickets/all", function(data){
+        $.get("/rest/tickets/prodavac", function(data){
         	
         	for(d of data){
         		var now = new Date(d.datum);

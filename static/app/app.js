@@ -11,6 +11,8 @@ const DodavanjeManifestacije = {template: '<add-manifestation></add-manifestatio
 const PrikazPojedinacne = {template: '<prikaz-pojedinacne></prikaz-pojedinacne>'}
 const Korpa = {template: '<shopping-cart></shopping-cart>'}
 const KarteKupac = {template: '<karte-kupac></karte-kupac>'}
+const KarteProdavac = {template: '<karte-prodavac></karte-prodavac>'}
+
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -27,7 +29,8 @@ const router = new VueRouter({
 	    { path: '/addManif', component: DodavanjeManifestacije },
 	    { path: '/prikaz', component: PrikazPojedinacne},
 	    { path: '/mojaKorpa', component: Korpa},
-	  	{ path: '/mojeKarte', component: KarteKupac}
+	  	{ path: '/mojeKarte', component: KarteKupac},
+	  	{ path: '/rezervisaneKarte', component: KarteProdavac}
 	  ]
 });
 

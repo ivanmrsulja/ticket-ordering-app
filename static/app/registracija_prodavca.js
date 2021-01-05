@@ -63,9 +63,9 @@ Vue.component("register-seller", {
     		.post(addr, newUser)
     		.then(function(response){
 				if(response.data == "Done"){
-					alert("Uspesno ste kreirali nalog.");
+					toast("Uspesno ste kreirali nalog.");
 				}else{
-					alert("Vec postoji korisnik sa tim kredencijalima, pokusajte ponovo.");
+					toast("Vec postoji korisnik sa tim kredencijalima, pokusajte ponovo.");
 				}	
     		});
 

@@ -35,7 +35,7 @@
 
 <a href="#/addManif" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Dodaj manifestaciju</a>
 <a href="#/" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Pregled manifestacija</a>
-<a href="#/" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Pregled rezervisanih karata</a>
+<a href="#/rezervisaneKarte" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Pregled rezervisanih karata</a>
 
 <a href="#/mojeKarte" v-bind:hidden="korisnik.uloga != 'KUPAC'">Moje karte</a>
 <a href="#/mojaKorpa" v-bind:hidden="korisnik.uloga != 'KUPAC'">Moja korpa</a>
@@ -64,6 +64,7 @@
 <script src="app/dodavanje_manifestacije.js"></script>
 <script src="app/korpa.js"></script>
 <script src="app/prikaz_karata_kupac.js"></script>
+<script src="app/pregled_karata_prodavac.js"></script>
 
 <script src="app/app.js"></script>
 </body>

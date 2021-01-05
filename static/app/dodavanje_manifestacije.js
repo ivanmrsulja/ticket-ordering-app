@@ -72,25 +72,39 @@ Vue.component("add-manifestation", {
 			let sirina = $("input[name=sirina]").val();
 			let duzina = $("input[name=duzina]").val();
 			let addr = $("input[name=adresa]").val();
-			let poster = $("input[name=poster]").val();			
-
-			//TODO: Validacija upisa
 			
-			let obj = {naziv : naz,
+			
+			let input = document.querySelector('input#poster');
+			let file = input.files[0];
+			let reader = new FileReader();
+			
+			reader.onloadend = function () {
+			    // Since it contains the Data URI, we should remove the prefix and keep only Base64 string
+			    let b64 = reader.result.replace(/^data:.+;base64,/, '');
+			    console.log(b64); //-> "R0lGODdhAQABAPAAAP8AAAAAACwAAAAAAQABAAACAkQBADs="
+			    
+			    let obj = {naziv : naz,
 					tipManifestacije : tip,
 					datumOdrzavanja : date,
 					brojMesta : mesta,
 					cenaRegular : cena,
 					lokacija : {geografskaSirina: sirina, geografskaDuzina: duzina, adresa: addr},
-					slika : poster};
-			
-			$.post("/rest/manifestations/add", JSON.stringify(obj), function(data){
+					slika : b64};
+					
+				$.post("/rest/manifestations/add", JSON.stringify(obj), function(data){
 				if(data == "Done"){
-					alert("Uspesno dodato.");
+					toast("Uspesno dodato.");
 				}else{
-					alert("Vec rezervisano.")
+					toast("Vec rezervisano.")
 				}
 			});
+			    
+			};
+
+  			reader.readAsDataURL(file);
+			
+
+			//TODO: Validacija upisa
 			
 		} 
 	},

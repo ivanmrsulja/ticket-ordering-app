@@ -63,10 +63,10 @@ Vue.component("register-user", {
     		.post(addr, newUser)
     		.then(function(response){
 				if(response.data == "Done"){
-					alert("Uspesno ste kreirali nalog, mozete se ulogovati.");
+					toast("Uspesno ste kreirali nalog, mozete se ulogovati.");
 					window.location.href = "#/login";
 				}else{
-					alert("Vec postoji korisnik sa tim kredencijalima, pokusajte ponovo.");
+					toast("Vec postoji korisnik sa tim kredencijalima, pokusajte ponovo.");
 				}	
     		});
 

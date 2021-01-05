@@ -15,6 +15,7 @@ public class Manifestacija {
 	private String slika; //putanja do slike
 	private double ocena;
 	private boolean obrisana;
+	private String idProdavca;
 	
 	public Manifestacija() {}
 
@@ -33,6 +34,14 @@ public class Manifestacija {
 		obrisana = false;
 	}
 	
+	public String getIdProdavca() {
+		return idProdavca;
+	}
+
+	public void setIdProdavca(String idProdavca) {
+		this.idProdavca = idProdavca;
+	}
+
 	public boolean isObrisana() {
 		return obrisana;
 	}

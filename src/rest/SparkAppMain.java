@@ -9,11 +9,10 @@ import static spark.Spark.staticFiles;
 import static spark.Spark.webSocket;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.security.Key;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gson.Gson;
 
@@ -32,7 +31,9 @@ import dao.ManifestacijaDAO;
 import dao.TipKupcaDAO;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import javaxt.utils.Base64;
 import ws.WsHandler;
+
 
 public class SparkAppMain {
 
@@ -58,7 +59,7 @@ public class SparkAppMain {
 		k.load();
 		lokacije  = new LokacijaDAO();
 		lokacije.load();
-		manifestacije = new ManifestacijaDAO(lokacije);
+		manifestacije = new ManifestacijaDAO(lokacije, k);
 		manifestacije.load();
 		karte = new KarteDAO(manifestacije, k);
 		karte.load();
@@ -232,10 +233,22 @@ public class SparkAppMain {
 		post("/rest/manifestations/add", (req, res) -> {
 			//Popraviti
 			Manifestacija man = g.fromJson(req.body(), Manifestacija.class);
+			Korisnik ko = req.session().attribute("currentUser");
 			boolean ok = manifestacije.checkLocation(man.getLokacija(), man.getDatumOdrzavanja());
 			if (ok) {
-				Manifestacija nova = new Manifestacija(manifestacije.makeID(), man.getNaziv(), man.getTipManifestacije(), man.getDatumOdrzavanja(), man.getBrojMesta(), man.getCenaRegular(), "NEAKTIVNO", man.getLokacija(), "def.jpg");
+				
+				int id = manifestacije.makeID();
+				
+				byte[] imgBytes = Base64.decode(man.getSlika());
+				FileOutputStream osf = new FileOutputStream(new File("static\\" + id + ".png"));
+				osf.write(imgBytes);
+				osf.flush();
+				osf.close();
+				
+				Manifestacija nova = new Manifestacija(id, man.getNaziv(), man.getTipManifestacije(), man.getDatumOdrzavanja(), man.getBrojMesta(), man.getCenaRegular(), "NEAKTIVNO", man.getLokacija(), id + ".png");
+				nova.setIdProdavca(ko.getUsername());
 				ok = manifestacije.dodajNovu(nova);
+				System.out.println(man);
 				if(ok) {
 					return "Done";
 				}
@@ -258,14 +271,20 @@ public class SparkAppMain {
 		});
 		
 		post("/rest/tickets/addToCart", (req, res) -> {
-			ShoppingCartItem sci = g.fromJson(req.body(), ShoppingCartItem.class);
+			ShoppingCartItem sci = null;
+			try {
+				sci = g.fromJson(req.body(), ShoppingCartItem.class);
+			}
+			catch(Exception e) {
+				return "Unesite kolicinu.";
+			}
 			Manifestacija man = req.session().attribute("currentManif");
 			Korisnik current = req.session().attribute("currentUser");
 			Kupac kupac = k.getKupciMap().get(current.getUsername());
 			ArrayList<ShoppingCartItem> sc = req.session().attribute("cart");
 			
 			if(sci.getIdManifestacije() != man.getId() || man.getStatus().equals("NEAKTIVNO") || sci.getKolicina() < 0 || sci.getKolicina() > man.getBrojMesta() || sci.getKolicina() == 0) {
-				return "Failed";
+				return "Unesite ispravnu kolicinu.";
 			}
 			double cijena = 0.0;
 			int newId = 0;
@@ -289,7 +308,7 @@ public class SparkAppMain {
 			sci.setCijena(cijena);
 			sc.add(sci);
 			req.session().attribute("cart", sc);
-			return "Done";
+			return "Dodato u korpu.";
 		});
 		
 		get("/rest/tickets/getCart", (req, res) -> {
@@ -348,25 +367,44 @@ public class SparkAppMain {
 					m.setBrojMesta(m.getBrojMesta() + 1);
 				}
 			}
+			k.updateType(ku);
 			karte.save();
 			manifestacije.save();
 			k.save();
 			return "Done";
 		});
 		
+		get("/rest/tickets/all", (req, res) -> {
+			res.type("application/json");
+			ArrayList<Karta> ret = karte.getNeobrisaneKarte();
+			System.out.println(ret);
+			return g.toJson(ret);
+		});
+		
+		get("/rest/tickets/prodavac", (req, res) -> {
+			res.type("application/json");
+			Korisnik ko = (Korisnik) req.session().attribute("currentUser");
+			//Prodavac p = k.getProdavciMap().get(ko.getUsername()); 
+			ArrayList<Karta> ret = k.vratiKarteProdavcu(ko.getUsername(), karte);
+			System.out.println(ret);
+			return g.toJson(ret);
+		});
+		
 		get("/rest/users/all", (req, res) -> {
 			res.type("application/json");
-			return g.toJson(k.getKorisnici());
+			ArrayList<Korisnik> ret = k.vratiNeobrisaneKorisnike();
+			return g.toJson(ret);
 		});
 		
-		get("/rest/users/allByers", (req, res) -> {
-			res.type("application/json");
-			return g.toJson(k.getKupci());
-		});
-		
-		get("/rest/users/allSellers", (req, res) -> {
-			res.type("application/json");
-			return g.toJson(k.getProdavci());
+		delete("/rest/users/:username", (req, res) -> {
+			String username = req.params("username");
+			try {
+				k.getKupciMap().get(username).setObrisan(true);
+			}catch(Exception e) {
+				k.getProdavciMap().get(username).setObrisan(true);
+			}
+			k.save();
+			return "Done";
 		});
 		
 		get("/rest/comments/allComments", (req, res) -> {

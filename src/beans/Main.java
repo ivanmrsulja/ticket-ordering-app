@@ -28,7 +28,7 @@ public class Main {
 		lokacije.load();
 		System.out.println(lokacije);
 		
-		ManifestacijaDAO manifestacije = new ManifestacijaDAO(lokacije);
+		ManifestacijaDAO manifestacije = new ManifestacijaDAO(lokacije, k);
 		manifestacije.load();
 		
 		System.out.println(manifestacije);

@@ -39,7 +39,7 @@ Vue.component("prikaz-pojedinacne", {
 			let sci = {idManifestacije: man, naziv: this.manifestacija.naziv, kolicina: amount, tipKarte: tip};
 			
 			$.post("rest/tickets/addToCart", JSON.stringify(sci), function(data){
-				alert(data);
+				toast(data);
 			})
 			
 		},

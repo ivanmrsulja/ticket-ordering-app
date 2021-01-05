@@ -15,6 +15,10 @@ public class Prodavac extends Korisnik{
 		obrisan = false;
 	}
 	
+	public void addManifestacija(Manifestacija m) {
+		manifestacije.add(m);
+	}
+	
 	public ArrayList<Manifestacija> getManifestacije() {
 		return manifestacije;
 	}

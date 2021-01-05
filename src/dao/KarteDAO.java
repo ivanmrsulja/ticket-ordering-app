@@ -46,7 +46,7 @@ public class KarteDAO {
 		return karteMenifestacija;
 	}
 	
-	public  ArrayList<Karta> NeobrisaneKarteManifestacija(String idMan){
+	public  ArrayList<Karta> neobrisaneKarteManifestacija(String idMan){
 		ArrayList<Karta> karteMenifestacija = new ArrayList<Karta>();
 		for(Karta k: karteList) {
 			if(k.getIdManifestacije().equals(idMan) && (!k.isObrisana()) && k.getStatus().equals("REZERVISANA")) {
@@ -58,7 +58,15 @@ public class KarteDAO {
 	}
 	
 	
-	
+	public ArrayList<Karta> getNeobrisaneKarte(){
+		ArrayList<Karta> karte = new ArrayList<Karta>();
+		for(Karta k: karteList) {
+			if(!k.isObrisana()) {
+				karte.add(k);
+			}
+		}
+		return karte;
+	}
 	
 	public void save() {
 //		Karta k1 = new Karta("000",80,(Kupac) korisnici.getKorisniciMap().get("bojan"),"U PRODAJI",1000, "TIP KARTE 1",(Manifestacija) manifestacije.getManifestacijaMap().get(2));
@@ -114,6 +122,7 @@ public class KarteDAO {
 				String[] tokens = currentLine.split(";");
 				Kupac kupac = korisnici.getKupciMap().get(tokens[2]);
 				Karta k  = new Karta(tokens[0],Integer.parseInt(tokens[1]), kupac.getUsername(), tokens[3], Double.parseDouble(tokens[4]), tokens[5], tokens[6]);
+				k.setImePrezime(kupac.getIme() + " " + kupac.getPrezime());
 				if(tokens[7].contentEquals("true")) {
 					k.setObrisana(true);
 				}
@@ -200,6 +209,7 @@ public class KarteDAO {
 					break;
 				}
 				Karta nova = new Karta(getNewID(), m.getBrojMesta(), kupac.getUsername(), "REZERVISANA", item.getCijena(), item.getTipKarte(), m.getNaziv());
+				nova.setDatum(m.getDatumOdrzavanja());
 				kupac.setBrojBodova((int)(kupac.getBrojBodova() + ((item.getCijena()/1000)*133)));
 				m.setBrojMesta(m.getBrojMesta() - 1);
 				karteMap.put(nova.getId(), nova);
