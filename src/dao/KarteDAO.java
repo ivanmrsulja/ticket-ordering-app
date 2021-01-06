@@ -110,6 +110,13 @@ public class KarteDAO {
 	}
 	
 	public void load() {
+		karteList.clear();
+		karteMap.clear();
+		
+		for(Kupac k : korisnici.getKupci()) {
+			k.getSveKarte().clear();
+		}
+		
 		String path = "data//karte.csv";
 		BufferedReader bf;
 		try {

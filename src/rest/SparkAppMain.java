@@ -209,6 +209,19 @@ public class SparkAppMain {
 			return g.toJson(ret);
 		});
 		
+		get("/rest/manifestations/seller", (req, res) -> {
+			res.type("application/json");
+			ArrayList<Manifestacija> ret = new ArrayList<Manifestacija>();
+			Korisnik ko = req.session().attribute("currentUser");
+			Prodavac pr = k.getProdavciMap().get(ko.getUsername());
+			for(Manifestacija m : pr.getManifestacije()) {
+				if(!m.isObrisana()) {
+					ret.add(m);
+				}
+			}
+			return g.toJson(ret);
+		});
+		
 		get("/rest/manifestations/welcome", (req, res) -> {
 			res.type("application/json");
 			return g.toJson(manifestacije.vratiAktuelne());
@@ -253,6 +266,52 @@ public class SparkAppMain {
 					return "Done";
 				}
 				return "Failed";
+			}
+			return "Failed";
+		});
+		
+		put("/rest/manifestations/update", (req, res) -> {
+			Manifestacija man = g.fromJson(req.body(), Manifestacija.class);
+			Korisnik ko = req.session().attribute("currentUser");
+			boolean ok = manifestacije.checkLocation(man.getLokacija(), man.getDatumOdrzavanja());
+			
+			int id = man.getId();
+			Manifestacija stara = (Manifestacija) manifestacije.getManifestacijaMap().get(id);
+			
+			System.out.println(man);
+			System.out.println(stara);
+			
+			if(stara.getLokacija().getGeografskaDuzina() == man.getLokacija().getGeografskaDuzina() && stara.getLokacija().getGeografskaSirina() == man.getLokacija().getGeografskaSirina()) {
+				ok = true;
+			}
+			
+			for (Manifestacija manif : manifestacije.getManifestacijaList()) {
+				if(manif.getNaziv().equals(man.getNaziv()) && manif.getId() != man.getId()) {
+					ok = false;
+				}
+			}
+			
+			if (ok) {
+				
+				if(!man.getSlika().equals("")) {
+					byte[] imgBytes = Base64.decode(man.getSlika());
+					FileOutputStream osf = new FileOutputStream(new File("static\\" + id + ".png"));
+					osf.write(imgBytes);
+					osf.flush();
+					osf.close();
+				}
+				
+				stara.setBrojMesta(man.getBrojMesta());
+				stara.setDatumOdrzavanja(man.getDatumOdrzavanja());
+				stara.setCenaRegular(man.getCenaRegular());
+				stara.setTipManifestacije(man.getTipManifestacije());
+				stara.setLokacija(man.getLokacija());
+				
+				manifestacije.save();
+				karte.save();
+				karte.load();
+				
+				return "Done";
 			}
 			return "Failed";
 		});

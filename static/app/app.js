@@ -3,6 +3,7 @@ const Registracija = { template: '<register-user></register-user>' }
 const Login = { template: '<login-user></login-user>' }
 const Profil = { template: '<update-user></update-user>' }
 const ManifestacijeAdmin = { template: '<manifestacije-admin></manifestacije-admin>' }
+const ManifestacijeProdavac = { template: '<manifestacije-prodavac></manifestacije-prodavac>' }
 const KorisniciAdmin = { template: '<korisnici-admin></korisnici-admin>' }
 const KarteAdmin = { template: '<karte-admin></karte-admin>' }
 const KomentariAdmin = { template: '<komentari-admin></komentari-admin>' }
@@ -30,7 +31,8 @@ const router = new VueRouter({
 	    { path: '/prikaz', component: PrikazPojedinacne},
 	    { path: '/mojaKorpa', component: Korpa},
 	  	{ path: '/mojeKarte', component: KarteKupac},
-	  	{ path: '/rezervisaneKarte', component: KarteProdavac}
+	  	{ path: '/rezervisaneKarte', component: KarteProdavac},
+	  	{ path: '/sellerManif', component: ManifestacijeProdavac}
 	  ]
 });
 
