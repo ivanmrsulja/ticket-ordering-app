@@ -21,7 +21,10 @@
 
 <body>
 <div id="webShop" align=center>
-<h1>Aplikacija za rezervaciju karata</h1>
+<div class="header">
+  <h1>Aplikacija za rezervaciju karata</h1>
+  <p>Mrsulja Ivan SW-65/2018</p>
+</div>
 <a href="#/" v-bind:hidden="korisnik.uloga == 'ADMIN' || korisnik.uloga=='PRODAVAC'">Pocetna</a>
 <a href="#/register" v-bind:hidden="korisnik.uloga != 'GOST'">Register</a>
 <a href="#/login" v-bind:hidden="korisnik.uloga != 'GOST'">Login</a>

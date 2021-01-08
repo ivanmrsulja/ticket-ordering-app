@@ -1,5 +1,23 @@
 @charset "UTF-8";
 
+/*HEADER*/
+
+.header {
+  padding: 45px;
+  text-align: center;
+  background: url("header.jpg");
+  color: white;
+  text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+  font-size: 25px;
+}
+
+body {
+    --background-color: #ffffff;
+    --text-color: #000000;
+}
+
+/*Pregled manifestacija*/
+
 * {
   box-sizing: border-box;
 }

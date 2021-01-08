@@ -540,7 +540,7 @@ public class SparkAppMain {
 				
 				System.out.println(novi);
 				
-				if(novi.getOcena() < 1 || novi.getOcena() > 5 || novi.getTekst().contains("_") || novi.getTekst().contains(";")) {
+				if(novi.getOcena() < 1 || novi.getOcena() > 5 || novi.getTekst().contains("_") || novi.getTekst().contains(";") || novi.getTekst().trim().equals("")) {
 					return "Doslo je do greske.";
 				}
 				
