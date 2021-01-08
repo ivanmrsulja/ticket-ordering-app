@@ -28,6 +28,8 @@ Vue.component("korisnici-admin", {
 				<td>{{k.datumRodjenja}}</td>
 				<td>{{k.uloga}}</td>
 				<td><input type="button" value="Obrisi" v-on:click="obrisi(k)" /></td>
+				<td v-if="!k.banovan" v-bind:hidden="k.uloga == 'ADMIN'"><input type="button" value="Banuj" v-on:click="banuj(k)" /></td>
+				<td v-else v-bind:hidden="k.uloga == 'ADMIN'"><input type="button" value="Unbanuj" v-on:click="banuj(k)" /></td>
 			</tr>
 		</table>
 	
@@ -35,6 +37,33 @@ Vue.component("korisnici-admin", {
 `
 	, 
 	methods : {
+		init : function(){
+			let self = this;
+	        $.get("/rest/users/all", function(data){
+	        	
+	        	for(d of data){
+	        		var now = new Date(d.datumRodjenja);
+	
+					var day = ("0" + now.getDate()).slice(-2);
+					var month = ("0" + (now.getMonth() + 1)).slice(-2);
+					
+					var today = now.getFullYear()+"-"+(month)+"-"+(day) + " " + ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
+					d.datumRodjenja = today;
+	        	}
+	        	
+	        	self.korisnici = data;
+	        });
+		},
+		banuj : function(k){
+			let self = this;
+			$.ajax({
+				url: "/rest/users/" + k.username,
+				method: "PUT",
+				contentType: "application/json",
+				success: function(response){ toast(response); self.init(); },
+				error: function(response){ toast("Doslo je do greske.")}
+			});
+		},
 		obrisi : function(k) {
 			let self = this;
 			$.ajax({
@@ -64,20 +93,6 @@ Vue.component("korisnici-admin", {
 		} 
 	},
 	mounted () {
-		let self = this;
-        $.get("/rest/users/all", function(data){
-        	
-        	for(d of data){
-        		var now = new Date(d.datumRodjenja);
-
-				var day = ("0" + now.getDate()).slice(-2);
-				var month = ("0" + (now.getMonth() + 1)).slice(-2);
-				
-				var today = now.getFullYear()+"-"+(month)+"-"+(day) + " " + ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
-				d.datumRodjenja = today;
-        	}
-        	
-        	self.korisnici = data;
-        });
+		this.init();
     }
 });

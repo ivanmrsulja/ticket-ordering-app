@@ -11,6 +11,7 @@ public class Korisnik {
 	private String pol;
 	private long datumRodjenja;
 	private String uloga;
+	private boolean banovan;
 	
 	public Korisnik() {}
 	public Korisnik(String us, String pa, String im, String pr, String po, long dr, String ul) {
@@ -21,6 +22,7 @@ public class Korisnik {
 		pol = po;
 		datumRodjenja = dr;
 		uloga = ul;
+		banovan = false;
 	}
 	
 	public String getIme() {
@@ -67,6 +69,12 @@ public class Korisnik {
 		this.uloga = uloga;
 	}
 	
+	public boolean isBanovan() {
+		return banovan;
+	}
+	public void setBanovan(boolean banovan) {
+		this.banovan = banovan;
+	}
 	@Override
 	public String toString() {
 		return "Korisnik [username=" + username + ", password=" + password + ", ime=" + ime + ", prezime=" + prezime

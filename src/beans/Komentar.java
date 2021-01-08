@@ -71,7 +71,7 @@ public class Komentar {
 	@Override
 	public String toString() {
 		return "Komentar [kupac=" + kupac.getUsername() + ", manifestacija=" + manifestacija.getNaziv() + ", tekst=" + tekst + ", ocena=" + ocena
-				+ " odobre="+ odobren+"]";
+				+ " odobren="+ odobren+"]";
 	}
 	
 }

@@ -7,14 +7,22 @@ public class Prodavac extends Korisnik{
 	
 	private ArrayList<Manifestacija> manifestacije;
 	private boolean obrisan;
+	private boolean banovan;
 	
 	public Prodavac() {}
 	public Prodavac(String u, String p, String im, String pr, String po, long dr, String ul) {
 		super(u, p, im, pr, po, dr, ul);
 		manifestacije = new ArrayList<Manifestacija>();
 		obrisan = false;
+		banovan = false;
 	}
 	
+	public boolean isBanovan() {
+		return banovan;
+	}
+	public void setBanovan(boolean banovan) {
+		this.banovan = banovan;
+	}
 	public void addManifestacija(Manifestacija m) {
 		manifestacije.add(m);
 	}

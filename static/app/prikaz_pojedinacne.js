@@ -2,7 +2,9 @@ Vue.component("prikaz-pojedinacne", {
 	data: function () {
 		    return {
 		      	manifestacija: {},
-				user: null
+				user: null,
+				commentable: false,
+				rating: 1.0
 		    }
 	},
 	template: ` 
@@ -23,9 +25,48 @@ Vue.component("prikaz-pojedinacne", {
 				</td> 
 				<td> Kolicina: </td>
 				<td> <input type="number" name="kolicina" min="0" :max="this.manifestacija.brojMesta"/> </td>
-				<td> <input type="button" value="Rezervisi!" v-on:click="addToCart()" v-bind:disabled="this.user == null || this.manifestacija.status == 'NEAKTIVNO'" /> </td>
+				<td> <input type="button" value="Rezervisi!" v-on:click="addToCart()" v-bind:disabled="this.user == null || this.manifestacija.status == 'NEAKTIVNO' || this.manifestacija.datumOdrzavanja <= (Date.now()) || this.manifestacija.brojMesta == 0" /> </td>
 			</tr>
 		</table>
+		
+		<br/>
+		<h2>Ostavi komentar:</h2>
+	    <textarea class="comment" name="komentar" placeholder="Unesite komentar" v-bind:disabled="!this.commentable"></textarea>
+	    <br/>
+	    <form class="rating">
+		  <label>
+		    <input type="radio" name="stars" value="1" v-bind:disabled="!this.commentable" />
+		    <span class="icon">★</span>
+		  </label>
+		  <label>
+		    <input type="radio" name="stars" value="2" v-bind:disabled="!this.commentable" />
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		  </label>
+		  <label>
+		    <input type="radio" name="stars" value="3" v-bind:disabled="!this.commentable" />
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>   
+		  </label>
+		  <label>
+		    <input type="radio" name="stars" value="4" v-bind:disabled="!this.commentable" />
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		  </label>
+		  <label>
+		    <input type="radio" name="stars" value="5" v-bind:disabled="!this.commentable" />
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		  </label>
+		</form>
+		<br/>
+	    <input type="button" name="submit" value="Postavi" v-bind:disabled="!this.commentable" v-on:click="postComment()" >
 		
 </div>		  
 `
@@ -43,6 +84,23 @@ Vue.component("prikaz-pojedinacne", {
 			})
 			
 		},
+		postComment : function(){
+			let com = {tekst: $("textarea[name=komentar]").val(), ocena: this.rating};
+			
+			$.ajax({
+			url: "/rest/comments/postComment",
+			data: JSON.stringify(com),
+			method: "POST",
+			contentType: "application/json",
+			success: function(response){
+				toast(response);
+			},
+			error: function(response){
+				toast("Doslo je do greske.");
+			}
+			});
+			
+		}
 	},
 	mounted () {
         let self = this;
@@ -51,6 +109,12 @@ Vue.component("prikaz-pojedinacne", {
 		});
 		$.get("/rest/users/currentUser", function(data){
 			self.user = data;
+		});
+		$.get("/rest/manifestations/commentable", function(data){
+			self.commentable = data;
+		});
+		$(":radio").change(function(){
+			self.rating = this.value;
 		});
     }
 });

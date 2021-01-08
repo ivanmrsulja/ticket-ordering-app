@@ -21,7 +21,7 @@ Vue.component("karte-kupac", {
 				<td>{{k.brojMesta}}</td>
 				<td>{{k.tip}}</td>
 				<td>{{k.datum}}</td>
-				<td><input type="button" value="Odustani" v-on:click="odustani(k)" /></td>
+				<td><input type="button" value="Odustani" v-on:click="odustani(k)" v-bind:disabled="(new Date(k.datum.split(' ')[0])).getTime() < (Date.now() + 604800000)" /></td>
 			</tr>
 		</table>
 		

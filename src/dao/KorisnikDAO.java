@@ -136,6 +136,10 @@ public class KorisnikDAO {
 						if (tokens[7].contentEquals("true")) {
 							pr.setObrisan(true);
 						}
+						if (tokens[8].contentEquals("true")) {
+							pr.setBanovan(true);
+							k.setBanovan(true);
+						}
 						korisnici.add(k);
 						prodavci.add(pr);
 						korisniciMap.put(k.getUsername(),k);
@@ -152,6 +156,7 @@ public class KorisnikDAO {
 						ko = new Korisnik(tokens[0],tokens[1],tokens[2],tokens[3],tokens[4],Long.parseLong(tokens[5]),tokens[6]);
 						if(!tokens[7].equals("false")) {
 							k.setBanovan(true);
+							ko.setBanovan(true);
 						}
 						if(tokens[10].contentEquals("true")) {
 							k.setObrisan(true);
@@ -238,6 +243,8 @@ public class KorisnikDAO {
 					{
 						out.print(";");
 						out.print(prodavciMap.get(k.getUsername()).isObrisan());
+						out.print(";");
+						out.print(prodavciMap.get(k.getUsername()).isBanovan());
 						out.println();
 						break;
 					}

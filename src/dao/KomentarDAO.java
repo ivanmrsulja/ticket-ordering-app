@@ -58,13 +58,6 @@ public class KomentarDAO {
 		return komentari;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
 	public void load() {
 		String path = "data//komentari.csv";
 		
@@ -77,13 +70,12 @@ public class KomentarDAO {
 					continue;
 				
 				String tokens[] = currentLine.split(";");
-				Komentar k = new Komentar((Korisnik)korisnici.getKorisniciMap().get(tokens[0]),(Manifestacija) manifestacije.getManifestacijaMap().get(tokens[1]), tokens[2], Double.parseDouble(tokens[3]));
+				Komentar k = new Komentar((Korisnik)korisnici.getKorisniciMap().get(tokens[0]),(Manifestacija) manifestacije.getManifestacijaMap().get(Integer.parseInt(tokens[1])), tokens[2], Double.parseDouble(tokens[3]));
 				if(tokens[4].contentEquals("true"))
 					k.setOdobren(true);
 				if(tokens[5].contentEquals("true"))
 					k.setObrisan(true);
 				komentariList.add(k);
-				
 				
 			}
 		} catch (FileNotFoundException e) {
@@ -95,18 +87,9 @@ public class KomentarDAO {
 		}
 		
 	}
-	
-	
-	
+
 	public void save() {
 		String path = "data//komentari.csv";
-//		Komentar k1 = new Komentar((Kupac) korisnici.getKorisniciMap().get("Jovana"),(Manifestacija) manifestacije.getManifestacijaMap().get(0), "Jovanin prvi komentar", 6);
-//		Komentar k2 = new Komentar((Kupac) korisnici.getKorisniciMap().get("Jovana"),(Manifestacija) manifestacije.getManifestacijaMap().get(0), "Jovanin drugi komentar", 10);
-//		k2.setOdobren(true);
-//		Komentar k3 = new Komentar((Kupac) korisnici.getKorisniciMap().get("bojan"),(Manifestacija) manifestacije.getManifestacijaMap().get(0), "Bojnov prvi komentar- tj tekst komentaraa", 6);
-//		komentariList.add(k1);
-//		komentariList.add(k2);
-//		komentariList.add(k3);
 		try {
 			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(path)));
 			for(Komentar k: komentariList) {
@@ -121,10 +104,10 @@ public class KomentarDAO {
 				out.print(k.isOdobren());
 				out.print(";");
 				out.println(k.isObrisan());
-				
 			}
+			out.flush();
+			out.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

@@ -26,27 +26,26 @@ public class Main {
 		
 		LokacijaDAO lokacije  = new LokacijaDAO();
 		lokacije.load();
-		System.out.println(lokacije);
 		
 		ManifestacijaDAO manifestacije = new ManifestacijaDAO(lokacije, k);
 		manifestacije.load();
+		
+		for(Manifestacija m : manifestacije.getManifestacijaList()) {
+			System.out.println(m);
+		}
 		
 		System.out.println(manifestacije);
 		
 		
 		KarteDAO karte = new KarteDAO(manifestacije, k);
 		karte.load();
-		System.out.println(karte);
 		
 		KomentarDAO komentari = new KomentarDAO(k,manifestacije);
 		komentari.load();
 		komentari.save();
-		System.out.println(komentari);
-		System.out.println(k.getKorisnici());
 		
 		tipovi.save();
 		k.save();
-		lokacije.save();
 		manifestacije.save();
 		karte.save();
 		komentari.save();

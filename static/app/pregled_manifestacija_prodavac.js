@@ -3,6 +3,7 @@ Vue.component("manifestacije-prodavac", {
 		    return {
 		    	manifestacije: {},
 				selected: { lokacija: { adresa: "", geografskaSirina: "", geografskaDuzina: ""}},
+				old: {},
 				mode: "BROWSE"
 		    }
 	},
@@ -90,6 +91,7 @@ Vue.component("manifestacije-prodavac", {
 	methods : {
 		selectManifestacija : function(m) {
 			this.selected = m;
+			this.old = JSON.parse(JSON.stringify(m)); //deepcopy
 			this.mode = "EDIT";
 		}, 
 		izmeni: function(){
@@ -118,6 +120,16 @@ Vue.component("manifestacije-prodavac", {
 						contentType: "application/json",
 						success: function(response){
 							toast(response);
+							if(response != "Uspesno azurirano."){
+								self.selected.id = self.old.id;
+								self.selected.naziv = self.old.naziv;
+								self.selected.tipManifestacije = self.old.tipManifestacije;
+								self.selected.datumOdrzavanja = self.old.datumOdrzavanja;
+								self.selected.vremeOdrzavanja = self.old.vremeOdrzavanja;
+								self.selected.brojMesta = self.old.brojMesta;
+								self.selected.cenaRegular = self.old.cenaRegular;
+								self.selected.lokacija = self.old.lokacija;
+							}
 						}
 					});
 				
@@ -149,6 +161,16 @@ Vue.component("manifestacije-prodavac", {
 						contentType: "application/json",
 						success: function(response){
 							toast(response);
+							if(response != "Uspesno azurirano."){
+								self.selected.id = self.old.id;
+								self.selected.naziv = self.old.naziv;
+								self.selected.tipManifestacije = self.old.tipManifestacije;
+								self.selected.datumOdrzavanja = self.old.datumOdrzavanja;
+								self.selected.vremeOdrzavanja = self.old.vremeOdrzavanja;
+								self.selected.brojMesta = self.old.brojMesta;
+								self.selected.cenaRegular = self.old.cenaRegular;
+								self.selected.lokacija = self.old.lokacija;
+							}
 						}
 					});
 				}

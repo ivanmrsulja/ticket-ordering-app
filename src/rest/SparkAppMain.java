@@ -12,11 +12,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.security.Key;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.google.gson.Gson;
 
 import beans.Karta;
+import beans.Komentar;
 import beans.Korisnik;
 import beans.Kupac;
 import beans.Manifestacija;
@@ -85,6 +87,8 @@ public class SparkAppMain {
 		
 		loadData();
 		
+		/////////////// KORISNICI ///////////////
+		
 		post("/rest/users/registerUser", (req, res) -> {
 			//Popraviti
 			Korisnik user = g.fromJson(req.body(), Korisnik.class);
@@ -126,19 +130,24 @@ public class SparkAppMain {
 			Korisnik user = g.fromJson(req.body(), Korisnik.class);
 			Korisnik kor = k.find(user.getUsername(), user.getPassword());
 			if(kor != null) {
-				System.out.println("Prosao");
 				res.type("application/json");
 				switch(kor.getUloga()) {
 				case "KUPAC":
 						System.out.println(k.getKupciMap().get(kor.getUsername()));
-						if(k.getKupciMap().get(kor.getUsername()).isObrisan() || k.getKupciMap().get(kor.getUsername()).isBanovan()) {
-							return "Failed";
+						if(k.getKupciMap().get(kor.getUsername()).isObrisan()) {
+							return "Nalog vam je obrisan.";
+						}
+						if(k.getKupciMap().get(kor.getUsername()).isBanovan()) {
+							return "Banovani ste.";
 						}
 					break;
 				case "PRODAVAC":
 						System.out.println(k.getKupciMap().get(kor.getUsername()));
 						if(k.getProdavciMap().get(kor.getUsername()).isObrisan()) {
-							return "Failed";
+							return "Nalog vam je obrisan.";
+						}
+						if(k.getProdavciMap().get(kor.getUsername()).isBanovan()) {
+							return "Banovani ste.";
 						}
 					break;
 				}
@@ -147,7 +156,6 @@ public class SparkAppMain {
 				req.session().attribute("cart", sc);
 				return "Done";
 			}else {
-				System.out.println("Pao");
 				res.type("application/json");
 				return "Failed";
 			}
@@ -197,6 +205,46 @@ public class SparkAppMain {
 			
 			return "Done";
 		});
+		
+		get("/rest/users/all", (req, res) -> {
+			res.type("application/json");
+			ArrayList<Korisnik> ret = k.vratiNeobrisaneKorisnike();
+			return g.toJson(ret);
+		});
+		
+		delete("/rest/users/:username", (req, res) -> {
+			String username = req.params("username");
+			try {
+				k.getKupciMap().get(username).setObrisan(true);
+			}catch(Exception e) {
+				k.getProdavciMap().get(username).setObrisan(true);
+			}
+			k.save();
+			return "Done";
+		});
+		
+		put("/rest/users/:username", (req, res) -> {
+			String username = req.params("username");
+			try {
+				k.getKupciMap().get(username).setBanovan(!k.getKupciMap().get(username).isBanovan());
+				k.getKorisniciMap().get(username).setBanovan(!k.getKorisniciMap().get(username).isBanovan());
+			}catch(Exception e) {
+				try {
+					k.getProdavciMap().get(username).setBanovan(!k.getProdavciMap().get(username).isBanovan());
+					k.getKorisniciMap().get(username).setBanovan(!k.getKorisniciMap().get(username).isBanovan());
+				}catch(Exception ex){
+					return "Korisnik nije nu kupac ni prodavac.";
+				}
+			}
+			k.save();
+			if(k.getKorisniciMap().get(username).isBanovan()) {
+				return "Korisnik banovan.";
+			}else {
+				return "Korisnik unbanovan.";
+			}
+		});
+		
+		/////////////// MANIFESTACIJE ///////////////
 		
 		get("/rest/manifestations/all", (req, res) -> {
 			res.type("application/json");
@@ -281,12 +329,10 @@ public class SparkAppMain {
 			System.out.println(man);
 			System.out.println(stara);
 			
-			if(stara.getLokacija().getGeografskaDuzina() == man.getLokacija().getGeografskaDuzina() && stara.getLokacija().getGeografskaSirina() == man.getLokacija().getGeografskaSirina()) {
-				ok = true;
-			}
+			ok = true;
 			
 			for (Manifestacija manif : manifestacije.getManifestacijaList()) {
-				if(manif.getNaziv().equals(man.getNaziv()) && manif.getId() != man.getId()) {
+				if(manif.getDatumOdrzavanja() == man.getDatumOdrzavanja() && stara.getLokacija().getGeografskaDuzina() == man.getLokacija().getGeografskaDuzina() && stara.getLokacija().getGeografskaSirina() == man.getLokacija().getGeografskaSirina() && manif.getId() != man.getId()) {
 					ok = false;
 				}
 			}
@@ -306,14 +352,17 @@ public class SparkAppMain {
 				stara.setCenaRegular(man.getCenaRegular());
 				stara.setTipManifestacije(man.getTipManifestacije());
 				stara.setLokacija(man.getLokacija());
+				lokacije.getLokacijeList().add(man.getLokacija());
+				lokacije.getLokacijeMap().put(man.getLokacija().getAdresa(), man.getLokacija());
 				
 				manifestacije.save();
+				lokacije.save();
 				karte.save();
 				karte.load();
 				
-				return "Done";
+				return "Uspesno azurirano.";
 			}
-			return "Failed";
+			return "Azuriranje nije uspelo, pokusajte ponovo.";
 		});
 		
 		post("/rest/manifestations/setCurrent", (req, res) -> {
@@ -325,8 +374,27 @@ public class SparkAppMain {
 		get("/rest/manifestations/getCurrent", (req, res) -> {
 			res.type("application/json");
 			Manifestacija m = (Manifestacija) req.session().attribute("currentManif");
-			System.out.println("AAA" + m);
 			return g.toJson(m);
+		});
+		
+		get("/rest/manifestations/commentable", (req,res) -> {
+			Manifestacija m = (Manifestacija) req.session().attribute("currentManif");
+			Korisnik ko = (Korisnik) req.session().attribute("currentUser");
+			res.type("application/json");
+			if (ko == null) {
+				return false;
+			}
+			Kupac ku = k.getKupciMap().get(ko.getUsername());
+			
+			System.out.println(m.getDatumOdrzavanja() < System.currentTimeMillis());
+			
+			for(Karta ka : ku.getSveKarte()) {
+				if (ka.getIdManifestacije().equals(m.getNaziv()) && ka.getStatus().equals("REZERVISANA") && m.getDatumOdrzavanja() < System.currentTimeMillis() ) {
+					return true;
+				}
+			}
+			
+			return false;
 		});
 		
 		post("/rest/tickets/addToCart", (req, res) -> {
@@ -449,21 +517,39 @@ public class SparkAppMain {
 			return g.toJson(ret);
 		});
 		
-		get("/rest/users/all", (req, res) -> {
-			res.type("application/json");
-			ArrayList<Korisnik> ret = k.vratiNeobrisaneKorisnike();
-			return g.toJson(ret);
-		});
-		
-		delete("/rest/users/:username", (req, res) -> {
-			String username = req.params("username");
-			try {
-				k.getKupciMap().get(username).setObrisan(true);
-			}catch(Exception e) {
-				k.getProdavciMap().get(username).setObrisan(true);
+		post("/rest/comments/postComment", (req, res) -> {
+			Manifestacija m = (Manifestacija) req.session().attribute("currentManif");
+			Korisnik ko = (Korisnik) req.session().attribute("currentUser");
+			Kupac ku = k.getKupciMap().get(ko.getUsername());
+			System.out.println(ko);
+			boolean ok = false;
+			
+			for(Karta ka : ku.getSveKarte()) {
+				if (ka.getIdManifestacije().equals(m.getNaziv()) && ka.getStatus().equals("REZERVISANA") && m.getDatumOdrzavanja() < System.currentTimeMillis()) {
+					ok = true;
+					break;
+				}
 			}
-			k.save();
-			return "Done";
+			
+			if(ok) {
+				Komentar novi = g.fromJson(req.body(), Komentar.class);
+				
+				novi.setKupac(ko);
+				novi.setManifestacija(m);
+				novi.setTekst(novi.getTekst().replace("\n", "_"));
+				
+				System.out.println(novi);
+				
+				if(novi.getOcena() < 1 || novi.getOcena() > 5 || novi.getTekst().contains("_") || novi.getTekst().contains(";")) {
+					return "Doslo je do greske.";
+				}
+				
+				komentari.getKomentariList().add(novi);
+				komentari.save();
+				return "Komentar je poslat na uvid prodavcu.";
+			}else {
+				return "Doslo je do greske.";
+			}
 		});
 		
 		get("/rest/comments/allComments", (req, res) -> {
@@ -471,38 +557,6 @@ public class SparkAppMain {
 			return  g.toJson(komentari);
 		});
 		
-//		get("/rest/demo/book/:isbn", (req, res) -> {
-//			String isbn = req.params("isbn");
-//			return "/rest/demo/book received PathParam 'isbn': " + isbn;
-//		});
-//
-//		get("/rest/demo/books", (req, res) -> {
-//			String num = req.queryParams("num");
-//			String num2 = req.queryParams("num2");
-//			return "/rest/demo/book received QueryParam 'num': " + num + ", and num2: " + num2;
-//		});
-//		
-//		get("/rest/demo/testheader", (req, res) -> {
-//			String cookie = req.headers("Cookie");
-//			return "/rest/demo/testheader received HeaderParam 'Cookie': " + cookie;
-//		});
-//		
-//		get("/rest/demo/testcookie", (req, res) -> {
-//			String cookie = req.cookie("pera");
-//			if (cookie == null) {
-//				res.cookie("pera", "Perin kolacic");
-//				return "/rest/demo/testcookie <b>created</b> CookieParam 'pera': 'Perin kolacic'";  
-//			} else {
-//				return "/rest/demo/testcookie <i><u>received</u></i> CookieParam 'pera': " + cookie;
-//			}
-//		});
 
-//		post("/rest/demo/forma", (req, res) -> {
-//			res.type("application/json");
-//			String ime = req.queryParams("ime");
-//			String prezime = req.queryParams("prezime");
-//			Student s = new Student(ime, prezime, null);
-//			return g.toJson(s);
-//		});
 	}
 }
