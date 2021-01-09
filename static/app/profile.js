@@ -69,7 +69,15 @@ Vue.component("update-user", {
 		} 
 	},
 	mounted () {
-			
+			$.ajax({
+				url: "/rest/users/currentUser",
+				method: "GET",
+				success: function(data){
+					if(data === null){
+						window.location.href = "#/login";
+					}
+				}
+			});
 			$.get("rest/users/currentUser", function(data){
 				 $("input[name=username]").val(data.username);
 				$("input[name=pass]").val(data.password);

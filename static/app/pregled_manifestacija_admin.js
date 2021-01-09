@@ -87,6 +87,15 @@ Vue.component("manifestacije-admin", {
 		}
 	},
 	mounted () {
+		$.ajax({
+			url: "/rest/users/currentUser",
+			method: "GET",
+			success: function(data){
+				if(data === null || data.uloga != "ADMIN"){
+					window.location.href = "#/login";
+				}
+			}
+		});
 		let self = this;
         $.get("/rest/manifestations/all", function(data){
         	for(d of data){

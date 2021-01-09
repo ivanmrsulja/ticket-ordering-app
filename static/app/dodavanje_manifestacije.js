@@ -109,6 +109,14 @@ Vue.component("add-manifestation", {
 		} 
 	},
 	mounted () {
-        
+		$.ajax({
+			url: "/rest/users/currentUser",
+			method: "GET",
+			success: function(data){
+				if(data === null || data.uloga != "PRODAVAC"){
+					window.location.href = "#/login";
+				}
+			}
+		});
     }
 });

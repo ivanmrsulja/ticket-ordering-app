@@ -72,6 +72,14 @@ Vue.component("register-seller", {
 		} 
 	},
 	mounted () {
-        
+        $.ajax({
+			url: "/rest/users/currentUser",
+			method: "GET",
+			success: function(data){
+				if(data === null || data.uloga != "ADMIN"){
+					window.location.href = "#/login";
+				}
+			}
+		});
     }
 });

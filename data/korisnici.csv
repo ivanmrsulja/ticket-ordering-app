@@ -1,8 +1,8 @@
-admin;admin;Marko;Marinkovic;MUSKI;12614400000;ADMIN
+admin;admin;Marinko;Marinkovic;MUSKI;12614400000;ADMIN
 niko;niko;Nikola;Nikolic;MUSKI;0;PRODAVAC;false;false
-andrija;andro;Andrija;Vojnvoic;MUSKI;819504000000;PRODAVAC;false;false
+andrija;andro;Andrija;Vojnvoic;MUSKI;819504000000;PRODAVAC;false;true
 Jovana;jovanica1999;Jovana;Jokic;ZENSKI;569289600000;KUPAC;false;9999;REDOVAN;false
 bojan;caki;bojan;Cakar;MUSKI;12345678;KUPAC;false;1117;NOVI;false
-pera;pera;Pera;Perovic;MUSKI;1192665600000;KUPAC;false;3034;REDOVAN;false
+pera;pera;Pera;Perovic;MUSKI;1192665600000;KUPAC;false;3097;REDOVAN;false
 kupac;kupac;Ivan;Mrsulja;MUSKI;1611100800000;KUPAC;false;-1330;NOVI;false
 prodavac;prodavac;Mika;Mirkovic;MUSKI;929404800000;PRODAVAC;false;false

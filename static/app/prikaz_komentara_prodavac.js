@@ -1,12 +1,12 @@
-Vue.component("komentari-admin", {
+Vue.component("komentari-prodavac", {
 	data: function () {
 		    return {
-		    komentari: {}
+				komentari: {}
 		    }
 	},
 	template: ` 
 <div>
-		<h1>Prikaz komentara admin</h1>
+		<h1>Prikaz komentara prodavac</h1>
 		
 		<table border = 1>
 		<tr> <th>Kupac</th> <th>Manifestacija</th> <th>Tekst</th> <th>Ocjena</th> </tr>
@@ -16,7 +16,7 @@ Vue.component("komentari-admin", {
 			<td>{{k.manifestacija.naziv}}</td>
 			<td>{{k.tekst}}</td>
 			<td>{{k.ocena}}</td>
-			<td v-bind:hidden="k.obrisan === true" ><input type="button" v-on:click="obrisi(k)" value="Obrisi" /></td>
+			<td v-bind:hidden="k.odobren === true" ><input type="button" v-on:click="odobri(k)" value="Odobri" /></td>
 		</tr>
 		
 		</table>
@@ -28,7 +28,7 @@ Vue.component("komentari-admin", {
 		init : function() {
 			let self = this;
 			$.ajax({
-				url: "/rest/comments/allComments",
+				url: "/rest/comments/currentSeller",
 				method: "GET",
 				success: function(data){
 					self.komentari = data;
@@ -38,11 +38,11 @@ Vue.component("komentari-admin", {
 				}
 			});
 		},
-		obrisi: function(k){
+		odobri: function(k){
 			let self = this;
 			$.ajax({
-				url: "/rest/comments/delete/"+k.id,
-				method: "DELETE",
+				url: "/rest/comments/approve/" + k.id,
+				method: "PUT",
 				success: function(data){
 					self.komentari = data;
 				},
@@ -50,18 +50,23 @@ Vue.component("komentari-admin", {
 					toast("Doslo je do greske.");
 				}
 			});
-		}  
+		} 
 	},
 	mounted () {
+		let flag = 0;
 		$.ajax({
 			url: "/rest/users/currentUser",
 			method: "GET",
 			success: function(data){
-				if(data === null || data.uloga != "ADMIN"){
+				if(data === null || data.uloga != "PRODAVAC"){
 					window.location.href = "#/login";
+					flag = 1;
 				}
 			}
 		});
+		if(flag == 1){
+			return;
+		}
         this.init();
     }
 });

@@ -182,6 +182,16 @@ Vue.component("manifestacije-prodavac", {
 		}
 	},
 	mounted () {
+		$.ajax({
+			url: "/rest/users/currentUser",
+			method: "GET",
+			success: function(data){
+				if(data === null || data.uloga != "PRODAVAC"){
+					window.location.href = "#/login";
+					flag = 1;
+				}
+			}
+		});
 		let self = this;
         $.get("/rest/manifestations/seller", function(data){
         	for(d of data){

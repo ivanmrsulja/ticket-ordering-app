@@ -517,6 +517,8 @@ public class SparkAppMain {
 			return g.toJson(ret);
 		});
 		
+		//////////////KOMENTARI//////////////
+		
 		post("/rest/comments/postComment", (req, res) -> {
 			Manifestacija m = (Manifestacija) req.session().attribute("currentManif");
 			Korisnik ko = (Korisnik) req.session().attribute("currentUser");
@@ -537,6 +539,7 @@ public class SparkAppMain {
 				novi.setKupac(ko);
 				novi.setManifestacija(m);
 				novi.setTekst(novi.getTekst().replace("\n", "_"));
+				novi.setId(komentari.getNewId());
 				
 				System.out.println(novi);
 				
@@ -552,9 +555,32 @@ public class SparkAppMain {
 			}
 		});
 		
+		get("/rest/comments/currentSeller", (req, res) -> {
+			res.type("application/json");
+			Korisnik current = req.session().attribute("currentUser");
+			ArrayList<Komentar> ret = komentari.vratiKomentareZaProdavca(current.getUsername());
+			return  g.toJson(ret);
+		});
+		
+		put("/rest/comments/approve/:id", (req, res) -> {
+			int id = Integer.parseInt(req.params("id"));
+			Korisnik current = req.session().attribute("currentUser");
+			ArrayList<Komentar> approved = komentari.approveAndReturn(id, current.getUsername());
+			res.type("application/json");
+			return g.toJson(approved);
+		});
+		
+		delete("/rest/comments/delete/:id", (req, res) -> {
+			int id = Integer.parseInt(req.params("id"));
+			ArrayList<Komentar> all = komentari.deleteAndReturn(id);
+			res.type("application/json");
+			return g.toJson(all);
+		});
+		
 		get("/rest/comments/allComments", (req, res) -> {
 			res.type("application/json");
-			return  g.toJson(komentari);
+			ArrayList<Komentar> ret = komentari.vratiNeobrisaneKomentare();
+			return  g.toJson(ret);
 		});
 		
 

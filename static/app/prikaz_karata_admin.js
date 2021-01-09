@@ -38,6 +38,15 @@ Vue.component("karte-admin", {
 		}
 	},
 	mounted () {
+		$.ajax({
+			url: "/rest/users/currentUser",
+			method: "GET",
+			success: function(data){
+				if(data === null || data.uloga != "ADMIN"){
+					window.location.href = "#/login";
+				}
+			}
+		});
 		let self = this;
         $.get("/rest/tickets/all", function(data){
         	

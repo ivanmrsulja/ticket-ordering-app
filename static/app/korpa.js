@@ -58,6 +58,15 @@ Vue.component("shopping-cart", {
 		}
 	},
 	mounted () {
+		$.ajax({
+			url: "/rest/users/currentUser",
+			method: "GET",
+			success: function(data){
+				if(data === null || data.uloga != "KUPAC"){
+					window.location.href = "#/login";
+				}
+			}
+		});
 		let self = this;
         $.get("/rest/tickets/getCart", function(data){
         	for(d of data){

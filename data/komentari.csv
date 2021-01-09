@@ -1,2 +1,3 @@
-pera;12;Nije nesto...;3.0;false;false
-kupac;12;Bilo je extra...Samo skupo u krv!;4.0;false;false
+pera;12;Nije nesto...;3.0;false;false;10
+kupac;12;Bilo je extra...Samo skupo u krv!;4.0;true;false;11
+pera;12;Ne prikazuje mi se komentar ! STO JE OVOOO!?!;1.0;false;true;12

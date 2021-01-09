@@ -39,6 +39,7 @@
 <a href="#/addManif" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Dodaj manifestaciju</a>
 <a href="#/sellerManif" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Pregled manifestacija</a>
 <a href="#/rezervisaneKarte" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Pregled rezervisanih karata</a>
+<a href="#/komentariProdavac" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Pregled komentara</a>
 
 <a href="#/mojeKarte" v-bind:hidden="korisnik.uloga != 'KUPAC'">Moje karte</a>
 <a href="#/mojaKorpa" v-bind:hidden="korisnik.uloga != 'KUPAC'">Moja korpa</a>
@@ -64,6 +65,7 @@
 <script src="app/pregled_manifestacija_prodavac.js"></script>
 <script src="app/prikaz_karata_admin.js"></script>
 <script src="app/prikaz_komentara_admin.js"></script>
+<script src="app/prikaz_komentara_prodavac.js"></script>
 <script src="app/prikaz_korisnika_admin.js"></script>
 <script src="app/dodavanje_manifestacije.js"></script>
 <script src="app/korpa.js"></script>

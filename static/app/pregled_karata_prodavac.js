@@ -38,6 +38,16 @@ Vue.component("karte-prodavac", {
 		}
 	},
 	mounted () {
+		$.ajax({
+			url: "/rest/users/currentUser",
+			method: "GET",
+			success: function(data){
+				if(data === null || data.uloga != "PRODAVAC"){
+					window.location.href = "#/login";
+				}
+			}
+		});
+		
 		let self = this;
         $.get("/rest/tickets/prodavac", function(data){
         	

@@ -49,20 +49,32 @@ Vue.component("karte-kupac", {
 					});
 				}
 			});
-		}, 
+		},
+		init: function(){
+			let self = this;
+	        $.get("/rest/tickets/forUser", function(data){
+				for(d of data){
+					let now = new Date(parseInt(d.datum));
+					let day = ("0" + now.getDate()).slice(-2);
+					let month = ("0" + (now.getMonth() + 1)).slice(-2);
+					let today = now.getFullYear()+"-"+(month)+"-"+(day) + " " + ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
+					
+					d.datum = today;
+				}
+				self.karte = data;
+			});
+		} 
 	},
 	mounted () {
-		let self = this;
-        $.get("/rest/tickets/forUser", function(data){
-			for(d of data){
-				let now = new Date(parseInt(d.datum));
-				let day = ("0" + now.getDate()).slice(-2);
-				let month = ("0" + (now.getMonth() + 1)).slice(-2);
-				let today = now.getFullYear()+"-"+(month)+"-"+(day) + " " + ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
-				
-				d.datum = today;
+		$.ajax({
+			url: "/rest/users/currentUser",
+			method: "GET",
+			success: function(data){
+				if(data === null || data.uloga != "KUPAC"){
+					window.location.href = "#/login";
+				}
 			}
-			self.karte = data;
 		});
+		this.init();
     }
 });

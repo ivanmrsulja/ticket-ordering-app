@@ -15,6 +15,7 @@ import java.util.Map;
 import beans.Komentar;
 import beans.Korisnik;
 import beans.Manifestacija;
+import beans.Prodavac;
 
 public class KomentarDAO {
 
@@ -36,6 +37,16 @@ public class KomentarDAO {
 		
 	}
 	
+	public int getNewId() {
+		int max = 0;
+		for(Komentar k : komentariList) {
+			if(k.getId() >= max) {
+				max = k.getId();
+			}
+		}
+		max++;
+		return max;
+	}
 	
 	public ArrayList<Komentar> vratiNeobrisaneKomentare(){
 		
@@ -48,15 +59,58 @@ public class KomentarDAO {
 		return neobrisaniKomentari;
 	}
 	
-	public  ArrayList<Komentar> vratiKomentareManifestacija(String idMan){
-		ArrayList<Komentar> komentari = new  ArrayList<Komentar>();
+	public ArrayList<Komentar> vratiKomentareManifestacija(int idMan, boolean odobreni){
+		ArrayList<Komentar> komentari = new ArrayList<Komentar>();
 		for(Komentar k: komentariList) {
-			if(k.getManifestacija().getNaziv().equals(idMan) && k.isOdobren())
-				komentari.add(k);
-			
+			if(odobreni) {
+				if(k.getManifestacija().getId() == idMan && !k.isObrisan() && k.isOdobren() == true) {
+					komentari.add(k);
+				}
+			}else {
+				if(k.getManifestacija().getId() == idMan && !k.isObrisan()) {
+					komentari.add(k);
+				}
+			}
 		}
 		return komentari;
 	}
+	
+	public ArrayList<Komentar> vratiKomentareZaProdavca(String username){
+		ArrayList<Komentar> komentari = new ArrayList<Komentar>();
+		Prodavac p = korisnici.getProdavciMap().get(username);
+		for(Manifestacija m : p.getManifestacije()) {
+			ArrayList<Komentar> temp = new ArrayList<Komentar>();
+			temp = vratiKomentareManifestacija(m.getId(), false);
+			for(Komentar kom : temp) {
+				komentari.add(kom);
+			}
+		}
+		return komentari;
+	}
+	
+	public ArrayList<Komentar> approveAndReturn(int id, String username){
+		for(Komentar kom : komentariList) {
+			if(kom.getId() == id) {
+				kom.setOdobren(true);
+				break;
+			}
+		}
+		save();
+		return vratiKomentareZaProdavca(username);
+	}
+	
+	
+	public ArrayList<Komentar> deleteAndReturn(int id){
+		for(Komentar kom : komentariList) {
+			if(kom.getId() == id) {
+				kom.setObrisan(true);
+				break;
+			}
+		}
+		save();
+		return vratiNeobrisaneKomentare();
+	}
+	
 	
 	public void load() {
 		String path = "data//komentari.csv";
@@ -75,6 +129,7 @@ public class KomentarDAO {
 					k.setOdobren(true);
 				if(tokens[5].contentEquals("true"))
 					k.setObrisan(true);
+				k.setId(Integer.parseInt(tokens[6]));
 				komentariList.add(k);
 				
 			}
@@ -103,7 +158,9 @@ public class KomentarDAO {
 				out.print(";");
 				out.print(k.isOdobren());
 				out.print(";");
-				out.println(k.isObrisan());
+				out.print(k.isObrisan());
+				out.print(";");
+				out.println(k.getId());
 			}
 			out.flush();
 			out.close();

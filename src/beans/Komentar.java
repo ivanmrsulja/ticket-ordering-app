@@ -5,6 +5,7 @@ public class Komentar {
 	private Manifestacija manifestacija;
 	private String tekst;
 	private double ocena;
+	private int id;
 	private boolean odobren;
 	private boolean obrisan;
 	
@@ -20,6 +21,14 @@ public class Komentar {
 		obrisan = false;
 	}
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public boolean isObrisan() {
 		return obrisan;
 	}
