@@ -62,7 +62,7 @@ Vue.component("update-user", {
 				  type: 'PUT',
 				  data: JSON.stringify(updatedUser),
 				  success: function(data) {
-				    toast('Uspesno azurirano.');
+				    alert(data);
 				  }
 				});
 

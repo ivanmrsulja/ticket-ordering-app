@@ -35,7 +35,7 @@ Vue.component("karte-kupac", {
 				url: '/rest/tickets/odustanak/' + k.id,
 				type: 'PUT',
 				success: function(resp){
-					toast("Uspesno azurirano.");
+					alert("Uspesno azurirano.");
 			        $.get("/rest/tickets/forUser", function(data){
 						for(d of data){
 							let now = new Date(parseInt(d.datum));

@@ -1,6 +1,7 @@
 12;EXIT;FESTIVAL;1597878000000;19987;2000.0;AKTIVNO;Petrovaradinska tvrdjava, Novi Sad, 21000;12.png;false;prodavac
-13;Zdravko Colic;KONCERT;1611081900000;1984;1000.0;NEAKTIVNO;Trg Slobode, Novi Sad, 21000;13.png;false;prodavac
-14;Predstava;POZORISTE;1611085500000;9;400.0;AKTIVNO;Trg Slobode, Novi Sad, 21000;14.png;false;prodavac
-15;Test;FESTIVAL;1609932300000;2;2.0;AKTIVNO;Trg Slobode, Novi Sad, 21000;def.jpg;true;prodavac
+13;Zdravko Colic;KONCERT;1613760300000;1984;1000.0;NEAKTIVNO;Trg Slobode, Novi Sad, 21000;13.png;false;prodavac
+14;Predstava;POZORISTE;1613763900000;8;400.0;AKTIVNO;Trg Slobode, Novi Sad, 21000;14.png;false;prodavac
+15;Test;FESTIVAL;1609932300000;0;2.0;AKTIVNO;Trg Slobode, Novi Sad, 21000;def.jpg;true;prodavac
 16;Baja Mali Knindza;KONCERT;1610218800000;294;750.0;AKTIVNO;Centar, Prijedor, 18000;16.png;false;prodavac
-17;Who See;KONCERT;1612119600000;97;500.0;AKTIVNO;Trg Slobode, Novi Sad, 21000;17.png;false;niko
+17;Who See;KONCERT;1612119600000;94;500.0;AKTIVNO;Trg Slobode, Novi Sad, 21000;17.png;false;niko
+18;INDIRA;KONCERT;1612378800000;98;1000.0;AKTIVNO;Trg Od Oruzja, Kotor, 85318;18.png;false;niko

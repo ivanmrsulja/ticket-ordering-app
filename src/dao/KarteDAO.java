@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,9 @@ import beans.Karta;
 import beans.Kupac;
 import beans.Manifestacija;
 import beans.ShoppingCartItem;
+import search.KarteSearchParams;
+import sorter.SortirajKartePoCijeniRastuce;
+import sorter.SortirajKartePoManifestacijiRastuce;
 public class KarteDAO {
 
 	
@@ -153,7 +158,54 @@ public class KarteDAO {
 		
 	}
 	
-
+	public List<Karta> searchFilterSort(KarteSearchParams ksp){
+		List<Karta> ret = new ArrayList<Karta>();
+		
+		for(Karta k : getNeobrisaneKarte()) {
+			if(k.getIdManifestacije().toUpperCase().contains(ksp.getNaziv().toUpperCase()) && k.getCena() <= ksp.getEndPrice() && k.getCena() >= ksp.getStartPrice() && k.getDatum() >= ksp.getStartDate() && k.getDatum() <= ksp.getEndDate()) {
+				
+				if(!ksp.getTip().equals("SVE")) {
+					if(!k.getTip().equals(ksp.getTip())) {
+						continue;
+					}
+				}
+				
+				if(!ksp.getStatus().equals("SVE")) {
+					if(!k.getStatus().equals(ksp.getStatus())) {
+						continue;
+					}
+				}
+				ret.add(k);
+			}
+		}
+		
+		switch(ksp.getKriterijumSortiranja()) {
+		case "NAZIV":
+			Collections.sort(ret, new SortirajKartePoManifestacijiRastuce());
+			break;
+		case "DATUM":
+			Collections.sort(ret, new Comparator<Karta>() {
+				
+				@Override
+				public int compare(Karta k1, Karta k2) {
+					return Long.compare(k1.getDatum(), k2.getDatum());
+				}
+			});
+			
+			break;
+		case "CENA":
+			Collections.sort(ret, new SortirajKartePoCijeniRastuce());
+			break;
+		}
+		
+		if(ksp.isOpadajuce()) {
+			Collections.reverse(ret);
+		}
+		
+		return ret;
+	}
+	
+	
 	public Collection<Karta> getKarteList() {
 		return karteList;
 	}

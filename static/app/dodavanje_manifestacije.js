@@ -93,9 +93,9 @@ Vue.component("add-manifestation", {
 					
 				$.post("/rest/manifestations/add", JSON.stringify(obj), function(data){
 				if(data == "Done"){
-					toast("Uspesno dodato.");
+					alert("Uspesno dodato.");
 				}else{
-					toast("Vec rezervisano.")
+					alert("Vec rezervisano.")
 				}
 			});
 			    

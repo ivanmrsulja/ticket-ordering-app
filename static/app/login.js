@@ -50,7 +50,7 @@ Vue.component("login-user", {
 						}
 					});
 				}else{
-					toast(response.data);
+					alert(response.data);
 				}
     		});
 		}  

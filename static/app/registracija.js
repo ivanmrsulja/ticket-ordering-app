@@ -52,6 +52,12 @@ Vue.component("register-user", {
 			let prz = $("input[name=prezime]").val();
 			let pol = $('#pol option:selected').val();
 			let dat = $("input[name=birthday]").val();
+			
+			if (usr.trim() == "" || pas.trim() == "" || ime.trim() == "" || prz.trim() == "" || dat.trim() == ""){
+				alert("Popunite sva polja.");
+				return;
+			}
+			
 			let date = (new Date(dat)).getTime();
 
 			//TODO: Validacija upisa
@@ -63,10 +69,10 @@ Vue.component("register-user", {
     		.post(addr, newUser)
     		.then(function(response){
 				if(response.data == "Done"){
-					toast("Uspesno ste kreirali nalog, mozete se ulogovati.");
+					alert("Uspesno ste kreirali nalog, mozete se ulogovati.");
 					window.location.href = "#/login";
 				}else{
-					toast("Vec postoji korisnik sa tim kredencijalima, pokusajte ponovo.");
+					alert("Vec postoji korisnik sa tim kredencijalima ili ste lose uneli podatke, pokusajte ponovo.");
 				}	
     		});
 

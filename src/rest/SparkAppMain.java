@@ -10,6 +10,8 @@ import static spark.Spark.webSocket;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,6 +36,8 @@ import dao.TipKupcaDAO;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import javaxt.utils.Base64;
+import search.KarteSearchParams;
+import search.ManifestacijaSearchParams;
 import ws.WsHandler;
 
 
@@ -93,7 +97,7 @@ public class SparkAppMain {
 			//Popraviti
 			Korisnik user = g.fromJson(req.body(), Korisnik.class);
 			Korisnik kor = k.find(user.getUsername(), user.getPassword());
-			if(kor != null) {
+			if(kor != null || user.getIme().trim().equals("") || user.getPrezime().trim().equals("") || user.getIme().contains(";") || user.getPrezime().contains(";") || user.getUsername().trim().equals("") || user.getPassword().trim().equals("") || user.getUsername().contains(";") || user.getPassword().contains(";")) {
 				return "Failed";
 			}else {
 				System.out.println("Prosao");
@@ -176,6 +180,9 @@ public class SparkAppMain {
 			Korisnik user = (Korisnik) req.session().attribute("currentUser");
 			System.out.println(user);
 			Korisnik updatedUser = (Korisnik) g.fromJson(req.body(), Korisnik.class);
+			if(updatedUser.getIme().trim().equals("") || updatedUser.getPrezime().trim().equals("") || updatedUser.getIme().contains(";") || updatedUser.getPrezime().contains(";") || updatedUser.getUsername().trim().equals("") || updatedUser.getPassword().trim().equals("") || updatedUser.getUsername().contains(";") || updatedUser.getPassword().contains(";")) {
+				return "Popunite sva polja ispravno.";
+			}
 			user.setPassword(updatedUser.getPassword());
 			user.setIme(updatedUser.getIme());
 			user.setPrezime(updatedUser.getPrezime());
@@ -203,7 +210,7 @@ public class SparkAppMain {
 			}
 			k.save();
 			
-			return "Done";
+			return "Uspesno azurirano.";
 		});
 		
 		get("/rest/users/all", (req, res) -> {
@@ -275,6 +282,48 @@ public class SparkAppMain {
 			return g.toJson(manifestacije.vratiAktuelne());
 		});
 		
+		get("/rest/manifestations/pretraga", (req, res) -> {
+				ManifestacijaSearchParams msp = new ManifestacijaSearchParams();
+				
+			
+				String naziv = req.queryParams("naziv").trim();
+				msp.setNaziv(naziv);
+				String startDate = req.queryParams("startDate").trim();
+				if(!startDate.equals("")) {
+					msp.setStartDate(Long.parseLong(startDate));
+				}
+				String endDate = req.queryParams("endDate").trim();
+				System.out.println(endDate);
+				if(!endDate.equals("") && !endDate.equals("0")) {
+					msp.setEndDate(Long.parseLong(endDate));
+				}
+				String lokacija = req.queryParams("lokacija").trim();
+				msp.setLokacija(lokacija);
+				String startPrice = req.queryParams("startPrice").trim();
+				if(!startPrice.equals("")) {
+					msp.setStartPrice(Double.parseDouble(startPrice));
+				}
+				String endPrice = req.queryParams("endPrice").trim();
+				if(!endPrice.equals("") && !endPrice.equals("0") && !endPrice.contains("-")) {
+					msp.setEndPrice(Double.parseDouble(endPrice));
+				}
+				String tip = req.queryParams("tip").trim();
+				msp.setTip(tip);
+				String kriterijumSortiranja = req.queryParams("kriterijumSortiranja").trim();
+				msp.setKriterijumSortiranja(kriterijumSortiranja);
+				boolean rasprodata = Boolean.parseBoolean(req.queryParams("rasprodata").trim());
+				msp.setRasprodata(rasprodata);
+				boolean opadajuce = Boolean.parseBoolean(req.queryParams("opadajuce").trim());
+				msp.setOpadajuce(opadajuce);
+				
+				System.out.println(msp);
+				List<Manifestacija> ret = manifestacije.searchFilterSort(msp);
+				
+				res.type("application/json");
+				return g.toJson(ret);
+			
+		});
+		
 		get("/rest/manifestations/odobri/:id", (req, res) -> {
 			String id = req.params("id");
 			Manifestacija m = (Manifestacija) manifestacije.getManifestacijaMap().get(Integer.parseInt(id));
@@ -311,6 +360,7 @@ public class SparkAppMain {
 				ok = manifestacije.dodajNovu(nova);
 				System.out.println(man);
 				if(ok) {
+					k.getProdavciMap().get(ko.getUsername()).addManifestacija(nova);
 					return "Done";
 				}
 				return "Failed";
@@ -494,6 +544,13 @@ public class SparkAppMain {
 					m.setBrojMesta(m.getBrojMesta() + 1);
 				}
 			}
+			
+			k.getKorisniciMap().get(ka.getIdKupca()).setBrojOtkazivanja(k.getKorisniciMap().get(ka.getIdKupca()).getBrojOtkazivanja() + 1);
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("data/infractions.csv", true)));
+			pw.println(ka.getIdKupca() + ";" + (new Date()).getTime());
+			pw.flush();
+			pw.close();
+			
 			k.updateType(ku);
 			karte.save();
 			manifestacije.save();
@@ -515,6 +572,49 @@ public class SparkAppMain {
 			ArrayList<Karta> ret = k.vratiKarteProdavcu(ko.getUsername(), karte);
 			System.out.println(ret);
 			return g.toJson(ret);
+		});
+		
+		get("/rest/tickets/pretraga", (req, res) -> {
+			KarteSearchParams ksp = new KarteSearchParams();
+			
+		
+			String naziv = req.queryParams("naziv").trim();
+			ksp.setNaziv(naziv);
+			String startDate = req.queryParams("startDate").trim();
+			if(!startDate.equals("")) {
+				ksp.setStartDate(Long.parseLong(startDate));
+			}
+			String endDate = req.queryParams("endDate").trim();
+			System.out.println(endDate);
+			if(!endDate.equals("") && !endDate.equals("0")) {
+				ksp.setEndDate(Long.parseLong(endDate));
+			}
+			
+			String startPrice = req.queryParams("startPrice").trim();
+			if(!startPrice.equals("")) {
+				ksp.setStartPrice(Double.parseDouble(startPrice));
+			}
+			String endPrice = req.queryParams("endPrice").trim();
+			if(!endPrice.equals("") && !endPrice.equals("0") && !endPrice.contains("-")) {
+				ksp.setEndPrice(Double.parseDouble(endPrice));
+			}
+			String tip = req.queryParams("tip").trim();
+			ksp.setTip(tip);
+			
+			String status = req.queryParams("status").trim();
+			ksp.setStatus(status);
+			
+			String kriterijumSortiranja = req.queryParams("kriterijumSortiranja").trim();
+			ksp.setKriterijumSortiranja(kriterijumSortiranja);
+			boolean opadajuce = Boolean.parseBoolean(req.queryParams("opadajuce").trim());
+			ksp.setOpadajuce(opadajuce);
+			
+			System.out.println(ksp);
+			List<Karta> ret = karte.searchFilterSort(ksp);
+			
+			res.type("application/json");
+			return g.toJson(ret);
+		
 		});
 		
 		//////////////KOMENTARI//////////////
@@ -583,6 +683,12 @@ public class SparkAppMain {
 			return  g.toJson(ret);
 		});
 		
-
+		get("/rest/comments/forPost", (req, res) -> {
+			Manifestacija current = (Manifestacija) req.session().attribute("currentManif");
+			ArrayList<Komentar> ret = komentari.vratiKomentareManifestacija(current.getId(), true);
+			res.type("application/json");
+			return g.toJson(ret);
+		});
+		
 	}
 }

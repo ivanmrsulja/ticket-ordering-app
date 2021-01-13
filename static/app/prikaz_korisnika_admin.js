@@ -5,10 +5,13 @@ Vue.component("korisnici-admin", {
 		    }
 	},
 	template: ` 
-<div>
+<div style="width: 80%">
 		<h1>Prikaz korisnika admin</h1>
 		
-		<table border=1>
+		<br/>
+		<br/>
+		
+		<table class="table table-hover">
 			<tr bgcolor="lightgrey">
 				<th>Username</th>
 				<th>Password</th>
@@ -19,7 +22,7 @@ Vue.component("korisnici-admin", {
 				<th>Uloga</th>
 			</tr>
 	
-			<tr v-for="k in this.korisnici">
+			<tr v-for="k in this.korisnici" v-bind:class="{ sumnjiv: k.brojOtkazivanja >= 5 }">
 				<td>{{k.username}}</td>
 				<td>{{k.password}}</td>
 				<td>{{k.ime}}</td>
@@ -60,8 +63,8 @@ Vue.component("korisnici-admin", {
 				url: "/rest/users/" + k.username,
 				method: "PUT",
 				contentType: "application/json",
-				success: function(response){ toast(response); self.init(); },
-				error: function(response){ toast("Doslo je do greske.")}
+				success: function(response){ alert(response); self.init(); },
+				error: function(response){ alert("Doslo je do greske.")}
 			});
 		},
 		obrisi : function(k) {
@@ -70,7 +73,7 @@ Vue.component("korisnici-admin", {
 				url: "/rest/users/" + k.username,
 				type: "DELETE",
 				success: function(data){
-					toast("Uspesno azurirano.")
+					alert("Uspesno azurirano.")
 					$.get("/rest/users/all", function(data){
         	
 			        	for(d of data){
@@ -87,7 +90,7 @@ Vue.component("korisnici-admin", {
 			        });
 				},
 				error: function(data){
-					toast("Doslo je do greske")
+					alert("Doslo je do greske")
 				}
 			});
 		} 

@@ -4,12 +4,15 @@ Vue.component("prikaz-pojedinacne", {
 		      	manifestacija: {},
 				user: null,
 				commentable: false,
-				rating: 1.0
+				rating: 1.0,
+				komentari: {},
+				ukupnaOcena: 0.0
 		    }
 	},
 	template: ` 
 <div>
 		<h1>{{this.manifestacija.naziv}}</h1>
+		<h3>{{this.manifestacija.tipManifestacije}}</h3>
 		
 		<img :src="this.manifestacija.slika"  height=300 width=500></img>
 		
@@ -30,6 +33,9 @@ Vue.component("prikaz-pojedinacne", {
 		</table>
 		
 		<br/>
+		<h3 v-if="this.ukupnaOcena != 0">Ukupna ocjena: {{this.ukupnaOcena}}</h3>
+		<br/>
+		
 		<h2>Ostavi komentar:</h2>
 	    <textarea class="comment" name="komentar" placeholder="Unesite komentar" v-bind:disabled="!this.commentable"></textarea>
 	    <br/>
@@ -67,6 +73,19 @@ Vue.component("prikaz-pojedinacne", {
 		</form>
 		<br/>
 	    <input type="button" name="submit" value="Postavi" v-bind:disabled="!this.commentable" v-on:click="postComment()" >
+	    
+	    <br/>
+	    <br/>
+	    
+	    <h2>Komentari</h2>
+	    
+	    <br/>
+	    
+	    <div style="border: 5px solid red; width: 15%" v-for="k in komentari">
+	    	<p>Korisnik: {{k.kupac.username}}</p>
+	    	<p>{{k.tekst}}</p>
+	    	<p>Ocena: {{k.ocena}}</p>
+	    </div>
 		
 </div>		  
 `
@@ -80,7 +99,7 @@ Vue.component("prikaz-pojedinacne", {
 			let sci = {idManifestacije: man, naziv: this.manifestacija.naziv, kolicina: amount, tipKarte: tip};
 			
 			$.post("rest/tickets/addToCart", JSON.stringify(sci), function(data){
-				toast(data);
+				alert(data);
 			})
 			
 		},
@@ -93,10 +112,10 @@ Vue.component("prikaz-pojedinacne", {
 			method: "POST",
 			contentType: "application/json",
 			success: function(response){
-				toast(response);
+				alert(response);
 			},
 			error: function(response){
-				toast("Doslo je do greske.");
+				alert("Doslo je do greske.");
 			}
 			});
 			
@@ -115,6 +134,17 @@ Vue.component("prikaz-pojedinacne", {
 		});
 		$(":radio").change(function(){
 			self.rating = this.value;
+		});
+		$.get("/rest/comments/forPost", function(data){
+			self.komentari = data;
+			let counter = 0;
+			for(d of data){
+				self.ukupnaOcena += d.ocena;
+				counter ++;
+			}
+			if (counter != 0){
+				self.ukupnaOcena = self.ukupnaOcena / counter;
+			}
 		});
     }
 });

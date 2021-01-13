@@ -7,6 +7,7 @@ import dao.KorisnikDAO;
 import dao.LokacijaDAO;
 import dao.ManifestacijaDAO;
 import dao.TipKupcaDAO;
+import search.ManifestacijaSearchParams;
 
 
 public class Main {
@@ -49,6 +50,15 @@ public class Main {
 		manifestacije.save();
 		karte.save();
 		komentari.save();
+		
+		System.out.println("\nAAA\n");
+		ManifestacijaSearchParams msp = new ManifestacijaSearchParams();
+		msp.setKriterijumSortiranja("CENA");
+		msp.setRasprodata(true);
+		msp.setOpadajuce(true);
+		for(Manifestacija m : manifestacije.searchFilterSort(msp)) {
+			System.out.println(m);
+		}
 		
 	}
 

@@ -2,19 +2,17 @@ package dao;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import beans.Karta;
 import beans.Korisnik;
@@ -74,6 +72,9 @@ public class KorisnikDAO {
 				t = tip;
 			}
 		}
+		if(t == null) {
+			t = (TipKupca) tipovi.getKupciMap().get("NOVI");
+		}
 		ku.setTip(t);
 	}
 	
@@ -106,15 +107,12 @@ public class KorisnikDAO {
 		return neobrisaniKorisnici;
 	}
 	
-	public void load() {
-		//putanja je navedena rucno, kasnije vidjeti sa mrsuljom gdje i kako
+	public void load(){
 		String path = "data\\korisnici.csv";
 		
 		BufferedReader bf = null;
 		
-		
 		String currentLine = null;
-		SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 			try {
 				bf = new BufferedReader(new FileReader(path));
 				while((currentLine = bf.readLine()) != null) {
@@ -175,6 +173,7 @@ public class KorisnikDAO {
 					}
 					
 				}
+				bf.close();
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -183,37 +182,32 @@ public class KorisnikDAO {
 				e.printStackTrace();
 			}
 			
+			currentLine = null;
+			BufferedReader br;
+			try {
+				br = new BufferedReader(new InputStreamReader(new FileInputStream("data/infractions.csv")));
+				try {
+					while((currentLine = br.readLine()) != null) {
+						String[] tokens = currentLine.split(";");
+						long date = Long.parseLong(tokens[1]);
+						if(date > (new Date()).getTime() - 2629800000l) {
+							korisniciMap.get(tokens[0]).setBrojOtkazivanja(korisniciMap.get(tokens[0]).getBrojOtkazivanja() + 1);
+						}
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+			
 			for(Korisnik k: korisnici)
 				System.out.println(k);
-			
-			
-			
 		
 	}
 	
 	public void save() {
 		String path = "data\\korisnici.csv";
-		//rucno dodavanje korisnika
-		//pitanje: da li LocalDate treba da bude ili LocalDateTime -> ja sam stavio na localDate
-		String input = "01/07/2020 11:15:02";
-		SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-//		Korisnik k1;
-//		try {
-//			k1 = new Korisnik("admin","admin","marko","markovic","MUSKI",formater.parse("22/12/2001 22:21:01"),"ADMIN");
-//			Korisnik k2 = new Prodavac("nikolas","nidzo","nikola","stevanovic","MUSKI",formater.parse("10/10/1999 22:21:01"),"PRODAVAC");
-//			Korisnik k3 = new Prodavac("andrija","andro","andrija","vojnvoic","MUSKI",formater.parse("15/09/1995 22:21:01"),"PRODAVAC");
-//			Korisnik k4 = new Kupac("Jovana","jovanica1999","jovana","jevtic","ZENSKI",formater.parse("22/12/2001 22:21:01"),"KUPAC", (TipKupca) tipovi.getKupciMap().get("Pocetni kupac"),24);
-//			Korisnik k5 = new Kupac("bojan","caki","bojan","Cakar","MUSKI",formater.parse("22/12/2001 22:21:01"),"KUPAC",(TipKupca) tipovi.getKupciMap().get("Nepostojeci kupac"), 0);
-//			korisnici.add(k1);
-//			korisnici.add(k2);
-//			korisnici.add(k3);
-//			korisnici.add(k4);
-//			korisnici.add(k5);
-//		} catch (ParseException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-		
 		
 		try {
 			
@@ -256,6 +250,9 @@ public class KorisnikDAO {
 						if(kupciMap.get(k.getUsername()).getTip() == null) {
 							out.print(";");
 							out.print("NOVI");
+							out.print(";");
+							out.print(kupciMap.get(k.getUsername()).isObrisan());
+							out.println();
 							break;
 						}
 						out.print(";");

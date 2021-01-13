@@ -34,7 +34,7 @@ Vue.component("komentari-prodavac", {
 					self.komentari = data;
 				},
 				error: function(response){
-					toast("Doslo je do greske.");
+					alert("Doslo je do greske.");
 				}
 			});
 		},
@@ -47,7 +47,7 @@ Vue.component("komentari-prodavac", {
 					self.komentari = data;
 				},
 				error: function(response){
-					toast("Doslo je do greske.");
+					alert("Doslo je do greske.");
 				}
 			});
 		} 

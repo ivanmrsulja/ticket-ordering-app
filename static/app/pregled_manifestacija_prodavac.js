@@ -8,10 +8,10 @@ Vue.component("manifestacije-prodavac", {
 		    }
 	},
 	template: ` 
-<div>
+<div style="width:80%">
 		<h1>Prikaz manifestacija admin</h1>
 		
-		<table border=1>
+		<table class="table table-hover">
 			<tr bgcolor="lightgrey">
 				<th>Naziv</th>
 				<th>Tip manifestacije</th>
@@ -22,7 +22,7 @@ Vue.component("manifestacije-prodavac", {
 				<th>Adresa odrzavanja</th>
 				<th>Status</th>
 			</tr>
-	
+			<tbody>
 			<tr v-for="m in this.manifestacije" v-on:click="selectManifestacija(m)">
 				<td>{{m.naziv}}</td>
 				<td>{{m.tipManifestacije}}</td>
@@ -33,11 +33,12 @@ Vue.component("manifestacije-prodavac", {
 				<td>{{m.lokacija.adresa}}</td>
 				<td>{{m.status}}</td>
 			</tr>
+			</tbody>
 		</table>
 		<br/>
 		<br/>
 		
-		<h1>Dodaj manifestaciju: </h1>
+		<h1>Izmeni manifestaciju: </h1>
 		<table>
 			<tr>
 				<td> <h2>Naziv:</h2> </td> <td> <input type="text" name="naziv" v-model="selected.naziv" disabled /> </td>
@@ -119,7 +120,7 @@ Vue.component("manifestacije-prodavac", {
 						data: JSON.stringify(obj),
 						contentType: "application/json",
 						success: function(response){
-							toast(response);
+							alert(response);
 							if(response != "Uspesno azurirano."){
 								self.selected.id = self.old.id;
 								self.selected.naziv = self.old.naziv;
@@ -160,7 +161,7 @@ Vue.component("manifestacije-prodavac", {
 						data: JSON.stringify(obj),
 						contentType: "application/json",
 						success: function(response){
-							toast(response);
+							alert(response);
 							if(response != "Uspesno azurirano."){
 								self.selected.id = self.old.id;
 								self.selected.naziv = self.old.naziv;

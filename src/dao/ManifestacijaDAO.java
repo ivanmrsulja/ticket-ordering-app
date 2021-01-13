@@ -16,7 +16,11 @@ import java.util.Map;
 
 import beans.Lokacija;
 import beans.Manifestacija;
-import beans.Prodavac;
+import search.ManifestacijaSearchParams;
+import sorter.SortirajManifestacijuPoCijeniRastuce;
+import sorter.SortirajManifestacijuPoDatumuRastuce;
+import sorter.SortirajManifestacijuPoLokacijiRastuce;
+import sorter.SortirajManifestacijuPoNazivuRastuce;
 
 public class ManifestacijaDAO {
 
@@ -180,6 +184,47 @@ public class ManifestacijaDAO {
 			}
 		}
 		Collections.reverse(ret);
+		return ret;
+	}
+	
+	public List<Manifestacija> searchFilterSort(ManifestacijaSearchParams msp){
+		List<Manifestacija> ret = new ArrayList<Manifestacija>();
+		
+		for(Manifestacija m : vratiAktuelne()) {
+			if(m.getNaziv().toUpperCase().contains(msp.getNaziv().toUpperCase()) && m.getLokacija().getAdresa().toUpperCase().contains(msp.getLokacija().toUpperCase()) && m.getCenaRegular() <= msp.getEndPrice() && m.getCenaRegular() >= msp.getStartPrice() && m.getDatumOdrzavanja() >= msp.getStartDate() && m.getDatumOdrzavanja() <= msp.getEndDate()) {
+				if(!msp.isRasprodata()) {
+					if(m.getBrojMesta() == 0) {
+						continue;
+					}
+				}
+				if(!msp.getTip().equals("SVE")) {
+					if(!m.getTipManifestacije().equals(msp.getTip())) {
+						continue;
+					}
+				}
+				ret.add(m);
+			}
+		}
+		
+		switch(msp.getKriterijumSortiranja()) {
+		case "NAZIV":
+			Collections.sort(ret, new SortirajManifestacijuPoNazivuRastuce());
+			break;
+		case "DATUM":
+			Collections.sort(ret, new SortirajManifestacijuPoDatumuRastuce());
+			break;
+		case "CENA":
+			Collections.sort(ret, new SortirajManifestacijuPoCijeniRastuce());
+			break;
+		case "LOKACIJA":
+			Collections.sort(ret, new SortirajManifestacijuPoLokacijiRastuce());
+			break;
+		}
+		
+		if(msp.isOpadajuce()) {
+			Collections.reverse(ret);
+		}
+		
 		return ret;
 	}
 

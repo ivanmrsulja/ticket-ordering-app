@@ -12,6 +12,7 @@ public class Korisnik {
 	private long datumRodjenja;
 	private String uloga;
 	private boolean banovan;
+	private int brojOtkazivanja;
 	
 	public Korisnik() {}
 	public Korisnik(String us, String pa, String im, String pr, String po, long dr, String ul) {
@@ -23,8 +24,15 @@ public class Korisnik {
 		datumRodjenja = dr;
 		uloga = ul;
 		banovan = false;
+		brojOtkazivanja = 0;
 	}
 	
+	public int getBrojOtkazivanja() {
+		return brojOtkazivanja;
+	}
+	public void setBrojOtkazivanja(int brojOtkazivanja) {
+		this.brojOtkazivanja = brojOtkazivanja;
+	}
 	public String getIme() {
 		return ime;
 	}
@@ -75,10 +83,11 @@ public class Korisnik {
 	public void setBanovan(boolean banovan) {
 		this.banovan = banovan;
 	}
+	
 	@Override
 	public String toString() {
 		return "Korisnik [username=" + username + ", password=" + password + ", ime=" + ime + ", prezime=" + prezime
-				+ ", pol=" + pol + ", datumRodjenja=" + (new Date(datumRodjenja)).toString() + ", uloga=" + uloga + "]";
+				+ ", pol=" + pol + ", datumRodjenja=" + datumRodjenja + ", uloga=" + uloga + ", banovan=" + banovan
+				+ ", brojOtkazivanja=" + brojOtkazivanja + "]";
 	}
-	
 }

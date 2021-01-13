@@ -36,7 +36,7 @@ Vue.component("shopping-cart", {
 		odobri : function () {
 			let self = this;
 			$.get("/rest/tickets/checkout", function(data){
-				toast("Uspesno kupljeno.");
+				alert("Uspesno kupljeno.");
 				 $.get("/rest/tickets/getCart", function(data){
 		        	for(d of data){
 						self.total += d.cijena;

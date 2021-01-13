@@ -3,6 +3,7 @@
 
 <head>
 	<link href="css/toast.css" rel="stylesheet" />
+	<link href="css/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet" />
 	<meta charset="utf-8"/>
 	<style>
 		h2 {
@@ -16,6 +17,17 @@
 			 padding-left: 5px ;
 		}
 	</style>
+	<script type="text/javascript">
+	/* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
+		function openNav() {
+		  document.getElementById("mySidebar").style.width = "300px";
+		}
+	
+		/* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
+		function closeNav() {
+		  document.getElementById("mySidebar").style.width = "0";
+		}
+	</script>
 	
 </head> 
 
@@ -45,6 +57,8 @@
 <a href="#/mojaKorpa" v-bind:hidden="korisnik.uloga != 'KUPAC'">Moja korpa</a>
 
 <a href="#/" v-on:click="logout()"  v-bind:hidden="korisnik.uloga == 'GOST'">Logout</a>
+<br/>
+<br/>
 	  <router-view></router-view>
 </div>
 
@@ -54,6 +68,7 @@
 <script src="js/axios.js"></script>
 <script src="js/jquery.min.js"></script>
 <script src="js/toast.js"></script>
+<script src="css/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
 
 <script src="app/login.js"></script>
 <script src="app/profile.js"></script>
