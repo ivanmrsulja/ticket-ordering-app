@@ -37,6 +37,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import javaxt.utils.Base64;
 import search.KarteSearchParams;
+import search.KorisniciSearchParams;
 import search.ManifestacijaSearchParams;
 import ws.WsHandler;
 
@@ -249,6 +250,37 @@ public class SparkAppMain {
 			}else {
 				return "Korisnik unbanovan.";
 			}
+		});
+		
+		get("/rest/users/pretraga", (req, res) -> {
+			KorisniciSearchParams ksp = new KorisniciSearchParams();
+			
+		
+			String ime = req.queryParams("ime").trim();
+			ksp.setIme(ime);
+			
+			String prezime = req.queryParams("prezime").trim();
+			ksp.setPrezime(prezime);
+			
+			String username = req.queryParams("username").trim();
+			ksp.setUsername(username);
+			
+			String tip = req.queryParams("tip").trim();
+			ksp.setTip(tip);
+			
+			String uloga = req.queryParams("uloga").trim();
+			ksp.setUloga(uloga);
+			
+			String kriterijumSortiranja = req.queryParams("kriterijumSortiranja").trim();
+			ksp.setKriterijumSortiranja(kriterijumSortiranja);
+			boolean opadajuce = Boolean.parseBoolean(req.queryParams("opadajuce").trim());
+			ksp.setOpadajuce(opadajuce);
+			
+			System.out.println(ksp);
+			List<Korisnik> ret = k.searchFilterSort(ksp);
+			res.type("application/json");
+			return g.toJson(ret);
+		
 		});
 		
 		/////////////// MANIFESTACIJE ///////////////

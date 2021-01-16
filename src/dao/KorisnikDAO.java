@@ -10,9 +10,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import beans.Karta;
 import beans.Korisnik;
@@ -20,6 +23,7 @@ import beans.Kupac;
 import beans.Manifestacija;
 import beans.Prodavac;
 import beans.TipKupca;
+import search.KorisniciSearchParams;
 
 public class KorisnikDAO {
 	private List<Korisnik> korisnici;
@@ -348,7 +352,83 @@ public class KorisnikDAO {
 		this.kupciMap = kupciMap;
 	}
 	
-	
+	public List<Korisnik> searchFilterSort(KorisniciSearchParams ksp) {
+		List<Korisnik> ret = new ArrayList<Korisnik>();
+		
+		for(Korisnik k : korisnici) {
+			if(k.getIme().toUpperCase().contains(ksp.getIme().toUpperCase()) && k.getPrezime().toUpperCase().contains(ksp.getPrezime().toUpperCase()) && k.getUsername().toUpperCase().contains(ksp.getUsername().toUpperCase())) {
+				if(!ksp.getUloga().equals("SVE")) {
+					if(!k.getUloga().equals(ksp.getUloga())) {
+						continue;
+					}
+				}
+				
+				if(!ksp.getTip().equals("SVE")) {
+					if(!k.getUloga().equals("KUPAC")) {
+						continue;
+					}
+					Kupac kupac = getKupciMap().get(k.getUsername());
+					if(!kupac.getTip().getImeTipa().equals(ksp.getTip())) {
+						continue;
+					}
+				}
+				ret.add(k);
+			}
+		}
+		
+		switch(ksp.getKriterijumSortiranja()) {
+		case "IME":
+			Collections.sort(ret, new Comparator<Korisnik>() {
+							
+				@Override
+				public int compare(Korisnik k1, Korisnik k2) {
+					return k1.getIme().compareTo(k2.getIme());
+				}
+			});
+			break;
+		case "PREZIME":
+			Collections.sort(ret, new Comparator<Korisnik>() {
+				
+				@Override
+				public int compare(Korisnik k1, Korisnik k2) {
+					return k1.getPrezime().compareTo(k2.getPrezime());
+				}
+			});
+			break;
+		case "USERNAME":
+			Collections.sort(ret, new Comparator<Korisnik>() {
+				
+				@Override
+				public int compare(Korisnik k1, Korisnik k2) {
+					return k1.getUsername().compareTo(k2.getUsername());
+				}
+			});
+			break;
+		case "BODOVI":
+			List<Kupac> temp = new ArrayList<Kupac>();
+			Comparator<Kupac> comparator = new Comparator<Kupac>() {
+				@Override
+				public int compare(Kupac k1, Kupac k2) {
+					return Integer.compare(k1.getBrojBodova(), k2.getBrojBodova());
+				}
+			};
+			for(String username : ret.stream().filter(k -> k.getUloga().equals("KUPAC")).map(k -> k.getUsername()).collect(Collectors.toList())) {
+				temp.add(getKupciMap().get(username));
+			}
+			Collections.sort(temp, comparator);
+			ret.clear();
+			for(Kupac ku : temp) {
+				ret.add(getKorisniciMap().get(ku.getUsername()));
+			}
+			break;
+		}
+		
+		if(ksp.isOpadajuce()) {
+			Collections.reverse(ret);
+		}
+		System.out.println(ret.size());
+		return ret;
+	}
 
 	public Korisnik find(String username, String password) {
 		try {

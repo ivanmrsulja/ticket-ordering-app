@@ -7,7 +7,7 @@ import dao.KorisnikDAO;
 import dao.LokacijaDAO;
 import dao.ManifestacijaDAO;
 import dao.TipKupcaDAO;
-import search.ManifestacijaSearchParams;
+import search.KorisniciSearchParams;
 
 
 public class Main {
@@ -52,12 +52,10 @@ public class Main {
 		komentari.save();
 		
 		System.out.println("\nAAA\n");
-		ManifestacijaSearchParams msp = new ManifestacijaSearchParams();
-		msp.setKriterijumSortiranja("CENA");
-		msp.setRasprodata(true);
-		msp.setOpadajuce(true);
-		for(Manifestacija m : manifestacije.searchFilterSort(msp)) {
-			System.out.println(m);
+		KorisniciSearchParams ksp = new KorisniciSearchParams();
+		ksp.setKriterijumSortiranja("BODOVI");
+		for(Korisnik kor : k.searchFilterSort(ksp)) {
+			System.out.println(kor);
 		}
 		
 	}
