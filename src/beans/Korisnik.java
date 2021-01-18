@@ -13,6 +13,7 @@ public class Korisnik {
 	private String uloga;
 	private boolean banovan;
 	private int brojOtkazivanja;
+	private boolean obrisan;
 	
 	public Korisnik() {}
 	public Korisnik(String us, String pa, String im, String pr, String po, long dr, String ul) {
@@ -25,8 +26,15 @@ public class Korisnik {
 		uloga = ul;
 		banovan = false;
 		brojOtkazivanja = 0;
+		obrisan = false;
 	}
 	
+	public boolean isObrisan() {
+		return obrisan;
+	}
+	public void setObrisan(boolean obrisan) {
+		this.obrisan = obrisan;
+	}
 	public int getBrojOtkazivanja() {
 		return brojOtkazivanja;
 	}

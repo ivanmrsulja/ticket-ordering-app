@@ -49,7 +49,7 @@ body {
 
 /* Linkovi */
 
-a {
+a.navigacija {
   background-color: red;
   color: white;
   padding: 0.5em 1em;
@@ -255,4 +255,11 @@ a:active {
 @media screen and (max-height: 450px) {
   .sidebar {padding-top: 15px;}
   .sidebar a {font-size: 18px;}
+}
+
+/* MAPA */
+
+.map {
+        height: 300px;
+        width: 20%;
 }

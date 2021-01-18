@@ -27,11 +27,11 @@ Vue.component("add-manifestation", {
 				</td> 
 			</tr>
 			<tr>
-				<td>Datum odrzavanja:</td>
+				<td><h2>Datum odrzavanja:</h2></td>
 				<td> <input type="date" id="datum" name="datum"> </td>
 			</tr>
 			<tr>
-				<td>Vreme odrzavanja:</td>
+				<td><h2>Vreme odrzavanja:</h2></td>
 				<td> <input type="time" id="vrijeme" name="vrijeme" min="00:00" max="23:59"> </td>
 			</tr>
 			<tr>
@@ -73,6 +73,15 @@ Vue.component("add-manifestation", {
 			let duzina = $("input[name=duzina]").val();
 			let addr = $("input[name=adresa]").val();
 			
+			if(naz.trim() == "" || isNaN(mesta) || dat.trim() == "" || isNaN(sirina) || isNaN(duzina) || addr.trim() == "" || vreme.trim() == ""){
+				alert("Popunite sva polja.");
+				return;
+			}
+			
+			if(naz.includes(";") || addr.includes(";")){
+				alert("Polja sadrze nedozvoljene karaktere!");
+				return;
+			}
 			
 			let input = document.querySelector('input#poster');
 			let file = input.files[0];
@@ -83,12 +92,12 @@ Vue.component("add-manifestation", {
 			    let b64 = reader.result.replace(/^data:.+;base64,/, '');
 			    console.log(b64); //-> "R0lGODdhAQABAPAAAP8AAAAAACwAAAAAAQABAAACAkQBADs="
 			    
-			    let obj = {naziv : naz,
+			    let obj = {naziv : naz.trim(),
 					tipManifestacije : tip,
 					datumOdrzavanja : date,
 					brojMesta : mesta,
 					cenaRegular : cena,
-					lokacija : {geografskaSirina: sirina, geografskaDuzina: duzina, adresa: addr},
+					lokacija : {geografskaSirina: sirina, geografskaDuzina: duzina, adresa: addr.trim()},
 					slika : b64};
 					
 				$.post("/rest/manifestations/add", JSON.stringify(obj), function(data){
@@ -100,11 +109,13 @@ Vue.component("add-manifestation", {
 			});
 			    
 			};
-
-  			reader.readAsDataURL(file);
 			
-
-			//TODO: Validacija upisa
+			try{
+  				reader.readAsDataURL(file);
+			}catch(exception){
+				alert("Morate uneti sliku.");
+				return;
+			}
 			
 		} 
 	},

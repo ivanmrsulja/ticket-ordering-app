@@ -6,7 +6,7 @@ Vue.component("karte-admin", {
 		    }
 	},
 	template: ` 
-<div>
+<div style="width: 80%">
 		<h1>Prikaz karata admin</h1>
 		
 		
@@ -53,7 +53,7 @@ Vue.component("karte-admin", {
 		</div>
 		
 		
-		<table border=1>
+		<table class="table table-hover">
 			<tr bgcolor="lightgrey">
 				<th>Kupac</th>
 				<th>Ime i prezime</th>

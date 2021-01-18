@@ -96,6 +96,17 @@ Vue.component("manifestacije-prodavac", {
 			this.mode = "EDIT";
 		}, 
 		izmeni: function(){
+		
+			if(this.selected.naziv.trim() == "" || isNaN(this.selected.brojMesta) || this.selected.datumOdrzavanja.trim() == "" || isNaN(this.selected.lokacija.geografskaSirina) || isNaN(this.selected.lokacija.geografskaDuzina) || this.selected.lokacija.adresa.trim() == "" || this.selected.vremeOdrzavanja.trim() == ""){
+				alert("Popunite sva polja.");
+				return;
+			}
+			
+			if(this.selected.naziv.includes(";") || this.selected.lokacija.adresa.includes(";")){
+				alert("Polja sadrze nedozvoljene karaktere!");
+				return;
+			}
+			
 			let self = this;
 			
 			let date = (new Date(this.selected.datumOdrzavanja)).getTime();
@@ -110,7 +121,7 @@ Vue.component("manifestacije-prodavac", {
 					datumOdrzavanja : date,
 					brojMesta :  this.selected.brojMesta,
 					cenaRegular :  this.selected.cenaRegular,
-					lokacija : {geografskaSirina:  this.selected.lokacija.geografskaSirina, geografskaDuzina:  this.selected.lokacija.geografskaDuzina, adresa:  this.selected.lokacija.adresa},
+					lokacija : {geografskaSirina:  this.selected.lokacija.geografskaSirina, geografskaDuzina:  this.selected.lokacija.geografskaDuzina, adresa: this.selected.lokacija.adresa},
 					slika : ""};
 				
 				//ajax poziv

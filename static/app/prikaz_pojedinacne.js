@@ -16,6 +16,11 @@ Vue.component("prikaz-pojedinacne", {
 		
 		<img :src="this.manifestacija.slika"  height=300 width=500></img>
 		
+		<br/>
+		<br/>
+			<div id="map" class="map"></div>
+		<br/>
+		
 		<table>
 			<tr><th colspan=5> Rezervisi karte! </th></tr>
 			<tr> <td> Tip karte: </td>
@@ -91,6 +96,31 @@ Vue.component("prikaz-pojedinacne", {
 `
 	, 
 	methods : {
+		showMap : function(){
+			let self = this;
+			var map = new ol.Map({
+		        target: 'map',
+		        layers: [
+		          new ol.layer.Tile({
+		            source: new ol.source.OSM()
+		          })
+		        ],
+		        view: new ol.View({
+		          center: ol.proj.fromLonLat([self.manifestacija.lokacija.geografskaDuzina, self.manifestacija.lokacija.geografskaSirina]),
+		          zoom: 16
+		        })
+		      });
+		     var layer = new ol.layer.Vector({
+			     source: new ol.source.Vector({
+			         features: [
+			             new ol.Feature({
+			                 geometry: new ol.geom.Point(ol.proj.fromLonLat([self.manifestacija.lokacija.geografskaDuzina, self.manifestacija.lokacija.geografskaSirina]))
+			             })
+			         ]
+			     })
+			 });
+			 map.addLayer(layer);
+		},
 		addToCart : function() {
 			let man = this.manifestacija.id;
 			let tip = $('#tip_karte option:selected').val();
@@ -125,6 +155,7 @@ Vue.component("prikaz-pojedinacne", {
         let self = this;
 		$.get("/rest/manifestations/getCurrent", function(data){
 			self.manifestacija = data;
+			self.showMap();
 		});
 		$.get("/rest/users/currentUser", function(data){
 			self.user = data;

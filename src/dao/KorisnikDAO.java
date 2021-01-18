@@ -137,6 +137,7 @@ public class KorisnikDAO {
 						k = new Korisnik(tokens[0],tokens[1],tokens[2],tokens[3],tokens[4],Long.parseLong(tokens[5]),tokens[6]);
 						if (tokens[7].contentEquals("true")) {
 							pr.setObrisan(true);
+							k.setObrisan(true);
 						}
 						if (tokens[8].contentEquals("true")) {
 							pr.setBanovan(true);
@@ -162,6 +163,7 @@ public class KorisnikDAO {
 						}
 						if(tokens[10].contentEquals("true")) {
 							k.setObrisan(true);
+							ko.setObrisan(true);
 						}
 						
 						korisnici.add(ko);

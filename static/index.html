@@ -4,6 +4,7 @@
 <head>
 	<link href="css/toast.css" rel="stylesheet" />
 	<link href="css/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="css/ol.css" rel="stylesheet"/>
 	<meta charset="utf-8"/>
 	<style>
 		h2 {
@@ -37,26 +38,26 @@
   <h1>Aplikacija za rezervaciju karata</h1>
   <p>Mrsulja Ivan SW-65/2018</p>
 </div>
-<a href="#/" v-bind:hidden="korisnik.uloga == 'ADMIN' || korisnik.uloga=='PRODAVAC'">Pocetna</a>
-<a href="#/register" v-bind:hidden="korisnik.uloga != 'GOST'">Register</a>
-<a href="#/login" v-bind:hidden="korisnik.uloga != 'GOST'">Login</a>
-<a href="#/profile" v-bind:hidden="korisnik.uloga == 'GOST'">Moj Profil</a>
+<a class="navigacija" href="#/" v-bind:hidden="korisnik.uloga == 'ADMIN' || korisnik.uloga=='PRODAVAC'">Pocetna</a>
+<a class="navigacija" href="#/register" v-bind:hidden="korisnik.uloga != 'GOST'">Register</a>
+<a class="navigacija" href="#/login" v-bind:hidden="korisnik.uloga != 'GOST'">Login</a>
+<a class="navigacija" href="#/profile" v-bind:hidden="korisnik.uloga == 'GOST'">Moj Profil</a>
 
-<a href="#/registerSeller" v-bind:hidden="korisnik.uloga != 'ADMIN'">Dodaj prodavca</a>
-<a href="#/adminManif" v-bind:hidden="korisnik.uloga != 'ADMIN'">PREGLED MANIFESTACIJA</a>
-<a href="#/adminTickets" v-bind:hidden="korisnik.uloga != 'ADMIN'">PREGLED KARATA</a>
-<a href="#/adminUsers" v-bind:hidden="korisnik.uloga != 'ADMIN'">PREGLED KORISNIKA</a>
-<a href="#/adminComment" v-bind:hidden="korisnik.uloga != 'ADMIN'">PREGLED KOMENTARA</a>
+<a class="navigacija" href="#/registerSeller" v-bind:hidden="korisnik.uloga != 'ADMIN'">Dodaj prodavca</a>
+<a class="navigacija" href="#/adminManif" v-bind:hidden="korisnik.uloga != 'ADMIN'">PREGLED MANIFESTACIJA</a>
+<a class="navigacija" href="#/adminTickets" v-bind:hidden="korisnik.uloga != 'ADMIN'">PREGLED KARATA</a>
+<a class="navigacija" href="#/adminUsers" v-bind:hidden="korisnik.uloga != 'ADMIN'">PREGLED KORISNIKA</a>
+<a class="navigacija" href="#/adminComment" v-bind:hidden="korisnik.uloga != 'ADMIN'">PREGLED KOMENTARA</a>
 
-<a href="#/addManif" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Dodaj manifestaciju</a>
-<a href="#/sellerManif" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Pregled manifestacija</a>
-<a href="#/rezervisaneKarte" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Pregled rezervisanih karata</a>
-<a href="#/komentariProdavac" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Pregled komentara</a>
+<a class="navigacija" href="#/addManif" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Dodaj manifestaciju</a>
+<a class="navigacija" href="#/sellerManif" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Pregled manifestacija</a>
+<a class="navigacija" href="#/rezervisaneKarte" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Pregled rezervisanih karata</a>
+<a class="navigacija" href="#/komentariProdavac" v-bind:hidden="korisnik.uloga != 'PRODAVAC'">Pregled komentara</a>
 
-<a href="#/mojeKarte" v-bind:hidden="korisnik.uloga != 'KUPAC'">Moje karte</a>
-<a href="#/mojaKorpa" v-bind:hidden="korisnik.uloga != 'KUPAC'">Moja korpa</a>
+<a class="navigacija" href="#/mojeKarte" v-bind:hidden="korisnik.uloga != 'KUPAC'">Moje karte</a>
+<a class="navigacija" href="#/mojaKorpa" v-bind:hidden="korisnik.uloga != 'KUPAC'">Moja korpa</a>
 
-<a href="#/" v-on:click="logout()"  v-bind:hidden="korisnik.uloga == 'GOST'">Logout</a>
+<a class="navigacija" href="#/" v-on:click="logout()"  v-bind:hidden="korisnik.uloga == 'GOST'">Logout</a>
 <br/>
 <br/>
 	  <router-view></router-view>
@@ -69,6 +70,7 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/toast.js"></script>
 <script src="css/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+<script src="css/ol.js"></script>
 
 <script src="app/login.js"></script>
 <script src="app/profile.js"></script>

@@ -375,6 +375,9 @@ public class SparkAppMain {
 		post("/rest/manifestations/add", (req, res) -> {
 			//Popraviti
 			Manifestacija man = g.fromJson(req.body(), Manifestacija.class);
+			if(man.getNaziv().trim().equals("") || man.getBrojMesta() == 0 || man.getLokacija().getAdresa().trim().equals("") || man.getNaziv().contains(";") || man.getLokacija().getAdresa().contains(";") ) {
+				return "Failed";
+			}
 			Korisnik ko = req.session().attribute("currentUser");
 			boolean ok = manifestacije.checkLocation(man.getLokacija(), man.getDatumOdrzavanja());
 			if (ok) {
@@ -402,6 +405,11 @@ public class SparkAppMain {
 		
 		put("/rest/manifestations/update", (req, res) -> {
 			Manifestacija man = g.fromJson(req.body(), Manifestacija.class);
+			
+			if(man.getNaziv().trim().equals("") || man.getBrojMesta() == 0 || man.getLokacija().getAdresa().trim().equals("") || man.getNaziv().contains(";") || man.getLokacija().getAdresa().contains(";") ) {
+				return "Failed";
+			}
+			
 			Korisnik ko = req.session().attribute("currentUser");
 			boolean ok = manifestacije.checkLocation(man.getLokacija(), man.getDatumOdrzavanja());
 			

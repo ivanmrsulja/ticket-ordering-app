@@ -75,7 +75,7 @@ Vue.component("korisnici-admin", {
 				<td>{{k.pol}}</td>
 				<td>{{k.datumRodjenja}}</td>
 				<td>{{k.uloga}}</td>
-				<td><input type="button" value="Obrisi" v-on:click="obrisi(k)" /></td>
+				<td><input type="button" value="Obrisi" v-on:click="obrisi(k)" v-bind:hidden="k.obrisan || k.uloga == 'ADMIN' " /></td>
 				<td v-if="!k.banovan" v-bind:hidden="k.uloga == 'ADMIN'"><input type="button" value="Banuj" v-on:click="banuj(k)" /></td>
 				<td v-else v-bind:hidden="k.uloga == 'ADMIN'"><input type="button" value="Unbanuj" v-on:click="banuj(k)" /></td>
 			</tr>
