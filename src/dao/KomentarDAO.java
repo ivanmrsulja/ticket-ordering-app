@@ -113,7 +113,7 @@ public class KomentarDAO {
 	
 	
 	public void load() {
-		String path = "data//komentari.csv";
+		String path = "data/komentari.csv";
 		
 		try {
 			BufferedReader bf = new BufferedReader(new FileReader(path));
@@ -144,7 +144,7 @@ public class KomentarDAO {
 	}
 
 	public void save() {
-		String path = "data//komentari.csv";
+		String path = "data/komentari.csv";
 		try {
 			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(path)));
 			for(Komentar k: komentariList) {

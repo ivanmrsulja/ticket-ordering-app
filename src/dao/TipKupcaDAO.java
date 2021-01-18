@@ -24,7 +24,7 @@ public class TipKupcaDAO {
 	}
 	
 	public void load() {
-		String path = "data\\tipoviKupaca.csv";
+		String path = "data/tipoviKupaca.csv";
 		
 		try {
 			BufferedReader bf = new BufferedReader(new FileReader(path));
@@ -56,7 +56,7 @@ public class TipKupcaDAO {
 	}
 	
 	public void save() {
-		String path = "data//tipoviKupaca.csv";
+		String path = "data/tipoviKupaca.csv";
 		
 //		TipKupca t1 = new TipKupca("Pocetni kupac",0,0);
 //		TipKupca t2 = new TipKupca("Redovan kupac",6,30);

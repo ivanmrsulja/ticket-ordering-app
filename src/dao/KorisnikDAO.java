@@ -112,7 +112,7 @@ public class KorisnikDAO {
 	}
 	
 	public void load(){
-		String path = "data\\korisnici.csv";
+		String path = "data/korisnici.csv";
 		
 		BufferedReader bf = null;
 		
@@ -213,7 +213,7 @@ public class KorisnikDAO {
 	}
 	
 	public void save() {
-		String path = "data\\korisnici.csv";
+		String path = "data/korisnici.csv";
 		
 		try {
 			

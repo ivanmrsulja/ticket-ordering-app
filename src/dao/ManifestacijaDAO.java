@@ -43,7 +43,7 @@ public class ManifestacijaDAO {
 	
 	public void load() {
 		
-		String path = "data//manifestacije.csv";
+		String path = "data/manifestacije.csv";
 		try {
 			SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 			BufferedReader bf = new BufferedReader(new FileReader(path));
@@ -98,7 +98,7 @@ public class ManifestacijaDAO {
 //			e1.printStackTrace();
 //		}
 		
-		String path = "data//manifestacije.csv";
+		String path = "data/manifestacije.csv";
 		PrintWriter out;
 		try {
 			out = new PrintWriter(new BufferedWriter(new FileWriter(path)));

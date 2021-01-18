@@ -26,7 +26,7 @@ public class LokacijaDAO {
 	
 	
 	public void load() {
-		String path = "data//lokacije.csv";
+		String path = "data/lokacije.csv";
 		
 		BufferedReader bf;
 		String currentLine;
@@ -53,7 +53,7 @@ public class LokacijaDAO {
 	}
 	
 	public void save() {
-		String path = "data//lokacije.csv";
+		String path = "data/lokacije.csv";
 //		Lokacija l1 = new Lokacija(45.24740, 19.85112, "Bulevar cara Lazara 3, Novi Sad 21000");
 //		Lokacija l2 = new Lokacija(45.24935, 19.84623, "Sutjeska 3 Novi Sad 21000");
 //		Lokacija l3 = new Lokacija(45.24648,19.83968,"Bulevar oslobodjenja 96, Novi Sad 21000");
