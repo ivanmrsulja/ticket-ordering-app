@@ -6,7 +6,7 @@ Vue.component("karte-prodavac", {
 	},
 	template: ` 
 <div>
-		<h1>Prikaz karata admin</h1>
+		<h1>Prikaz karata prodavac</h1>
 		
 		<table border=1>
 			<tr bgcolor="lightgrey">

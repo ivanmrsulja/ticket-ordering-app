@@ -3,6 +3,7 @@
 14;Predstava;POZORISTE;1613763900000;8;400.0;AKTIVNO;Trg Slobode, Novi Sad, 21000;14.png;false;prodavac
 15;Test;FESTIVAL;1609932300000;0;2.0;AKTIVNO;Trg Slobode, Novi Sad, 21000;def.jpg;true;prodavac
 16;Baja Mali Knindza;KONCERT;1610218800000;294;750.0;AKTIVNO;Centar, Prijedor, 18000;16.png;false;prodavac
-17;Who See;KONCERT;1612119600000;94;500.0;AKTIVNO;Trg Slobode, Novi Sad, 21000;17.png;false;niko
+17;Who See;KONCERT;1612119600000;93;500.0;AKTIVNO;Trg Slobode, Novi Sad, 21000;17.png;false;niko
 18;INDIRA;KONCERT;1612378800000;98;1000.0;AKTIVNO;Trg Od Oruzja, Kotor, 85318;18.png;false;niko
-19;Spring Break;KONCERT;1615572000000;12400;5000.0;NEAKTIVNO;Plaža Kamenovo, Budva, 19000;19.png;false;prodavac
+19;Spring Break;KONCERT;1615572000000;12400;5000.0;AKTIVNO;Plaža Kamenovo, Budva, 19000;19.png;false;prodavac
+20;test;KONCERT;1611226980000;123;123.0;NEAKTIVNO;Adresa, Kotor, 20000;20.png;true;test

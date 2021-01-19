@@ -31,6 +31,9 @@ Vue.component("komentari-admin", {
 				url: "/rest/comments/allComments",
 				method: "GET",
 				success: function(data){
+					for(d of data){
+						d.tekst = d.tekst.replaceAll("_", " ");
+					}
 					self.komentari = data;
 				},
 				error: function(response){

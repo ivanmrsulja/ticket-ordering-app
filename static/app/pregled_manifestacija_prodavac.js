@@ -96,8 +96,8 @@ Vue.component("manifestacije-prodavac", {
 			this.mode = "EDIT";
 		}, 
 		izmeni: function(){
-		
-			if(this.selected.naziv.trim() == "" || isNaN(this.selected.brojMesta) || this.selected.datumOdrzavanja.trim() == "" || isNaN(this.selected.lokacija.geografskaSirina) || isNaN(this.selected.lokacija.geografskaDuzina) || this.selected.lokacija.adresa.trim() == "" || this.selected.vremeOdrzavanja.trim() == ""){
+			
+			if(this.selected.naziv.trim() == "" || this.selected.brojMesta == "" || this.selected.cenaRegular == "" || this.selected.datumOdrzavanja.trim() == "" || this.selected.lokacija.geografskaSirina == "" || this.selected.lokacija.geografskaDuzina == "" || this.selected.lokacija.adresa.trim() == "" || this.selected.vremeOdrzavanja.trim() == ""){
 				alert("Popunite sva polja.");
 				return;
 			}

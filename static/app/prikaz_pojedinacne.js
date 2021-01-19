@@ -172,6 +172,7 @@ Vue.component("prikaz-pojedinacne", {
 			for(d of data){
 				self.ukupnaOcena += d.ocena;
 				counter ++;
+				d.tekst = d.tekst.replaceAll("_", "\n");
 			}
 			if (counter != 0){
 				self.ukupnaOcena = self.ukupnaOcena / counter;

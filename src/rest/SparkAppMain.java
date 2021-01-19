@@ -113,10 +113,14 @@ public class SparkAppMain {
 		});
 		
 		post("/rest/users/registerSeller", (req, res) -> {
-			//Popraviti
+			Korisnik ko = req.session().attribute("currentUser");
+			if (ko == null || !ko.getUloga().equals("ADMIN")) {
+				return "Failed";
+			}
+			
 			Korisnik user = g.fromJson(req.body(), Korisnik.class);
 			Korisnik kor = k.find(user.getUsername(), user.getPassword());
-			if(kor != null) {
+			if(kor != null || user.getIme().trim().equals("") || user.getPrezime().trim().equals("") || user.getIme().contains(";") || user.getPrezime().contains(";") || user.getUsername().trim().equals("") || user.getPassword().trim().equals("") || user.getUsername().contains(";") || user.getPassword().contains(";")) {
 				return "Failed";
 			}else {
 				System.out.println("Prosao");
@@ -131,7 +135,6 @@ public class SparkAppMain {
 		});
 		
 		post("/rest/users/logUser", (req, res) -> {
-			//Popraviti
 			Korisnik user = g.fromJson(req.body(), Korisnik.class);
 			Korisnik kor = k.find(user.getUsername(), user.getPassword());
 			if(kor != null) {
@@ -162,7 +165,7 @@ public class SparkAppMain {
 				return "Done";
 			}else {
 				res.type("application/json");
-				return "Failed";
+				return "Pogresan username/password.";
 			}
 		});
 		
@@ -179,11 +182,17 @@ public class SparkAppMain {
 		
 		put("rest/users/updateUser", (req,res) -> {
 			Korisnik user = (Korisnik) req.session().attribute("currentUser");
+			
 			System.out.println(user);
 			Korisnik updatedUser = (Korisnik) g.fromJson(req.body(), Korisnik.class);
 			if(updatedUser.getIme().trim().equals("") || updatedUser.getPrezime().trim().equals("") || updatedUser.getIme().contains(";") || updatedUser.getPrezime().contains(";") || updatedUser.getUsername().trim().equals("") || updatedUser.getPassword().trim().equals("") || updatedUser.getUsername().contains(";") || updatedUser.getPassword().contains(";")) {
 				return "Popunite sva polja ispravno.";
 			}
+			
+			if (user == null || !user.getUsername().equals(updatedUser.getUsername())) {
+				return "Failed";
+			}
+			
 			user.setPassword(updatedUser.getPassword());
 			user.setIme(updatedUser.getIme());
 			user.setPrezime(updatedUser.getPrezime());
@@ -221,6 +230,10 @@ public class SparkAppMain {
 		});
 		
 		delete("/rest/users/:username", (req, res) -> {
+			Korisnik ko = req.session().attribute("currentUser");
+			if (ko == null || !ko.getUloga().equals("ADMIN")) {
+				return "Failed";
+			}
 			String username = req.params("username");
 			try {
 				k.getKupciMap().get(username).setObrisan(true);
@@ -232,6 +245,10 @@ public class SparkAppMain {
 		});
 		
 		put("/rest/users/:username", (req, res) -> {
+			Korisnik ko = req.session().attribute("currentUser");
+			if (ko == null || !ko.getUloga().equals("ADMIN")) {
+				return "Failed";
+			}
 			String username = req.params("username");
 			try {
 				k.getKupciMap().get(username).setBanovan(!k.getKupciMap().get(username).isBanovan());
@@ -286,6 +303,10 @@ public class SparkAppMain {
 		/////////////// MANIFESTACIJE ///////////////
 		
 		get("/rest/manifestations/all", (req, res) -> {
+			Korisnik ko = req.session().attribute("currentUser");
+			if (ko == null || !ko.getUloga().equals("ADMIN")) {
+				return "Failed";
+			}
 			res.type("application/json");
 			ArrayList<Manifestacija> ret = new ArrayList<Manifestacija>();
 			for(Manifestacija m : manifestacije.getManifestacijaList()) {
@@ -300,6 +321,9 @@ public class SparkAppMain {
 			res.type("application/json");
 			ArrayList<Manifestacija> ret = new ArrayList<Manifestacija>();
 			Korisnik ko = req.session().attribute("currentUser");
+			if (ko == null || !ko.getUloga().equals("PRODAVAC")) {
+				return "Failed";
+			}
 			Prodavac pr = k.getProdavciMap().get(ko.getUsername());
 			for(Manifestacija m : pr.getManifestacije()) {
 				if(!m.isObrisana()) {
@@ -357,6 +381,11 @@ public class SparkAppMain {
 		});
 		
 		get("/rest/manifestations/odobri/:id", (req, res) -> {
+			Korisnik ko = req.session().attribute("currentUser");
+			if (ko == null || !ko.getUloga().equals("ADMIN")) {
+				return "Failed";
+			}
+			
 			String id = req.params("id");
 			Manifestacija m = (Manifestacija) manifestacije.getManifestacijaMap().get(Integer.parseInt(id));
 			m.setStatus("AKTIVNO");
@@ -365,6 +394,11 @@ public class SparkAppMain {
 		});
 		
 		delete("/rest/manifestations/obrisi/:id", (req, res) -> {
+			Korisnik ko = req.session().attribute("currentUser");
+			if (ko == null || !ko.getUloga().equals("ADMIN")) {
+				return "Failed";
+			}
+			
 			String id = req.params("id");
 			Manifestacija m = (Manifestacija) manifestacije.getManifestacijaMap().get(Integer.parseInt(id));
 			m.setObrisana(true);
@@ -375,10 +409,13 @@ public class SparkAppMain {
 		post("/rest/manifestations/add", (req, res) -> {
 			//Popraviti
 			Manifestacija man = g.fromJson(req.body(), Manifestacija.class);
-			if(man.getNaziv().trim().equals("") || man.getBrojMesta() == 0 || man.getLokacija().getAdresa().trim().equals("") || man.getNaziv().contains(";") || man.getLokacija().getAdresa().contains(";") ) {
+			if(man.getNaziv().trim().equals("") || man.getCenaRegular() < 0 || man.getBrojMesta() <= 0 || man.getLokacija().getAdresa().trim().equals("") || man.getNaziv().contains(";") || man.getLokacija().getAdresa().contains(";") ) {
 				return "Failed";
 			}
 			Korisnik ko = req.session().attribute("currentUser");
+			if (ko == null || !ko.getUloga().equals("PRODAVAC")) {
+				return "Failed";
+			}
 			boolean ok = manifestacije.checkLocation(man.getLokacija(), man.getDatumOdrzavanja());
 			if (ok) {
 				
@@ -404,13 +441,17 @@ public class SparkAppMain {
 		});
 		
 		put("/rest/manifestations/update", (req, res) -> {
-			Manifestacija man = g.fromJson(req.body(), Manifestacija.class);
-			
-			if(man.getNaziv().trim().equals("") || man.getBrojMesta() == 0 || man.getLokacija().getAdresa().trim().equals("") || man.getNaziv().contains(";") || man.getLokacija().getAdresa().contains(";") ) {
+			Korisnik ko = req.session().attribute("currentUser");
+			if (ko == null || !ko.getUloga().equals("PRODAVAC")) {
 				return "Failed";
 			}
 			
-			Korisnik ko = req.session().attribute("currentUser");
+			Manifestacija man = g.fromJson(req.body(), Manifestacija.class);
+			
+			if(man.getNaziv().trim().equals("") || man.getCenaRegular() < 0 || man.getBrojMesta() <= 0 || man.getLokacija().getAdresa().trim().equals("") || man.getNaziv().contains(";") || man.getLokacija().getAdresa().contains(";") ) {
+				return "Failed";
+			}
+			
 			boolean ok = manifestacije.checkLocation(man.getLokacija(), man.getDatumOdrzavanja());
 			
 			int id = man.getId();
@@ -497,6 +538,10 @@ public class SparkAppMain {
 			}
 			Manifestacija man = req.session().attribute("currentManif");
 			Korisnik current = req.session().attribute("currentUser");
+			if (current == null || !current.getUloga().equals("KUPAC")) {
+				return "Failed";
+			}
+			
 			Kupac kupac = k.getKupciMap().get(current.getUsername());
 			ArrayList<ShoppingCartItem> sc = req.session().attribute("cart");
 			
@@ -536,6 +581,10 @@ public class SparkAppMain {
 		
 		get("/rest/tickets/forUser", (req, res) -> {
 			Korisnik current = req.session().attribute("currentUser");
+			if (current == null || !current.getUloga().equals("KUPAC")) {
+				return "Failed";
+			}
+			
 			Kupac kupac = k.getKupciMap().get(current.getUsername());
 			List<Karta> karte = kupac.getSveKarte();
 			ArrayList<Karta> ret = new ArrayList<Karta>();
@@ -549,6 +598,11 @@ public class SparkAppMain {
 		});
 		
 		get("/rest/tickets/removeFromCart/:id", (req, res) -> {
+			Korisnik current = req.session().attribute("currentUser");
+			if (current == null || !current.getUloga().equals("KUPAC")) {
+				return "Failed";
+			}
+			
 			res.type("application/json");
 			int id = Integer.parseInt(req.params("id"));
 			ArrayList<ShoppingCartItem> sc = req.session().attribute("cart");
@@ -568,6 +622,10 @@ public class SparkAppMain {
 		get("/rest/tickets/checkout", (req, res) -> {
 			ArrayList<ShoppingCartItem> sc = req.session().attribute("cart");
 			Korisnik ko = req.session().attribute("currentUser");
+			if (ko == null || !ko.getUloga().equals("KUPAC")) {
+				return "Failed";
+			}
+			
 			karte.makeTickets(sc, k.getKupciMap().get(ko.getUsername()));
 			sc.clear();
 			req.session().attribute("cart", sc);
@@ -575,6 +633,11 @@ public class SparkAppMain {
 		});
 		
 		put("/rest/tickets/odustanak/:id", (req, res) -> {
+			Korisnik ko = req.session().attribute("currentUser");
+			if (ko == null || !ko.getUloga().equals("KUPAC")) {
+				return "Failed";
+			}
+			
 			Karta ka = (Karta) karte.getKarteMap().get(req.params("id"));
 			ka.setStatus("ODUSTANAK");
 			Kupac ku = k.getKupciMap().get(ka.getIdKupca());
@@ -599,6 +662,11 @@ public class SparkAppMain {
 		});
 		
 		get("/rest/tickets/all", (req, res) -> {
+			Korisnik ko = req.session().attribute("currentUser");
+			if (ko == null || !ko.getUloga().equals("ADMIN")) {
+				return "Failed";
+			}
+			
 			res.type("application/json");
 			ArrayList<Karta> ret = karte.getNeobrisaneKarte();
 			System.out.println(ret);
@@ -608,6 +676,10 @@ public class SparkAppMain {
 		get("/rest/tickets/prodavac", (req, res) -> {
 			res.type("application/json");
 			Korisnik ko = (Korisnik) req.session().attribute("currentUser");
+			if (ko == null || !ko.getUloga().equals("PRODAVAC")) {
+				return "Failed";
+			}
+			
 			//Prodavac p = k.getProdavciMap().get(ko.getUsername()); 
 			ArrayList<Karta> ret = k.vratiKarteProdavcu(ko.getUsername(), karte);
 			System.out.println(ret);
@@ -662,6 +734,9 @@ public class SparkAppMain {
 		post("/rest/comments/postComment", (req, res) -> {
 			Manifestacija m = (Manifestacija) req.session().attribute("currentManif");
 			Korisnik ko = (Korisnik) req.session().attribute("currentUser");
+			if (ko == null || !ko.getUloga().equals("KUPAC")) {
+				return "Failed";
+			}
 			Kupac ku = k.getKupciMap().get(ko.getUsername());
 			System.out.println(ko);
 			boolean ok = false;
@@ -678,15 +753,15 @@ public class SparkAppMain {
 				
 				novi.setKupac(ko);
 				novi.setManifestacija(m);
-				novi.setTekst(novi.getTekst().replace("\n", "_"));
 				novi.setId(komentari.getNewId());
 				
 				System.out.println(novi);
 				
 				if(novi.getOcena() < 1 || novi.getOcena() > 5 || novi.getTekst().contains("_") || novi.getTekst().contains(";") || novi.getTekst().trim().equals("")) {
-					return "Doslo je do greske.";
+					return "Komentar sadrzi nedozvoljene karaktere ili je prazan.";
 				}
 				
+				novi.setTekst(novi.getTekst().replace("\n", "_"));
 				komentari.getKomentariList().add(novi);
 				komentari.save();
 				return "Komentar je poslat na uvid prodavcu.";
@@ -698,6 +773,9 @@ public class SparkAppMain {
 		get("/rest/comments/currentSeller", (req, res) -> {
 			res.type("application/json");
 			Korisnik current = req.session().attribute("currentUser");
+			if (current == null || !current.getUloga().equals("PRODAVAC")) {
+				return "Failed";
+			}
 			ArrayList<Komentar> ret = komentari.vratiKomentareZaProdavca(current.getUsername());
 			return  g.toJson(ret);
 		});
@@ -705,12 +783,21 @@ public class SparkAppMain {
 		put("/rest/comments/approve/:id", (req, res) -> {
 			int id = Integer.parseInt(req.params("id"));
 			Korisnik current = req.session().attribute("currentUser");
+			if (current == null || !current.getUloga().equals("PRODAVAC")) {
+				return "Failed";
+			}
+			
 			ArrayList<Komentar> approved = komentari.approveAndReturn(id, current.getUsername());
 			res.type("application/json");
 			return g.toJson(approved);
 		});
 		
 		delete("/rest/comments/delete/:id", (req, res) -> {
+			Korisnik current = req.session().attribute("currentUser");
+			if (current == null || !current.getUloga().equals("ADMIN")) {
+				return "Failed";
+			}
+			
 			int id = Integer.parseInt(req.params("id"));
 			ArrayList<Komentar> all = komentari.deleteAndReturn(id);
 			res.type("application/json");
@@ -718,6 +805,11 @@ public class SparkAppMain {
 		});
 		
 		get("/rest/comments/allComments", (req, res) -> {
+			Korisnik current = req.session().attribute("currentUser");
+			if (current == null || !current.getUloga().equals("ADMIN")) {
+				return "Failed";
+			}
+			
 			res.type("application/json");
 			ArrayList<Komentar> ret = komentari.vratiNeobrisaneKomentare();
 			return  g.toJson(ret);
