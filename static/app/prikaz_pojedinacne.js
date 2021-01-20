@@ -13,16 +13,20 @@ Vue.component("prikaz-pojedinacne", {
 <div>
 		<h1>{{this.manifestacija.naziv}}</h1>
 		<h3>{{this.manifestacija.tipManifestacije}}</h3>
+		<h4 style="opacity:70%">({{this.manifestacija.status}})</h4>
 		
+		<div class="gallery">
 		<img :src="this.manifestacija.slika"  height=300 width=500></img>
+			<div>
+				<strong>Pocetak: {{this.manifestacija.datumOdrzavanja}} u {{this.manifestacija.vremeOdrzavanja}}h | Ostalo {{this.manifestacija.brojMesta}} karata!</strong>
+			</div>
+		</div>
 		
-		<br/>
-		<br/>
-			<div id="map" class="map"></div>
-		<br/>
+		</br>
+		</br>
 		
 		<table>
-			<tr><th colspan=5> Rezervisi karte! </th></tr>
+			<tr align=center><th colspan=5> Rezervisi karte! Cena vec od: {{this.manifestacija.cenaRegular}} RSD </th></tr>
 			<tr> <td> Tip karte: </td>
 				<td> 
 					<select name="tip_karte" id="tip_karte" >
@@ -38,6 +42,13 @@ Vue.component("prikaz-pojedinacne", {
 		</table>
 		
 		<br/>
+		
+		<h4 align: center>Nalazimo se na:</h4>
+		
+		<div id="map" class="map"></div>
+		<br/>
+		
+		
 		<h3 v-if="this.ukupnaOcena != 0">Ukupna ocjena: {{this.ukupnaOcena}}</h3>
 		<br/>
 		
@@ -154,6 +165,17 @@ Vue.component("prikaz-pojedinacne", {
 	mounted () {
         let self = this;
 		$.get("/rest/manifestations/getCurrent", function(data){
+			
+			let now = new Date(data.datumOdrzavanja);
+
+			let day = ("0" + now.getDate()).slice(-2);
+			let month = ("0" + (now.getMonth() + 1)).slice(-2);
+			
+			let today = (day)+"-"+(month)+"-"+now.getFullYear();
+			let time = ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
+			data.datumOdrzavanja = today;
+			data.vremeOdrzavanja = time;
+			
 			self.manifestacija = data;
 			self.showMap();
 		});
