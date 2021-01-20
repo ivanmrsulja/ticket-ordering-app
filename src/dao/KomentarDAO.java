@@ -115,6 +115,9 @@ public class KomentarDAO {
 	public void load() {
 		String path = "data/komentari.csv";
 		
+		HashMap<Integer, Integer> histogram = new HashMap<Integer, Integer>();
+		HashMap<Integer, Double> cumsum = new HashMap<Integer, Double>();
+		
 		try {
 			BufferedReader bf = new BufferedReader(new FileReader(path));
 			String currentLine;
@@ -132,6 +135,19 @@ public class KomentarDAO {
 				k.setId(Integer.parseInt(tokens[6]));
 				komentariList.add(k);
 				
+				if(k.isOdobren() && !k.isObrisan()) {
+					if(histogram.containsKey(k.getManifestacija().getId())) {
+						histogram.put(k.getManifestacija().getId(), histogram.get(k.getManifestacija().getId())+1);
+					}else {
+						histogram.put(k.getManifestacija().getId(), 1);
+					}
+					
+					if(cumsum.containsKey(k.getManifestacija().getId())) {
+						cumsum.put(k.getManifestacija().getId(), cumsum.get(k.getManifestacija().getId()) + k.getOcena());
+					}else {
+						cumsum.put(k.getManifestacija().getId(), k.getOcena());
+					}
+				}
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -139,6 +155,14 @@ public class KomentarDAO {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		System.out.println(histogram);
+		System.out.println("----------");
+		System.out.println(cumsum);
+		for(int key : cumsum.keySet()) {
+			Manifestacija m = (Manifestacija) manifestacije.getManifestacijaMap().get(key);
+			m.setOcena(cumsum.get(key)/histogram.get(key));
 		}
 		
 	}

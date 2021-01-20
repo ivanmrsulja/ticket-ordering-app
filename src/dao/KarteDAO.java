@@ -269,6 +269,7 @@ public class KarteDAO {
 				}
 				Karta nova = new Karta(getNewID(), m.getBrojMesta(), kupac.getUsername(), "REZERVISANA", item.getCijena(), item.getTipKarte(), m.getNaziv());
 				nova.setDatum(m.getDatumOdrzavanja());
+				nova.setImePrezime(kupac.getIme() + " " + kupac.getPrezime());
 				kupac.setBrojBodova((int)(kupac.getBrojBodova() + ((item.getCijena()/1000)*133)));
 				m.setBrojMesta(m.getBrojMesta() - 1);
 				karteMap.put(nova.getId(), nova);

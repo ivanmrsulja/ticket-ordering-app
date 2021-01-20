@@ -37,7 +37,7 @@ Vue.component("prikaz-pojedinacne", {
 				</td> 
 				<td> Kolicina: </td>
 				<td> <input type="number" name="kolicina" min="0" :max="this.manifestacija.brojMesta"/> </td>
-				<td> <input type="button" value="Rezervisi!" v-on:click="addToCart()" v-bind:disabled="this.user == null || this.manifestacija.status == 'NEAKTIVNO' || this.manifestacija.datumOdrzavanja <= (Date.now()) || this.manifestacija.brojMesta == 0" /> </td>
+				<td> <input type="button" value="Rezervisi!" v-on:click="addToCart()" v-bind:disabled="this.user == null || this.manifestacija.status == 'NEAKTIVNO' || (new Date(this.manifestacija.datumOdrzavanja.split('-')[2]+'-'+this.manifestacija.datumOdrzavanja.split('-')[1]+'-'+this.manifestacija.datumOdrzavanja.split('-')[0])).getTime() <= (Date.now()) || this.manifestacija.brojMesta == 0" /> </td>
 			</tr>
 		</table>
 		
@@ -52,10 +52,10 @@ Vue.component("prikaz-pojedinacne", {
 		<h3 v-if="this.ukupnaOcena != 0">Ukupna ocjena: {{this.ukupnaOcena}}</h3>
 		<br/>
 		
-		<h2>Ostavi komentar:</h2>
-	    <textarea class="comment" name="komentar" placeholder="Unesite komentar" v-bind:disabled="!this.commentable"></textarea>
+		<h2 v-bind:hidden="!this.commentable" >Ostavi komentar:</h2>
+	    <textarea v-bind:hidden="!this.commentable" class="comment" name="komentar" placeholder="Unesite komentar" v-bind:disabled="!this.commentable"></textarea>
 	    <br/>
-	    <form class="rating">
+	    <form v-bind:hidden="!this.commentable" class="rating">
 		  <label>
 		    <input type="radio" name="stars" value="1" v-bind:disabled="!this.commentable" />
 		    <span class="icon">★</span>
@@ -88,12 +88,12 @@ Vue.component("prikaz-pojedinacne", {
 		  </label>
 		</form>
 		<br/>
-	    <input type="button" name="submit" value="Postavi" v-bind:disabled="!this.commentable" v-on:click="postComment()" >
+	    <input type="button" name="submit" value="Postavi" v-bind:hidden="!this.commentable" v-on:click="postComment()" >
 	    
 	    <br/>
 	    <br/>
 	    
-	    <h2>Komentari</h2>
+	    <h2 v-bind:hidden="Object.keys(this.komentari).length == 0" >Komentari</h2>
 	    
 	    <br/>
 	    
@@ -176,7 +176,9 @@ Vue.component("prikaz-pojedinacne", {
 			data.datumOdrzavanja = today;
 			data.vremeOdrzavanja = time;
 			
+			
 			self.manifestacija = data;
+			
 			self.showMap();
 		});
 		$.get("/rest/users/currentUser", function(data){

@@ -57,7 +57,9 @@ Vue.component("pocetna-strana", {
 	      
 	      <p>{{m.lokacija.adresa}}</p>
 	      <p>Cena karte vec od: {{m.cenaRegular}}</p>
-	      <input type="button" class="button1" value="Vise informacija" v-on:click="setCurrent(m)" />
+	      <table>
+	      	<tr><td><input type="button" class="button1" value="Vise informacija" v-on:click="setCurrent(m)" /></td><td style="padding = 0px; margin = 0px;" v-bind:hidden=" m.ocena == 0" ><strong>Ocena: {{m.ocena}}</strong></td></tr>
+	      </table>
 	      </div></div>
 	    </div>
 		
@@ -67,8 +69,10 @@ Vue.component("pocetna-strana", {
 	methods : {
 		setCurrent : function(m) {
 			let current = JSON.parse(JSON.stringify(m)); //deepcopy :O
-			current.datumOdrzavanja = current.datumOdrzavanja.split(" ")[0];
-			let date = (new Date(current.datumOdrzavanja)).getTime();
+			
+			let datum = current.datumOdrzavanja.split(" ")[0];
+			let vreme = current.datumOdrzavanja.split(" ")[1];
+			let date = (new Date(datum.split('-')[2]+'-'+datum.split('-')[1]+'-'+datum.split('-')[0])).getTime() + (parseInt(vreme.split(":")[0])-1)*3600000 + parseInt(vreme.split(":")[1])*60000;
 			current.datumOdrzavanja = date;
 			$.post("/rest/manifestations/setCurrent", JSON.stringify(current), function(data){
 				window.location.href = "#/prikaz" ;
@@ -92,7 +96,7 @@ Vue.component("pocetna-strana", {
 							var day = ("0" + now.getDate()).slice(-2);
 							var month = ("0" + (now.getMonth() + 1)).slice(-2);
 							
-							var today = now.getFullYear()+"-"+(month)+"-"+(day) + " " + ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
+							var today = (day)+"-"+(month)+"-"+ now.getFullYear() + " " + ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
 							d.datumOdrzavanja = today;
 			        	}
 						self.manifestacije = data;
@@ -110,7 +114,7 @@ Vue.component("pocetna-strana", {
 				var day = ("0" + now.getDate()).slice(-2);
 				var month = ("0" + (now.getMonth() + 1)).slice(-2);
 				
-				var today = now.getFullYear()+"-"+(month)+"-"+(day) + " " + ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
+				var today = (day)+"-"+(month)+"-"+ now.getFullYear() + " " + ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
 				d.datumOdrzavanja = today;
         	}
         	

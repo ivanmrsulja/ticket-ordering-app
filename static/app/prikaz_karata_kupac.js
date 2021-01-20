@@ -21,7 +21,7 @@ Vue.component("karte-kupac", {
 				<td>{{k.brojMesta}}</td>
 				<td>{{k.tip}}</td>
 				<td>{{k.datum}}</td>
-				<td><input type="button" value="Odustani" v-on:click="odustani(k)" v-bind:disabled="(new Date(k.datum.split(' ')[0])).getTime() < (Date.now() + 604800000)" /></td>
+				<td><input type="button" value="Odustani" v-on:click="odustani(k)" v-bind:disabled="(new Date(k.datum.split(' ')[0].split('-')[2]+'-'+k.datum.split(' ')[0].split('-')[1]+'-'+k.datum.split(' ')[0].split('-')[0])).getTime() < (Date.now() + 604800000)" /></td>
 			</tr>
 		</table>
 		
@@ -41,7 +41,7 @@ Vue.component("karte-kupac", {
 							let now = new Date(parseInt(d.datum));
 							let day = ("0" + now.getDate()).slice(-2);
 							let month = ("0" + (now.getMonth() + 1)).slice(-2);
-							let today = now.getFullYear()+"-"+(month)+"-"+(day) + " " + ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
+							let today = (day) +"-"+(month)+"-"+ now.getFullYear() + " " + ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
 							
 							d.datum = today;
 						}
@@ -57,7 +57,7 @@ Vue.component("karte-kupac", {
 					let now = new Date(parseInt(d.datum));
 					let day = ("0" + now.getDate()).slice(-2);
 					let month = ("0" + (now.getMonth() + 1)).slice(-2);
-					let today = now.getFullYear()+"-"+(month)+"-"+(day) + " " + ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
+					let today = (day) +"-"+(month)+"-"+ now.getFullYear() + " " + ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
 					
 					d.datum = today;
 				}

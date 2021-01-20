@@ -93,7 +93,7 @@ Vue.component("karte-admin", {
 					var day = ("0" + now.getDate()).slice(-2);
 					var month = ("0" + (now.getMonth() + 1)).slice(-2);
 					
-					var today = now.getFullYear()+"-"+(month)+"-"+(day) + " " + ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
+					var today = (day)+"-"+(month)+"-"+ now.getFullYear() + " " + ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
 					d.datum = today;
         		}
 				
@@ -123,7 +123,7 @@ Vue.component("karte-admin", {
 				var day = ("0" + now.getDate()).slice(-2);
 				var month = ("0" + (now.getMonth() + 1)).slice(-2);
 				
-				var today = now.getFullYear()+"-"+(month)+"-"+(day) + " " + ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
+				var today = (day)+"-"+(month)+"-"+ now.getFullYear() + " " + ("0" + (now.getHours())).slice(-2) + ":" + ("0" + (now.getMinutes())).slice(-2);
 				d.datum = today;
         	}
         	
