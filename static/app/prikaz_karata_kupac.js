@@ -8,7 +8,9 @@ Vue.component("karte-kupac", {
 <div>
 		<h1>Moje karte:</h1>
 		
-		<table border=1>
+		<h2 v-bind:hidden="Object.keys(this.karte).length != 0" >Trenutno nemate rezervisanih karata...</h2>
+		
+		<table border=1 v-bind:hidden="Object.keys(this.karte).length == 0">
 			<tr bgcolor="lightgrey">
 				<th>Manifestacija</th>
 				<th>Broj mesta</th>

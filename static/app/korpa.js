@@ -9,7 +9,7 @@ Vue.component("shopping-cart", {
 <div>
 		<h1>Moja korpa:</h1>
 		
-		<table border=1>
+		<table border=1 v-bind:hidden="Object.keys(this.cart).length == 0" >
 			<tr bgcolor="lightgrey">
 				<th>Manifestacija</th>
 				<th>Kolicina</th>
@@ -25,9 +25,11 @@ Vue.component("shopping-cart", {
 				<td><input type="button" value="Obrisi" v-on:click="obrisi(item)" /></td>
 			</tr>
 		</table>
+		<img src="../css/prazno.png" v-bind:hidden="Object.keys(this.cart).length != 0" />
+		<h1 v-bind:hidden="Object.keys(this.cart).length != 0" > Korpa je prazna! Kupi nesto! </h1>
 		<br/>
-		<h4> Total {{this.total}} </h4>
-		<input type="button" value="Potvrdi rezervaciju!" v-on:click="odobri()" v-bind:disabled="this.total == 0.0" />
+		<h4 v-bind:hidden="Object.keys(this.cart).length == 0" > Total {{this.total}} </h4>
+		<input type="button" value="Potvrdi rezervaciju!" v-on:click="odobri()" v-bind:hidden="this.total == 0.0 || Object.keys(this.cart).length == 0" />
 		<br/>
 </div>		  
 `

@@ -74,13 +74,7 @@ public class KarteDAO {
 	}
 	
 	public void save() {
-//		Karta k1 = new Karta("000",80,(Kupac) korisnici.getKorisniciMap().get("bojan"),"U PRODAJI",1000, "TIP KARTE 1",(Manifestacija) manifestacije.getManifestacijaMap().get(2));
-//		Karta k2 = new Karta("001",110,(Kupac) korisnici.getKorisniciMap().get("Jovana"),"U PRODAJI",1000, "TIP KARTE 1",(Manifestacija) manifestacije.getManifestacijaMap().get(1));
-//		Karta k3 = new Karta("002",60,(Kupac) korisnici.getKorisniciMap().get("Jovana"),"U PRODAJI",1000, "TIP KARTE 1",(Manifestacija) manifestacije.getManifestacijaMap().get(0));
 		String path = "data/karte.csv";
-//		karteList.add(k1);
-//		karteList.add(k2);
-//		karteList.add(k3);
 		PrintWriter out;
 	
 		try {
