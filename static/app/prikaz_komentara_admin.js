@@ -5,18 +5,18 @@ Vue.component("komentari-admin", {
 		    }
 	},
 	template: ` 
-<div>
+<div style="width:60%" >
 		<h1>Prikaz komentara admin</h1>
 		
-		<table border = 1>
-		<tr> <th>Kupac</th> <th>Manifestacija</th> <th>Tekst</th> <th>Ocjena</th> </tr>
+		<table class="table table-hover" >
+		<tr style="background-color : lightgray"> <th>Kupac</th> <th>Manifestacija</th> <th>Tekst</th> <th>Ocjena</th> <th>Akcija</th> </tr>
 		
 		<tr v-for="k in komentari" >
 			<td>{{k.kupac.ime}} {{k.kupac.prezime}}</td>
 			<td>{{k.manifestacija.naziv}}</td>
 			<td>{{k.tekst}}</td>
 			<td>{{k.ocena}}</td>
-			<td v-bind:hidden="k.obrisan === true" ><input type="button" v-on:click="obrisi(k)" value="Obrisi" /></td>
+			<td v-bind:hidden="k.obrisan === true" ><input type="button" class="btn btn-danger" v-on:click="obrisi(k)" value="Obrisi" /></td>
 		</tr>
 		
 		</table>

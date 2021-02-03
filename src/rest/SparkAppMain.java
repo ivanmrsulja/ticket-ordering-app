@@ -505,11 +505,17 @@ public class SparkAppMain {
 		get("/rest/manifestations/getCurrent", (req, res) -> {
 			res.type("application/json");
 			Manifestacija m = (Manifestacija) req.session().attribute("currentManif");
+			if(m == null) {
+				return null;
+			}
 			return g.toJson(m);
 		});
 		
 		get("/rest/manifestations/commentable", (req,res) -> {
 			Manifestacija m = (Manifestacija) req.session().attribute("currentManif");
+			if(m == null) {
+				return null;
+			}
 			Korisnik ko = (Korisnik) req.session().attribute("currentUser");
 			res.type("application/json");
 			if (ko == null) {
@@ -537,6 +543,9 @@ public class SparkAppMain {
 				return "Unesite kolicinu.";
 			}
 			Manifestacija man = req.session().attribute("currentManif");
+			if(man == null) {
+				return "Failed";
+			}
 			Korisnik current = req.session().attribute("currentUser");
 			if (current == null || !current.getUloga().equals("KUPAC")) {
 				return "Failed";
@@ -733,6 +742,9 @@ public class SparkAppMain {
 		
 		post("/rest/comments/postComment", (req, res) -> {
 			Manifestacija m = (Manifestacija) req.session().attribute("currentManif");
+			if(m == null) {
+				return "Failed";
+			}
 			Korisnik ko = (Korisnik) req.session().attribute("currentUser");
 			if (ko == null || !ko.getUloga().equals("KUPAC")) {
 				return "Failed";
@@ -788,6 +800,7 @@ public class SparkAppMain {
 			}
 			
 			ArrayList<Komentar> approved = komentari.approveAndReturn(id, current.getUsername());
+			komentari.load();
 			res.type("application/json");
 			return g.toJson(approved);
 		});
@@ -817,6 +830,9 @@ public class SparkAppMain {
 		
 		get("/rest/comments/forPost", (req, res) -> {
 			Manifestacija current = (Manifestacija) req.session().attribute("currentManif");
+			if(current == null) {
+				return null;
+			}
 			ArrayList<Komentar> ret = komentari.vratiKomentareManifestacija(current.getId(), true);
 			res.type("application/json");
 			return g.toJson(ret);

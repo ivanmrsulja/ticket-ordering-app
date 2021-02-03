@@ -5,18 +5,21 @@ Vue.component("komentari-prodavac", {
 		    }
 	},
 	template: ` 
-<div>
-		<h1>Prikaz komentara prodavac</h1>
+<div style="width:60%">
+		<h1 style="margin-bottom : 20px">Prikaz komentara prodavac</h1>
 		
-		<table border = 1>
-		<tr> <th>Kupac</th> <th>Manifestacija</th> <th>Tekst</th> <th>Ocjena</th> </tr>
+		<h1 v-bind:hidden="Object.keys(this.komentari).length != 0" style="margin-top : 50px; color : gray" >Trenutno nema komentara ni na jednoj od vasih manifestacija.</h1>
+		
+		<table class="table table-hover" v-bind:hidden="Object.keys(this.komentari).length == 0">
+		<tr style="background-color : lightgray" > <th>Kupac</th> <th>Manifestacija</th> <th>Tekst</th> <th>Ocjena</th> <th>Status</th> </tr>
 		
 		<tr v-for="k in komentari" >
 			<td>{{k.kupac.ime}} {{k.kupac.prezime}}</td>
 			<td>{{k.manifestacija.naziv}}</td>
 			<td>{{k.tekst}}</td>
 			<td>{{k.ocena}}</td>
-			<td v-bind:hidden="k.odobren === true" ><input type="button" v-on:click="odobri(k)" value="Odobri" /></td>
+			<td v-bind:hidden="k.odobren === true" ><input type="button" class="btn btn-success" v-on:click="odobri(k)" value="Odobri" /></td>
+			<td v-bind:hidden="k.odobren !== true" ><h4 style="color:lightgray">ODOBREN</h4></td>
 		</tr>
 		
 		</table>

@@ -5,7 +5,7 @@ Vue.component("update-user", {
 	},
 	template: ` 
 <div>
-		<h1>Korisnicki profil: </h1>
+		<h1>Moj profil: </h1>
 		<table>
 			<tr>
 				<td> <h2>Username:</h2> </td> <td> <input type="text" name="username" disabled /> </td>
@@ -29,7 +29,7 @@ Vue.component("update-user", {
 				</td> 
 			</tr>
 			<tr>
-				<td>Datum rodjenja:</td>
+				<td><h2>Datum rodjenja:</h2></td>
 				<td> <input type="date" id="birthday" name="birthday"> </td>
 			</tr>
 			<tr>

@@ -6,15 +6,16 @@ Vue.component("shopping-cart", {
 		    }
 	},
 	template: ` 
-<div>
+<div style="width:40%">
 		<h1>Moja korpa:</h1>
 		
-		<table border=1 v-bind:hidden="Object.keys(this.cart).length == 0" >
+		<table class="table table-hover" v-bind:hidden="Object.keys(this.cart).length == 0" >
 			<tr bgcolor="lightgrey">
 				<th>Manifestacija</th>
 				<th>Kolicina</th>
 				<th>Tip karte</th>
 				<th>Cijena</th>
+				<th>Akcija</th>
 			</tr>
 	
 			<tr v-for="item in this.cart">
@@ -22,14 +23,14 @@ Vue.component("shopping-cart", {
 				<td>{{item.kolicina}}</td>
 				<td>{{item.tipKarte}}</td>
 				<td>{{item.cijena}}</td>
-				<td><input type="button" value="Obrisi" v-on:click="obrisi(item)" /></td>
+				<td><input type="button" class="btn btn-danger" value="Obrisi" v-on:click="obrisi(item)" /></td>
 			</tr>
 		</table>
 		<img src="../css/prazno.png" v-bind:hidden="Object.keys(this.cart).length != 0" />
 		<h1 v-bind:hidden="Object.keys(this.cart).length != 0" > Korpa je prazna! Kupi nesto! </h1>
 		<br/>
 		<h4 v-bind:hidden="Object.keys(this.cart).length == 0" > Total {{this.total}} </h4>
-		<input type="button" value="Potvrdi rezervaciju!" v-on:click="odobri()" v-bind:hidden="this.total == 0.0 || Object.keys(this.cart).length == 0" />
+		<input type="button" class="btn btn-success" value="Potvrdi rezervaciju!" v-on:click="odobri()" v-bind:hidden="this.total == 0.0 || Object.keys(this.cart).length == 0" />
 		<br/>
 </div>		  
 `

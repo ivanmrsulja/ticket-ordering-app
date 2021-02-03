@@ -113,6 +113,8 @@ public class KomentarDAO {
 	
 	
 	public void load() {
+		komentariList.clear();
+		komentariMap.clear();
 		String path = "data/komentari.csv";
 		
 		HashMap<Integer, Integer> histogram = new HashMap<Integer, Integer>();

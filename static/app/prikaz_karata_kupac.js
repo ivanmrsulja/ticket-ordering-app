@@ -5,17 +5,18 @@ Vue.component("karte-kupac", {
 		    }
 	},
 	template: ` 
-<div>
+<div style="width : 70%">
 		<h1>Moje karte:</h1>
 		
 		<h2 v-bind:hidden="Object.keys(this.karte).length != 0" >Trenutno nemate rezervisanih karata...</h2>
 		
-		<table border=1 v-bind:hidden="Object.keys(this.karte).length == 0">
+		<table class="table table-hover" v-bind:hidden="Object.keys(this.karte).length == 0">
 			<tr bgcolor="lightgrey">
 				<th>Manifestacija</th>
 				<th>Broj mesta</th>
 				<th>Tip karte</th>
 				<th>Datum</th>
+				<th>Akcija</th>
 			</tr>
 	
 			<tr v-for="k in this.karte">
@@ -23,7 +24,7 @@ Vue.component("karte-kupac", {
 				<td>{{k.brojMesta}}</td>
 				<td>{{k.tip}}</td>
 				<td>{{k.datum}}</td>
-				<td><input type="button" value="Odustani" v-on:click="odustani(k)" v-bind:disabled="(new Date(k.datum.split(' ')[0].split('-')[2]+'-'+k.datum.split(' ')[0].split('-')[1]+'-'+k.datum.split(' ')[0].split('-')[0])).getTime() < (Date.now() + 604800000)" /></td>
+				<td><input type="button" class="btn btn-danger" value="Odustani" v-on:click="odustani(k)" v-bind:disabled="(new Date(k.datum.split(' ')[0].split('-')[2]+'-'+k.datum.split(' ')[0].split('-')[1]+'-'+k.datum.split(' ')[0].split('-')[0])).getTime() < (Date.now() + 604800000)" /></td>
 			</tr>
 		</table>
 		

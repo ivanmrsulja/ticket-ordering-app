@@ -5,10 +5,10 @@ Vue.component("manifestacije-admin", {
 		    }
 	},
 	template: ` 
-<div>
+<div style="width:80%" >
 		<h1>Prikaz manifestacija admin</h1>
 		
-		<table border=1>
+		<table class="table table-hover">
 			<tr bgcolor="lightgrey">
 				<th>Naziv</th>
 				<th>Tip manifestacije</th>
@@ -17,6 +17,7 @@ Vue.component("manifestacije-admin", {
 				<th>Cijena karte</th>
 				<th>Adresa odrzavanja</th>
 				<th>Status</th>
+				<th colspan=2 >Akcije</th>
 			</tr>
 	
 			<tr v-for="m in this.manifestacije">
@@ -27,8 +28,8 @@ Vue.component("manifestacije-admin", {
 				<td>{{m.cenaRegular}}</td>
 				<td>{{m.lokacija.adresa}}</td>
 				<td>{{m.status}}</td>
-				<td><input type="button" value="Odobri" v-on:click="odobri(m)" v-bind:disabled="m.status == 'AKTIVNO'" /></td>
-				<td><input type="button" value="Obrisi" v-on:click="obrisi(m)" /></td>
+				<td><input type="button" class="btn btn-danger" value="Odobri" v-on:click="odobri(m)" v-bind:disabled="m.status == 'AKTIVNO'" /></td>
+				<td><input type="button" class="btn btn-danger" value="Obrisi" v-on:click="obrisi(m)" /></td>
 			</tr>
 		</table>
 		<br/>

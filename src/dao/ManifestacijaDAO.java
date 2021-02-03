@@ -42,7 +42,6 @@ public class ManifestacijaDAO {
 	
 	
 	public void load() {
-		
 		String path = "data/manifestacije.csv";
 		try {
 			SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
@@ -153,7 +152,7 @@ public class ManifestacijaDAO {
 	
 	public boolean checkLocation(Lokacija lo, long date) {
 		for(Manifestacija m : manifestacijaList) {
-			if(m.getDatumOdrzavanja() == date && m.getLokacija().getGeografskaSirina() == lo.getGeografskaSirina() && m.getLokacija().getGeografskaDuzina() == lo.getGeografskaDuzina()) {
+			if(m.getDatumOdrzavanja() == date && ((m.getLokacija().getGeografskaSirina() == lo.getGeografskaSirina() && m.getLokacija().getGeografskaDuzina() == lo.getGeografskaDuzina()) || m.getLokacija().getAdresa().equals(lo.getAdresa()))) {
 				return false;
 			}
 		}

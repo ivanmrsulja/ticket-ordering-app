@@ -65,6 +65,7 @@ Vue.component("korisnici-admin", {
 				<th>Pol</th>
 				<th>Datum rodjenja</th>
 				<th>Uloga</th>
+				<th colspan=2 >Akcije</th>
 			</tr>
 	
 			<tr v-for="k in this.korisnici" v-bind:class="{ sumnjiv: k.brojOtkazivanja >= 5 }">
@@ -75,9 +76,9 @@ Vue.component("korisnici-admin", {
 				<td>{{k.pol}}</td>
 				<td>{{k.datumRodjenja}}</td>
 				<td>{{k.uloga}}</td>
-				<td><input type="button" value="Obrisi" v-on:click="obrisi(k)" v-bind:hidden="k.obrisan || k.uloga == 'ADMIN' " /></td>
-				<td v-if="!k.banovan" v-bind:hidden="k.uloga == 'ADMIN'"><input type="button" value="Banuj" v-on:click="banuj(k)" /></td>
-				<td v-else v-bind:hidden="k.uloga == 'ADMIN'"><input type="button" value="Unbanuj" v-on:click="banuj(k)" /></td>
+				<td><input type="button" value="Obrisi" class="btn btn-danger" v-on:click="obrisi(k)" v-bind:hidden="k.obrisan || k.uloga == 'ADMIN' " /></td>
+				<td v-if="!k.banovan" v-bind:hidden="k.uloga == 'ADMIN'"><input type="button" class="btn btn-warning" value="Banuj" v-on:click="banuj(k)" /></td>
+				<td v-else v-bind:hidden="k.uloga == 'ADMIN'"><input type="button" class="btn btn-success" value="Unbanuj" v-on:click="banuj(k)" /></td>
 			</tr>
 		</table>
 	
