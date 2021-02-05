@@ -422,7 +422,7 @@ public class SparkAppMain {
 				int id = manifestacije.makeID();
 				
 				byte[] imgBytes = Base64.decode(man.getSlika());
-				FileOutputStream osf = new FileOutputStream(new File("static\\" + id + ".png"));
+				FileOutputStream osf = new FileOutputStream(new File("static//" + id + ".png"));
 				osf.write(imgBytes);
 				osf.flush();
 				osf.close();
@@ -472,7 +472,7 @@ public class SparkAppMain {
 				
 				if(!man.getSlika().equals("")) {
 					byte[] imgBytes = Base64.decode(man.getSlika());
-					FileOutputStream osf = new FileOutputStream(new File("static\\" + id + ".png"));
+					FileOutputStream osf = new FileOutputStream(new File("static/" + id + ".png"));
 					osf.write(imgBytes);
 					osf.flush();
 					osf.close();
