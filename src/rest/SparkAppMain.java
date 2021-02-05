@@ -767,8 +767,6 @@ public class SparkAppMain {
 				novi.setManifestacija(m);
 				novi.setId(komentari.getNewId());
 				
-				System.out.println(novi);
-				
 				if(novi.getOcena() < 1 || novi.getOcena() > 5 || novi.getTekst().contains("_") || novi.getTekst().contains(";") || novi.getTekst().trim().equals("")) {
 					return "Komentar sadrzi nedozvoljene karaktere ili je prazan.";
 				}

@@ -37,7 +37,7 @@ Vue.component("prikaz-pojedinacne", {
 				</td> 
 				<td> Kolicina: </td>
 				<td> <input type="number" name="kolicina" min="0" :max="this.manifestacija.brojMesta"/> </td>
-				<td> <input type="button" value="Rezervisi!" v-on:click="addToCart()" v-bind:disabled="this.user == null || this.manifestacija.status == 'NEAKTIVNO' || (new Date(this.manifestacija.datumOdrzavanja.split('-')[2]+'-'+this.manifestacija.datumOdrzavanja.split('-')[1]+'-'+this.manifestacija.datumOdrzavanja.split('-')[0])).getTime() <= (Date.now()) || this.manifestacija.brojMesta == 0" /> </td>
+				<td> <input type="button" value="Rezervisi!" v-on:click="addToCart()" v-bind:disabled="this.user == null || this.manifestacija.status == 'NEAKTIVNO' || this.manifestacija.datumOdrzavanja == null || (new Date(this.manifestacija.datumOdrzavanja.split('-')[2]+'-'+this.manifestacija.datumOdrzavanja.split('-')[1]+'-'+this.manifestacija.datumOdrzavanja.split('-')[0])).getTime() <= (Date.now()) || this.manifestacija.brojMesta == 0" /> </td>
 			</tr>
 		</table>
 		

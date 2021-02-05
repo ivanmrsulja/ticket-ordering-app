@@ -56,7 +56,7 @@ Vue.component("pocetna-strana", {
 	      <h5>{{m.tipManifestacije}}, {{m.datumOdrzavanja}}</h5>
 	      
 	      <p>{{m.lokacija.adresa}}</p>
-	      <p>Cena karte vec od: {{m.cenaRegular}}</p>
+	      <p>Cena karte vec od: {{m.cenaRegular}} RSD</p>
 	      <table>
 	      	<tr><td><input type="button" class="button1" value="Vise informacija" v-on:click="setCurrent(m)" /></td><td style="padding = 0px; margin = 0px;" v-bind:hidden=" m.ocena == 0" ><strong>Ocena: {{m.ocena}}</strong></td></tr>
 	      </table>

@@ -29,7 +29,7 @@ Vue.component("register-seller", {
 				</td> 
 			</tr>
 			<tr>
-				<td>Datum rodjenja:</td>
+				<td><h2>Datum rodjenja:</h2></td>
 				<td> <input type="date" id="birthday" name="birthday"> </td>
 			</tr>
 			<tr>
@@ -65,7 +65,7 @@ Vue.component("register-seller", {
 				if(response.data == "Done"){
 					alert("Uspesno ste kreirali nalog.");
 				}else{
-					alert("Vec postoji korisnik sa tim kredencijalima, pokusajte ponovo.");
+					alert("Vec postoji korisnik sa tim kredencijalima ili polja nisu dobro popunjena, pokusajte ponovo.");
 				}	
     		});
 

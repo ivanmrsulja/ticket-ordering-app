@@ -5,10 +5,14 @@ Vue.component("karte-prodavac", {
 		    }
 	},
 	template: ` 
-<div>
+<div style="width : 80%" >
 		<h1>Prikaz karata prodavac</h1>
 		
-		<table border=1>
+		<h2 v-bind:hidden="Object.keys(this.karte).length != 0" >Trenutno nemate rezervisanih karata...</h2>
+		
+		</br>
+		
+		<table class="table table-hover" v-bind:hidden="Object.keys(this.karte).length == 0">
 			<tr bgcolor="lightgrey">
 				<th>Kupac</th>
 				<th>Ime i prezime</th>
