@@ -1,11 +1,14 @@
 Vue.component("add-manifestation", {
 	data: function () {
 		    return {
+		    	currentPosition: {lat: 45.2671, lon: 19.8335}
 		    }
 	},
 	template: ` 
 <div>
 		<h1>Dodaj manifestaciju: </h1>
+		
+		<div style="display: inline-block;">
 		<table>
 			<tr>
 				<td> <h2>Naziv:</h2> </td> <td> <input type="text" name="naziv"/> </td>
@@ -35,10 +38,10 @@ Vue.component("add-manifestation", {
 				<td> <input type="time" id="vrijeme" name="vrijeme" min="00:00" max="23:59"> </td>
 			</tr>
 			<tr>
-				<td> <h2>Geografska sirina:</h2> </td> <td> <input type="number" name="sirina"/> </td>
+				<td> <h2>Geografska sirina:</h2> </td> <td> <input type="number" name="sirina" v-model="currentPosition.lat" /> </td>
 			</tr>
 			<tr>
-				<td> <h2>Geografska duzina:</h2> </td> <td> <input type="number" name="duzina"/> </td>
+				<td> <h2>Geografska duzina:</h2> </td> <td> <input type="number" name="duzina" v-model="currentPosition.lon" /> </td>
 			</tr>
 			<tr>
 				<td> <h2>Adresa:</h2> </td> <td> <input type="text" name="adresa"/> </td>
@@ -52,12 +55,49 @@ Vue.component("add-manifestation", {
 				</td>
 			</tr>
 		</table>
-	
+		</div>
+		
+		
+		<div id="map" class="map-right" ></div>
+		
 </div>		  
 `
 	, 
 	methods : {
-		init : function() {
+		showMap : function(){
+			let self = this;
+			
+			var vectorSource = new ol.source.Vector({});
+		    var vectorLayer = new ol.layer.Vector({source: vectorSource});
+			
+			var map = new ol.Map({
+		        target: 'map',
+		        layers: [
+		          new ol.layer.Tile({
+		            source: new ol.source.OSM()
+		          }),vectorLayer
+		        ],
+		        view: new ol.View({
+		          center: ol.proj.fromLonLat([19.8335, 45.2671]),
+		          zoom: 11
+		        })
+		      });
+		      
+			var marker;
+			  
+			setMarker = function(position) {
+				marker = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat(position)));
+				vectorSource.addFeature(marker);
+			}
+			
+			map.on("click", function(event){
+				let position = ol.proj.toLonLat(event.coordinate);
+				self.currentPosition.lat = parseFloat(position.toString().split(",")[1]).toFixed(6);
+				self.currentPosition.lon = parseFloat(position.toString().split(",")[0]).toFixed(6);
+				vectorSource.clear();
+				setMarker(position);
+			});
+			
 		}, 
 		registerManif : function () {
 			let naz = $("input[name=naziv]").val();
@@ -120,12 +160,15 @@ Vue.component("add-manifestation", {
 		} 
 	},
 	mounted () {
+		let self = this;
 		$.ajax({
 			url: "/rest/users/currentUser",
 			method: "GET",
 			success: function(data){
 				if(data === null || data.uloga != "PRODAVAC"){
 					window.location.href = "#/login";
+				}else{
+					self.showMap();
 				}
 			}
 		});
